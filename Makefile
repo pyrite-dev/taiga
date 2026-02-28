@@ -13,4 +13,4 @@ taiga$(E): $(OBJS)
 	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
 
 clean:
-	rm -f *.o taiga taiga.exe
+	rm -f src/*.o taiga taiga.exe
