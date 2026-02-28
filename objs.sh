@@ -1,0 +1,8 @@
+#!/bin/sh
+echo > objs.mk
+ls external/xemil/src/*.c src/*.c | while read a; do
+	O="`echo "$a" | sed 's/.c$/.o/' | sed 's/\//_/g'`"
+	echo "OBJS += $O" >> objs.mk
+	echo "$O: $a" >> objs.mk
+	echo "	\$(CC) \$(CFLAGS) -c -o \$@ $a" >> objs.mk
+done
