@@ -5,4 +5,6 @@
 #include <string.h>
 #include <stdlib.h>
 
+int action_site(int argc, char** argv);
+
 #endif
