@@ -20,3 +20,11 @@ char* u_strvacat(const char* str, ...){
 
 	return r;
 }
+
+char* u_strdup(const char* str){
+	char* s = malloc(strlen(str) + 1);
+
+	strcpy(s, str);
+
+	return s;
+}

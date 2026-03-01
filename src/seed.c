@@ -29,10 +29,28 @@ int action_seed(int argc, char** argv){
 	fprintf(f, "</skinconfig>\n");
 	fclose(f);
 
+	if((f = fopen("site/content/index.xml", "w")) == NULL){
+		fprintf(stderr, "Failed to open site/content/index.xml\n");
+		return 1;
+	}
+	fprintf(f, "<?xml version=\"1.0\"?>\n");
+	fprintf(f, "<document>\n");
+	fprintf(f, "	<header>\n");
+	fprintf(f, "		<title>Welcome to template</title>\n");
+	fprintf(f, "	</header>\n");
+	fprintf(f, "	<body>\n");
+	fprintf(f, "		<section id=\"status\">\n");
+	fprintf(f, "			<title>Congratulations</title>\n");
+	fprintf(f, "		</section>\n");
+	fprintf(f, "	</body>\n");
+	fprintf(f, "</document>\n");
+	fclose(f);
+
 	printf("Template project created!\n");
 	printf("\n");
 	printf("Here is an outline of the generated files:\n");
 	describe("site/skinconf.xml", "Skin configuration");
+	describe("site/content/index.xml", "Example index file");
 
 	return 0;
 }

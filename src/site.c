@@ -5,6 +5,7 @@ static void scan(const char* path){
 	char* out = u_strvacat("build/", path, NULL);
 	IO_DIR* dir;
 	
+	io_mkdir(out, 0755);
 	if((dir = io_opendir(in)) != NULL){
 		struct io_dirent* d;
 
@@ -14,10 +15,15 @@ static void scan(const char* path){
 
 			if(strcmp(d->d_name, ".") == 0 || strcmp(d->d_name, "..") == 0) continue;
 
-			p = u_strvacat(in, d->d_name, "/", NULL);
+			p = u_strvacat(in, d->d_name, NULL);
 			if(io_stat(p, &s) == 0){
 				if(IO_S_ISDIR(s.st_mode)){
-					scan(p);
+					char* p2 = u_strvacat(d->d_name, "/", NULL);
+					scan(p2);
+					free(p2);
+				}else if(strcmp(d->d_name, "index.xml") == 0){
+					process(out, p);
+					printf("%s\n", p);
 				}
 			}
 			free(p);

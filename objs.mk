@@ -20,6 +20,9 @@ src/src_help.o: src/help.c
 OBJS += src/src_main.o
 src/src_main.o: src/main.c
 	$(CC) $(CFLAGS) -c -o $@ src/main.c
+OBJS += src/src_process.o
+src/src_process.o: src/process.c
+	$(CC) $(CFLAGS) -c -o $@ src/process.c
 OBJS += src/src_seed.o
 src/src_seed.o: src/seed.c
 	$(CC) $(CFLAGS) -c -o $@ src/seed.c
