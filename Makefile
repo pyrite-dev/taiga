@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -I external/xemil/include
+CFLAGS = -I external/xemil/include -I src
 LDFLAGS =
 LIBS =
 
