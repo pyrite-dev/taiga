@@ -30,7 +30,7 @@ int action_seed(int argc, char** argv){
 	fprintf(f, "	<copyright>\n");
 	fprintf(f, "		<vendor>Example Co, Ltd.</vendor>\n");
 	fprintf(f, "		<year>2026</year>\n");
-	fprintf(f, "		<link href=\"https://example.com\">\n");
+	fprintf(f, "		<link href=\"https://example.com\" />\n");
 	fprintf(f, "	</copyright>\n");
 	fprintf(f, "</skinconfig>\n");
 	fclose(f);
