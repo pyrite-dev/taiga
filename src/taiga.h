@@ -15,6 +15,8 @@
 #include <dirent.h>
 #endif
 
+#include <xemil.h>
+
 #ifdef _WIN32
 #define io_mkdir(x,y) _mkdir(x)
 #define io_chdir(x) _chdir(x)
@@ -36,6 +38,8 @@
 #endif
 
 /* site.c */
+extern xemil_t* skinconf;
+
 int action_site(int argc, char** argv);
 
 /* help.c */
@@ -49,6 +53,11 @@ char* u_strvacat(const char* str, ...);
 char* u_strdup(const char* str);
 
 /* process.c */
-void process(const char* out, const char* full);
+int process(const char* top, const char* out, const char* full);
+
+/* classic.c */
+void classic_stylesheet(FILE* out);
+void classic_head(FILE* out, const char* top, xl_node_t* header);
+void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body);
 
 #endif

@@ -23,9 +23,15 @@ int action_seed(int argc, char** argv){
 	fprintf(f, "<?xml version=\"1.0\"?>\n");
 	fprintf(f, "<skinconfig>\n");
 	fprintf(f, "	<search domain=\"example.com\" />\n");
-	fprintf(f, "	<vendor>Example Co, Ltd.</vendor>\n");
-	fprintf(f, "	<year>2026</vendor>\n");
-	fprintf(f, "	<copyright-link>https://example.com</copyright-link>\n");
+	fprintf(f, "	<trail>\n");
+	fprintf(f, "		<link name=\"Example Co, Ltd\" href=\"https://example.com\" />\n");
+	fprintf(f, "		<link name=\"Example Project\" href=\"https://example.com\" />\n");
+	fprintf(f, "	</trail>\n");
+	fprintf(f, "	<copyright>\n");
+	fprintf(f, "		<vendor>Example Co, Ltd.</vendor>\n");
+	fprintf(f, "		<year>2026</year>\n");
+	fprintf(f, "		<link href=\"https://example.com\">\n");
+	fprintf(f, "	</copyright>\n");
 	fprintf(f, "</skinconfig>\n");
 	fclose(f);
 
@@ -36,7 +42,7 @@ int action_seed(int argc, char** argv){
 	fprintf(f, "<?xml version=\"1.0\"?>\n");
 	fprintf(f, "<document>\n");
 	fprintf(f, "	<header>\n");
-	fprintf(f, "		<title>Welcome to template</title>\n");
+	fprintf(f, "		<title><![CDATA[Welcome to template]]></title>\n");
 	fprintf(f, "	</header>\n");
 	fprintf(f, "	<body>\n");
 	fprintf(f, "		<section id=\"status\">\n");

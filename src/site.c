@@ -1,6 +1,8 @@
 #include <taiga.h>
 
-static void scan(const char* path){
+xemil_t* skinconf;
+
+static int scan(const char* top, const char* path){
 	char* in = u_strvacat("site/content/", path, NULL);
 	char* out = u_strvacat("build/", path, NULL);
 	IO_DIR* dir;
@@ -19,11 +21,29 @@ static void scan(const char* path){
 			if(io_stat(p, &s) == 0){
 				if(IO_S_ISDIR(s.st_mode)){
 					char* p2 = u_strvacat(d->d_name, "/", NULL);
-					scan(p2);
+					char* t = u_strvacat(top, "../", NULL);
+					if(!scan(t, p2)){
+						free(t);
+						free(p2);
+						free(p);
+						io_closedir(dir);
+						free(out);
+						free(in);
+
+						return 0;
+					}
+					free(t);
 					free(p2);
 				}else if(strcmp(d->d_name, "index.xml") == 0){
-					process(out, p);
-					printf("%s\n", p);
+					printf("%s:\n", p);
+					if(!process(top, out, p)){
+						free(p);
+						io_closedir(dir);
+						free(out);
+						free(in);
+
+						return 0;
+					}
 				}
 			}
 			free(p);
@@ -34,12 +54,42 @@ static void scan(const char* path){
 	
 	free(out);
 	free(in);
+
+	return 1;
 }
 
 int action_site(int argc, char** argv){
+	int st = 0;
+	FILE* css;
+
 	io_mkdir("build", 0755);
 
-	scan("");
+	if((skinconf = xl_open_file("site/skinconf.xml")) == NULL || !xl_parse(skinconf)){
+		fprintf(stderr, "Failed to parse site/skinconf.xml!\n");
+		st = 1;
+		goto cleanup;
+	}
+
+	if((css = fopen("build/style.css", "w")) == NULL){
+		st = 1;
+		goto cleanup;
+	}
+	classic_stylesheet(css);
+	fclose(css);
+
+	if(!scan("", "")){
+		st = 1;
+		goto cleanup;
+	}
+
+cleanup:;
+	if(skinconf != NULL) xl_close(skinconf);
+
+	if(st == 0){
+		fprintf(stderr, "\nBuild successful\n");
+	}else{
+		fprintf(stderr, "\nBuild failed!\n");
+	}
 
 	return 0;
 }
