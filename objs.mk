@@ -26,3 +26,6 @@ src/src_seed.o: src/seed.c
 OBJS += src/src_site.o
 src/src_site.o: src/site.c
 	$(CC) $(CFLAGS) -c -o $@ src/site.c
+OBJS += src/src_util.o
+src/src_util.o: src/util.c
+	$(CC) $(CFLAGS) -c -o $@ src/util.c

@@ -1,3 +1,5 @@
 *.o
 *.exe
 /taiga
+/build
+/site
