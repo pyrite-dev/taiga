@@ -2,7 +2,7 @@
 
 int main(int argc, char** argv){
 	int i;
-	char* action;
+	char* action = NULL;
 	int target_argc = 0;
 	char** target_argv = malloc(sizeof(*target_argv));
 	target_argv[0] = NULL;
@@ -26,6 +26,10 @@ int main(int argc, char** argv){
 
 	if(strcmp(action, "site") == 0){
 		return action_site(target_argc, target_argv);
+	}else if(strcmp(action, "help") == 0){
+		return action_help(target_argc, target_argv);
+	}else if(strcmp(action, "seed") == 0){
+		return action_seed(target_argc, target_argv);
 	}
 
 	fprintf(stderr, "Unknown action\n");
