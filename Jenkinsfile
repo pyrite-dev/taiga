@@ -10,6 +10,7 @@ pipeline {
 						label "built-in"
 					}
 					steps {
+						sh("git submodule update --init --recursive --force")
 						sh("make -j4 CC=musl-gcc LDFLAGS=-static")
 						archiveArtifacts("taiga")
 					}
