@@ -201,14 +201,22 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 	fprintf(out, "				<td>\n");
 	for(i = 0; i < sizeof(images) / sizeof(images[0]); i++) {
 		char  path[64];
-		char* description = "";
+		char* name;
+		char* link;
 
 		sprintf(path, "%s.name", images[i]);
 		if((nodes = xl_get_path(skinconf->root, path)) != NULL) {
-			description = nodes[i]->text;
+			name = nodes[0]->text;
 			free(nodes);
 		}
-		if(description == NULL) description = "Logo";
+		if(name == NULL) name = "Logo";
+
+		sprintf(path, "%s.link", images[i]);
+		if((nodes = xl_get_path(skinconf->root, path)) != NULL) {
+			link = xl_get_attribute(nodes[0], "href");
+			free(nodes);
+		}
+		if(link == NULL) link = "https://invalid.link";
 
 		sprintf(path, "%s.image", images[i]);
 		if((nodes = xl_get_path(skinconf->root, path)) != NULL) {
@@ -216,7 +224,7 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 
 			if(text != NULL) {
 				text = u_path(top, text);
-				fprintf(out, "					<img src=\"%s\" alt=\"%s\">\n", text, images[i + 1], description);
+				fprintf(out, "					<a href=\"%s\"><img src=\"%s\" alt=\"%s\"></a>\n", link, text, images[i + 1], name);
 				free(text);
 			}
 
