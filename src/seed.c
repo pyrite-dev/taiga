@@ -1,5 +1,8 @@
 #include <taiga.h>
 
+#include "image/logo1.h"
+#include "image/logo2.h"
+
 static void describe(const char* path, const char* what) {
 	char space[64];
 	int  i;
@@ -15,6 +18,21 @@ int action_seed(int argc, char** argv) {
 
 	io_mkdir("site", 0755);
 	io_mkdir("site/content", 0755);
+	io_mkdir("site/image", 0755);
+
+	if((f = fopen("site/image/group-logo.png", "w")) == NULL) {
+		fprintf(stderr, "Failed to open site/image/group-logo.png\n");
+		return 1;
+	}
+	fwrite(image_logo1, image_logo1_len, 1, f);
+	fclose(f);
+
+	if((f = fopen("site/image/project-logo.png", "w")) == NULL) {
+		fprintf(stderr, "Failed to open site/image/project-logo.png\n");
+		return 1;
+	}
+	fwrite(image_logo2, image_logo2_len, 1, f);
+	fclose(f);
 
 	if((f = fopen("site/skinconf.xml", "w")) == NULL) {
 		fprintf(stderr, "Failed to open site/skinconf.xml\n");
@@ -31,6 +49,7 @@ int action_seed(int argc, char** argv) {
 	fprintf(f, "		<name>Example Project</name>\n");
 	fprintf(f, "		<description>Example Project Description</description>\n");
 	fprintf(f, "		<link href=\"https://example.com\" />\n");
+	fprintf(f, "		<image src=\"\" />\n");
 	fprintf(f, "	</project>\n");
 	fprintf(f, "	<nav>\n");
 	fprintf(f, "		<group title=\"Example Project\">\n");

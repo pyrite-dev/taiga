@@ -29,6 +29,12 @@ src/src_image_fill.o: src/image/fill.c
 OBJS += src/src_image_fixme.o
 src/src_image_fixme.o: src/image/fixme.c
 	$(CC) $(CFLAGS) -c -o $@ src/image/fixme.c
+OBJS += src/src_image_logo1.o
+src/src_image_logo1.o: src/image/logo1.c
+	$(CC) $(CFLAGS) -c -o $@ src/image/logo1.c
+OBJS += src/src_image_logo2.o
+src/src_image_logo2.o: src/image/logo2.c
+	$(CC) $(CFLAGS) -c -o $@ src/image/logo2.c
 OBJS += src/src_image_note.o
 src/src_image_note.o: src/image/note.c
 	$(CC) $(CFLAGS) -c -o $@ src/image/note.c

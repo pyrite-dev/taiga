@@ -161,7 +161,7 @@ void default_nav(FILE* out, const char* top, xl_node_t* element, int indent) {
 		if((name = xl_get_attribute(element, "name")) == NULL) name = "";
 
 		for(i = 0; i < indent; i++) fprintf(out, "\t");
-		fprintf(out, " - <a href=\"%s\">%s</a><br>", link, name);
+		fprintf(out, " - <a href=\"%s\">%s</a><br>\n", link, name);
 	} else if(strcmp(element->name, "group") == 0) {
 		char*	   title;
 		xl_node_t* child;
