@@ -52,6 +52,7 @@ int action_seed(int argc, char** argv);
 /* util.c */
 char* u_strvacat(const char* str, ...);
 char* u_strdup(const char* str);
+char* u_path(const char* top, const char* path);
 
 /* process.c */
 int process(const char* top, const char* out, const char* full);

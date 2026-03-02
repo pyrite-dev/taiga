@@ -8,7 +8,7 @@ static void describe(const char* path, const char* what) {
 	int  i;
 
 	memset(space, 0, sizeof(space));
-	for(i = 0; i < (32 - strlen(path)); i++) space[i] = ' ';
+	for(i = 0; i < (48 - strlen(path)); i++) space[i] = ' ';
 
 	printf("%s%s# %s\n", path, space, what);
 }
@@ -18,17 +18,17 @@ int action_seed(int argc, char** argv) {
 
 	io_mkdir("site", 0755);
 	io_mkdir("site/content", 0755);
-	io_mkdir("site/image", 0755);
+	io_mkdir("site/content/image", 0755);
 
-	if((f = fopen("site/image/group-logo.png", "w")) == NULL) {
-		fprintf(stderr, "Failed to open site/image/group-logo.png\n");
+	if((f = fopen("site/content/image/group-logo.png", "w")) == NULL) {
+		fprintf(stderr, "Failed to open site/content/image/group-logo.png\n");
 		return 1;
 	}
 	fwrite(image_logo1, image_logo1_len, 1, f);
 	fclose(f);
 
-	if((f = fopen("site/image/project-logo.png", "w")) == NULL) {
-		fprintf(stderr, "Failed to open site/image/project-logo.png\n");
+	if((f = fopen("site/content/image/project-logo.png", "w")) == NULL) {
+		fprintf(stderr, "Failed to open site/content/image/project-logo.png\n");
 		return 1;
 	}
 	fwrite(image_logo2, image_logo2_len, 1, f);
@@ -45,11 +45,17 @@ int action_seed(int argc, char** argv) {
 	fprintf(f, "		<link name=\"Example Co, Ltd\" href=\"https://example.com\" />\n");
 	fprintf(f, "		<link name=\"Example Project\" href=\"https://example.com\" />\n");
 	fprintf(f, "	</breadcrumb>\n");
+	fprintf(f, "	<group>\n");
+	fprintf(f, "		<name>Example Co, Ltd</name>\n");
+	fprintf(f, "		<description>Example Co, Ltd Description</description>\n");
+	fprintf(f, "		<link href=\"https://example.com\" />\n");
+	fprintf(f, "		<image src=\"image/group-logo.png\" />\n");
+	fprintf(f, "	</group>\n");
 	fprintf(f, "	<project>\n");
 	fprintf(f, "		<name>Example Project</name>\n");
 	fprintf(f, "		<description>Example Project Description</description>\n");
 	fprintf(f, "		<link href=\"https://example.com\" />\n");
-	fprintf(f, "		<image src=\"\" />\n");
+	fprintf(f, "		<image src=\"image/project-logo.png\" />\n");
 	fprintf(f, "	</project>\n");
 	fprintf(f, "	<nav>\n");
 	fprintf(f, "		<group title=\"Example Project\">\n");
@@ -104,6 +110,8 @@ int action_seed(int argc, char** argv) {
 	printf("Here is an outline of the generated files:\n");
 	describe("site/skinconf.xml", "Skin configuration");
 	describe("site/content/index.xml", "Example index file");
+	describe("site/content/image/group-logo.png", "Group logo");
+	describe("site/content/image/project-logo.png", "Project logo");
 
 	return 0;
 }

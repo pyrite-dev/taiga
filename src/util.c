@@ -28,3 +28,11 @@ char* u_strdup(const char* str) {
 
 	return s;
 }
+
+char* u_path(const char* top, const char* path) {
+	if(strlen(path) > 3 && strstr(path, "://") != NULL) return u_strdup(path); /* link - return as is */
+	if(strlen(path) > 2 && memcmp(path, "./", 2) == 0) return u_strdup(path);  /* current directory - probably intended */
+	if(strlen(path) > 3 && memcmp(path, "../", 2) == 0) return u_strdup(path); /* parent directory - also probably intended */
+
+	return u_strvacat(top, path, NULL); /* otherwise, concat */
+}

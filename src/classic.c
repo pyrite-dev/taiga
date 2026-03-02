@@ -12,12 +12,12 @@ void classic_stylesheet(FILE* out, const char* top) {
 	char	    path[128];
 	char*	    breadcrumb_bgcolor = NULL;
 	xl_node_t** nodes;
+	int	    i;
 	char*	    messages[] = {
 		  "fixme", "#cc6600",	/**/
 		  "warning", "#990000", /**/
 		  "note", "#006699"	/**/
 	      };
-	int i;
 
 	sprintf(path, "%sfill.gif", top);
 	f = fopen(path, "wb");
@@ -157,6 +157,11 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 	char*	    sitesearch = NULL;
 	xl_node_t** nodes;
 	xl_node_t*  child;
+	int	    i;
+	char*	    images[] = {
+		  "group", "Group",    /**/
+		  "project", "Project" /**/
+	      };
 
 	strcpy(year, "Some year");
 
@@ -191,6 +196,36 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 	}
 	if(sitesearch == NULL) sitesearch = "https://invalid.link";
 
+	fprintf(out, "		<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\">\n");
+	fprintf(out, "			<tr width=\"100%%\">\n");
+	fprintf(out, "				<td>\n");
+	for(i = 0; i < sizeof(images) / sizeof(images[0]); i++) {
+		char  path[64];
+		char* description = "";
+
+		sprintf(path, "%s.name", images[i]);
+		if((nodes = xl_get_path(skinconf->root, path)) != NULL) {
+			description = nodes[i]->text;
+			free(nodes);
+		}
+		if(description == NULL) description = "Logo";
+
+		sprintf(path, "%s.image", images[i]);
+		if((nodes = xl_get_path(skinconf->root, path)) != NULL) {
+			char* text = xl_get_attribute(nodes[0], "src");
+
+			if(text != NULL) {
+				text = u_path(top, text);
+				fprintf(out, "					<img src=\"%s\" alt=\"%s\">\n", text, images[i + 1], description);
+				free(text);
+			}
+
+			free(nodes);
+		}
+	}
+	fprintf(out, "				</td>\n");
+	fprintf(out, "			</tr>\n");
+	fprintf(out, "		</table>\n");
 	fprintf(out, "		<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\" id=\"breadcrumb\">\n");
 	fprintf(out, "			<tr width=\"100%%\">\n");
 	fprintf(out, "				<td>\n");

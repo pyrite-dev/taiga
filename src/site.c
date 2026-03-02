@@ -22,6 +22,10 @@ static int scan(const char* top, const char* path) {
 				if(IO_S_ISDIR(s.st_mode)) {
 					char* p2 = u_strvacat(d->d_name, "/", NULL);
 					char* t	 = u_strvacat(top, "../", NULL);
+					char* o	 = u_strvacat(out, d->d_name, NULL);
+
+					io_mkdir(o, 0755);
+					free(o);
 					if(!scan(t, p2)) {
 						free(t);
 						free(p2);
@@ -44,6 +48,19 @@ static int scan(const char* top, const char* path) {
 
 						return 0;
 					}
+				} else {
+					char* po   = u_strvacat(out, d->d_name, NULL);
+					FILE* fin  = fopen(p, "rb");
+					FILE* fout = fopen(po, "wb");
+					char  buffer[4096];
+					int   s;
+
+					while((s = fread(buffer, 1, sizeof(buffer), fin)) != 0) {
+						fwrite(buffer, 1, s, fout);
+					}
+
+					fclose(fout);
+					fclose(fin);
 				}
 			}
 			free(p);
