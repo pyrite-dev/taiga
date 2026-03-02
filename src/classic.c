@@ -151,114 +151,6 @@ void classic_head(FILE* out, const char* top, xl_node_t* header) {
 	fprintf(out, "		<link rel=\"stylesheet\" href=\"%sstyle.css\">\n", top);
 }
 
-static void print(FILE* out, const char* txt, int indent) {
-	int i;
-
-	for(i = 0;; i++) {
-		if(i == 0 || txt[i] == '\n' || txt[i] == 0) {
-			int j;
-			if(i > 0) fprintf(out, "\n");
-			if(txt[i] == 0) break;
-			for(j = 0; j < indent; j++) fprintf(out, "\t");
-		}
-
-		if(txt[i] != '\n') fprintf(out, "%c", txt[i]);
-	}
-}
-
-static void recursive(FILE* out, const char* top, xl_node_t* element, int indent) {
-	xl_node_t* child;
-	char	   tag[2048]; /* enough for most cases... :) */
-	char	   end[128];
-	int	   add = 0;
-
-	tag[0] = end[0] = 0;
-
-	if(element->name == NULL) return;
-
-	if(strcmp(element->name, "section") == 0) {
-		char* title = xl_get_attribute(element, "title");
-
-		sprintf(tag, "<div class=\"section\">%s</div>", title);
-	} else if(strcmp(element->name, "fixme") == 0 ||   /**/
-		  strcmp(element->name, "warning") == 0 || /**/
-		  strcmp(element->name, "note") == 0) {
-		char* text = "";
-
-		if(strcmp(element->name, "fixme") == 0) {
-			text = "Fixme";
-		} else if(strcmp(element->name, "warning") == 0) {
-			text = "Warning";
-		} else if(strcmp(element->name, "note") == 0) {
-			text = "Note";
-		}
-
-		sprintf(tag + strlen(tag), "<div class=\"%s-message\">\n", element->name);
-		sprintf(tag + strlen(tag), "	<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\">\n");
-		sprintf(tag + strlen(tag), "		<tr>\n");
-		sprintf(tag + strlen(tag), "			<td rowspan=\"2\">\n");
-		sprintf(tag + strlen(tag), "				<img src=\"%s%s.png\">\n", top, element->name);
-		sprintf(tag + strlen(tag), "			</td>\n");
-		sprintf(tag + strlen(tag), "			<td>\n");
-		sprintf(tag + strlen(tag), "				<b>%s</b>\n", text);
-		sprintf(tag + strlen(tag), "			</td>\n");
-		sprintf(tag + strlen(tag), "		</tr>\n");
-		sprintf(tag + strlen(tag), "		<tr>\n");
-		sprintf(tag + strlen(tag), "			<td width=\"100%%\">");
-
-		sprintf(end + strlen(end), "			</td>\n");
-		sprintf(end + strlen(end), "		</tr>\n");
-		sprintf(end + strlen(end), "	</table>\n");
-		sprintf(end + strlen(end), "</div>", element->name);
-
-		add = 3;
-	} else if(strcmp(element->name, "p") == 0 ||	      /**/
-		  strcmp(element->name, "code") == 0 ||	      /**/
-		  strcmp(element->name, "blockquote") == 0 || /**/
-		  strcmp(element->name, "ul") == 0 ||	      /**/
-		  strcmp(element->name, "ol") == 0 ||	      /**/
-		  strcmp(element->name, "li") == 0) {
-		sprintf(tag, "<%s>", element->name);
-
-		sprintf(end, "</%s>", element->name);
-	} else if(strcmp(element->name, "a") == 0) {
-		char		text[2048];
-		xl_attribute_t* attr = element->first_attribute;
-
-		text[0] = 0;
-		while(attr != NULL) {
-			if(attr->value == NULL) {
-				sprintf(text + strlen(text), " %s", attr->key);
-			} else {
-				sprintf(text + strlen(text), " %s=\"%s\"", attr->key, attr->value);
-			}
-
-			attr = attr->next;
-		}
-
-		sprintf(tag, "<%s%s>", element->name, text);
-
-		sprintf(end, "</%s>", element->name);
-	} else if(strcmp(element->name, "hr") == 0) {
-		sprintf(tag, "<%s>", element->name);
-	}
-
-	if(tag[0] != 0) print(out, tag, indent + 6);
-
-	child = element->first_child;
-	while(child != NULL) {
-		if(child->type == XL_NODE_NODE && child->name != NULL) {
-			recursive(out, top, child, indent + 1 + add);
-		} else if(child->type == XL_NODE_TEXT && child->text != NULL) {
-			print(out, child->text, indent + 7 + add);
-		}
-
-		child = child->next;
-	}
-
-	if(end[0] != 0) print(out, end, indent + 6);
-}
-
 void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body) {
 	char	    year[4 + 1 + 4 + 1]; /* no one would use our software in year 10000... right? :) */
 	char*	    holder     = "Unknown people";
@@ -340,7 +232,7 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 
 	child = body->first_child;
 	while(child != NULL) {
-		recursive(out, top, child, 0);
+		default_node(out, top, child, 0);
 
 		child = child->next;
 	}

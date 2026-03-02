@@ -61,4 +61,7 @@ void classic_stylesheet(FILE* out, const char* top); /* also create files here i
 void classic_head(FILE* out, const char* top, xl_node_t* header);
 void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body);
 
+/* default.c */
+void default_node(FILE* out, const char* top, xl_node_t* element, int indent);
+
 #endif

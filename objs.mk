@@ -17,6 +17,9 @@ src/external_xemil_src_util.o: external/xemil/src/util.c
 OBJS += src/src_classic.o
 src/src_classic.o: src/classic.c
 	$(CC) $(CFLAGS) -c -o $@ src/classic.c
+OBJS += src/src_default.o
+src/src_default.o: src/default.c
+	$(CC) $(CFLAGS) -c -o $@ src/default.c
 OBJS += src/src_help.o
 src/src_help.o: src/help.c
 	$(CC) $(CFLAGS) -c -o $@ src/help.c
