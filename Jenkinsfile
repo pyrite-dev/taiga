@@ -12,7 +12,24 @@ pipeline {
 					steps {
 						sh("git submodule update --init --recursive --force")
 						sh("make -j4 CC=musl-gcc LDFLAGS=-static")
-						archiveArtifacts("taiga")
+						sh("mv taiga taiga-linux64")
+						archiveArtifacts("taiga-linux64")
+					}
+				}
+				stage("Build for Windows 32-bit") {
+					agent {
+						label "built-in"
+					}
+					environment {
+						WATCOM = "/usr/watcom"
+						INCLUDE = "/usr/watcom/h:/usr/watcom/h/nt"
+						PATH = "/usr/watcom/binl64:${env.PATH}"
+					}
+					steps {
+						sh("git submodule update --init --recursive --force")
+						sh("make -j4 CC='owcc -bnt' E=.exe")
+						sh("mv taiga.exe taiga-win32.exe")
+						archiveArtifacts("taiga-win32.exe")
 					}
 				}
 			}
