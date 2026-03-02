@@ -63,5 +63,6 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 
 /* default.c */
 void default_node(FILE* out, const char* top, xl_node_t* element, int indent);
+void default_nav(FILE* out, const char* top, xl_node_t* element, int indent);
 
 #endif

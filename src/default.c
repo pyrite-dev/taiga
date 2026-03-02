@@ -132,18 +132,58 @@ void default_node(FILE* out, const char* top, xl_node_t* element, int indent) {
 		sprintf(tag, "<%s>", element->name);
 	}
 
-	if(tag[0] != 0) print(out, tag, indent + 6);
+	if(tag[0] != 0) print(out, tag, indent);
 
 	child = element->first_child;
 	while(child != NULL) {
 		if(child->type == XL_NODE_NODE && child->name != NULL) {
 			default_node(out, top, child, indent + 1 + add);
 		} else if(child->type == XL_NODE_TEXT && child->text != NULL) {
-			print(out, child->text, indent + 7 + add);
+			print(out, child->text, indent + 1 + add);
 		}
 
 		child = child->next;
 	}
 
-	if(end[0] != 0) print(out, end, indent + 6);
+	if(end[0] != 0) print(out, end, indent);
+}
+
+void default_nav(FILE* out, const char* top, xl_node_t* element, int indent) {
+	int i;
+
+	if(element->name == NULL) return;
+
+	if(strcmp(element->name, "link") == 0) {
+		char* link;
+		char* name;
+
+		if((link = xl_get_attribute(element, "href")) == NULL) link = "https://invalid.link";
+		if((name = xl_get_attribute(element, "name")) == NULL) name = "";
+
+		for(i = 0; i < indent; i++) fprintf(out, "\t");
+		fprintf(out, " - <a href=\"%s\">%s</a><br>", link, name);
+	} else if(strcmp(element->name, "group") == 0) {
+		char*	   title;
+		xl_node_t* child;
+
+		if((title = xl_get_attribute(element, "title")) == NULL) title = "";
+
+		if(title != NULL) {
+			for(i = 0; i < indent; i++) fprintf(out, "\t");
+			fprintf(out, "<div class=\"linkgrouptitle\"> - %s</div>\n", title);
+		}
+
+		for(i = 0; i < indent; i++) fprintf(out, "\t");
+		fprintf(out, "<div class=\"linkgroup\">\n");
+
+		child = element->first_child;
+		while(child != NULL) {
+			default_nav(out, top, child, indent + 1);
+
+			child = child->next;
+		}
+
+		for(i = 0; i < indent; i++) fprintf(out, "\t");
+		fprintf(out, "</div>\n");
+	}
 }

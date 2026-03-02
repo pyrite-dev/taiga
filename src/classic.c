@@ -118,7 +118,7 @@ void classic_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
 	fprintf(out, ".linkgroup {\n");
-	fprintf(out, "	padding-left: 16px;\n");
+	fprintf(out, "	padding-left: 12px;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
 	fprintf(out, ".linkgrouptitle {\n");
@@ -225,6 +225,20 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 	fprintf(out, "			<tr>\n");
 	fprintf(out, "				<td width=\"150\" valign=\"top\">\n");
 	fprintf(out, "					<div id=\"nav\">\n");
+
+	if((nodes = xl_get_path(skinconf->root, "nav")) != NULL) {
+		int i;
+
+		child = nodes[0]->first_child;
+		while(child != NULL) {
+			default_nav(out, top, child, 6);
+
+			child = child->next;
+		}
+
+		free(nodes);
+	}
+
 	fprintf(out, "					</div>\n");
 	fprintf(out, "				</td>\n");
 	fprintf(out, "				<td valign=\"top\">\n");
@@ -232,7 +246,7 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 
 	child = body->first_child;
 	while(child != NULL) {
-		default_node(out, top, child, 0);
+		default_node(out, top, child, 6);
 
 		child = child->next;
 	}
