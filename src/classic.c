@@ -59,7 +59,7 @@ void classic_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "body {\n");
 	fprintf(out, "	padding: 0;\n");
 	fprintf(out, "	margin: 0;\n");
-	fprintf(out, "	font-family: Arial, sans-serif;\n");
+	fprintf(out, "	font-family: Verdana, Helvetica, Arial, sans-serif;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
 	fprintf(out, "#breadcrumb {\n");
