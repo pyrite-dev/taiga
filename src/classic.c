@@ -100,6 +100,10 @@ void classic_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "	background-color: #dddddd;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
+	fprintf(out, ".message-icon {\n");
+	fprintf(out, "	padding-right: 5px;\n");
+	fprintf(out, "}\n");
+	fprintf(out, "\n");
 	for(i = 0; i < sizeof(messages) / sizeof(messages[0]); i += 2) {
 		fprintf(out, ".%s-message {\n", messages[i]);
 		fprintf(out, "	border-top: solid 5px %s;\n", messages[i + 1]);

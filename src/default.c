@@ -105,7 +105,7 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int indent) {
 		sprintf(tag + strlen(tag), "<div class=\"%s-message\">\n", element->name);
 		sprintf(tag + strlen(tag), "	<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\">\n");
 		sprintf(tag + strlen(tag), "		<tr>\n");
-		sprintf(tag + strlen(tag), "			<td rowspan=\"2\">\n");
+		sprintf(tag + strlen(tag), "			<td rowspan=\"2\" class=\"message-icon\">\n");
 		sprintf(tag + strlen(tag), "				<img src=\"%simage/%s.png\">\n", top, element->name);
 		sprintf(tag + strlen(tag), "			</td>\n");
 		sprintf(tag + strlen(tag), "			<td>\n");
@@ -153,7 +153,8 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int indent) {
 		sprintf(tag, "<%s%s>", element->name, text);
 
 		sprintf(end, "</%s>", element->name);
-	} else if(strcmp(element->name, "img") == 0) {
+	} else if(strcmp(element->name, "img") == 0 || /**/
+		  strcmp(element->name, "script") == 0) {
 		char text[2048];
 
 		accept_attr(text, element, "src", NULL);
