@@ -38,7 +38,44 @@ static void accept_attr(char* text, xl_node_t* element, ...) {
 	}
 }
 
-void default_node(FILE* out, const char* top, xl_node_t* element, int indent) {
+void default_head(FILE* out, const char* top, xl_node_t* element, int indent) {
+	xl_node_t* child;
+	char	   tag[2048];
+	char	   end[128];
+	int	   add = 0;
+
+	tag[0] = end[0] = 0;
+
+	if(element->name == NULL) return;
+
+	if(strcmp(element->name, "link") == 0) {
+		char text[2048];
+
+		accept_attr(text, element, "rel", "href", NULL);
+
+		sprintf(tag, "<%s%s>", element->name, text);
+	}
+
+	if(tag[0] != 0) print(out, tag, indent);
+
+	child = element->first_child;
+	while(child != NULL) {
+		if(child->type == XL_NODE_NODE && child->name != NULL) {
+			default_head(out, top, child, indent + 1 + add);
+		} else if(child->type == XL_NODE_TEXT && child->text != NULL) {
+			/* most likely junk */
+#if 0
+			print(out, child->text, indent + 1 + add);
+#endif
+		}
+
+		child = child->next;
+	}
+
+	if(end[0] != 0) print(out, end, indent);
+}
+
+void default_body(FILE* out, const char* top, xl_node_t* element, int indent) {
 	xl_node_t* child;
 	char	   tag[2048]; /* enough for most cases... :) */
 	char	   end[128];
@@ -137,7 +174,7 @@ void default_node(FILE* out, const char* top, xl_node_t* element, int indent) {
 	child = element->first_child;
 	while(child != NULL) {
 		if(child->type == XL_NODE_NODE && child->name != NULL) {
-			default_node(out, top, child, indent + 1 + add);
+			default_body(out, top, child, indent + 1 + add);
 		} else if(child->type == XL_NODE_TEXT && child->text != NULL) {
 			print(out, child->text, indent + 1 + add);
 		}
@@ -160,8 +197,12 @@ void default_nav(FILE* out, const char* top, xl_node_t* element, int indent) {
 		if((link = xl_get_attribute(element, "href")) == NULL) link = "https://invalid.link";
 		if((name = xl_get_attribute(element, "name")) == NULL) name = "";
 
+		link = u_path(top, link);
+
 		for(i = 0; i < indent; i++) fprintf(out, "\t");
 		fprintf(out, " - <a href=\"%s\">%s</a><br>\n", link, name);
+
+		free(link);
 	} else if(strcmp(element->name, "group") == 0) {
 		char*	   title;
 		xl_node_t* child;

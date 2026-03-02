@@ -48,6 +48,11 @@ int action_seed(int argc, char** argv) {
 		return 1;
 	}
 	fprintf(f, "<?xml version=\"1.0\"?>\n");
+	fprintf(f, "<!--\n");
+	fprintf(f, "	NOTE!\n");
+	fprintf(f, "	  - Relative path in this config is relative to site/content\n");
+	fprintf(f, "	  - If relative path starts from ./ or ../, it's relative to URL when accessed\n");
+	fprintf(f, "-->\n");
 	fprintf(f, "<skinconfig>\n");
 	fprintf(f, "	<search domain=\"example.com\" />\n");
 	fprintf(f, "	<breadcrumb>\n");
@@ -76,6 +81,7 @@ int action_seed(int argc, char** argv) {
 	fprintf(f, "			</group>\n");
 	fprintf(f, "		</group>\n");
 	fprintf(f, "	</nav>\n");
+	fprintf(f, "	<favicon></favicon>\n");
 	fprintf(f, "	<copyright>\n");
 	fprintf(f, "		<holder>Example Co, Ltd</holder>\n");
 	fprintf(f, "		<year>2026</year>\n");

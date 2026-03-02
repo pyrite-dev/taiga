@@ -111,7 +111,16 @@ void classic_stylesheet(FILE* out, const char* top) {
 }
 
 void classic_head(FILE* out, const char* top, xl_node_t* header) {
+	xl_node_t* child;
+
 	fprintf(out, "		<link rel=\"stylesheet\" href=\"%sstyle.css\">\n", top);
+
+	child = header->first_child;
+	while(child != NULL) {
+		default_head(out, top, child, 2);
+
+		child = child->next;
+	}
 }
 
 void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body) {
@@ -181,6 +190,8 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 		}
 		if(link == NULL) link = "https://invalid.link";
 
+		link = u_path(top, link);
+
 		sprintf(path, "%s.image", images[i]);
 		if((nodes = xl_get_path(skinconf->root, path)) != NULL) {
 			char* text = xl_get_attribute(nodes[0], "src");
@@ -193,6 +204,8 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 
 			free(nodes);
 		}
+
+		free(link);
 	}
 	fprintf(out, "				</td>\n");
 	fprintf(out, "			</tr>\n");
@@ -208,10 +221,15 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 			char* name = xl_get_attribute(nodes[i], "name");
 
 			if(link == NULL) link = "https://invalid.link";
+
+			link = u_path(top, link);
+
 			if(title == NULL) title = link;
 
 			if(i > 0) fprintf(out, "					|\n");
 			fprintf(out, "					<a href=\"%s\">%s</a>\n", link, name);
+
+			free(link);
 		}
 
 		free(nodes);
@@ -252,7 +270,7 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 
 	child = body->first_child;
 	while(child != NULL) {
-		default_node(out, top, child, 6);
+		default_body(out, top, child, 6);
 
 		child = child->next;
 	}

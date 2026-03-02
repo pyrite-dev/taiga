@@ -15,10 +15,13 @@ static int parse_file(const char* top, const char* full) {
 		}
 
 		if(st) {
-			char*	   title  = NULL;
-			xl_node_t* node	  = NULL;
-			xl_node_t* header = NULL;
-			xl_node_t* body	  = NULL;
+			char*	    title  = NULL;
+			xl_node_t*  node   = NULL;
+			xl_node_t*  header = NULL;
+			xl_node_t*  body   = NULL;
+			xl_node_t** nodes;
+			xl_node_t** nodes2;
+			int	    has_own_icon = 0;
 
 			if(handle->root != NULL) node = handle->root->first_child;
 			while(node != NULL) {
@@ -48,7 +51,34 @@ static int parse_file(const char* top, const char* full) {
 			fprintf(f, "	<head>\n");
 			fprintf(f, "		<meta http-equiv=\"Content-Type\" content=\"text/html;charset=UTF-8\">\n");
 			fprintf(f, "		<title>%s</title>\n", title);
+
+			if((nodes = xl_get_path(header, "link")) != NULL) {
+				int i;
+
+				for(i = 0; nodes[i] != NULL; i++) {
+					char* rel = xl_get_attribute(nodes[i], "rel");
+
+					if(strcmp(rel, "icon") == 0) {
+						has_own_icon = 1;
+						break;
+					}
+				}
+
+				free(nodes);
+			}
+
 			classic_head(f, top, header);
+
+			if(!has_own_icon && (nodes = xl_get_path(skinconf->root, "favicon")) != NULL) {
+				if(nodes[0]->text != NULL) {
+					char* p = u_path(top, nodes[0]->text);
+					fprintf(f, "		<link rel=\"icon\" href=\"%s\">\n", p);
+					free(p);
+				}
+
+				free(nodes);
+			}
+
 			fprintf(f, "	</head>\n");
 			fprintf(f, "	<body>\n");
 			classic_body(f, top, title, body);
