@@ -2,31 +2,31 @@
 
 static FILE* f;
 
-static int parse_file(const char* top, const char* full){
+static int parse_file(const char* top, const char* full) {
 	xemil_t* handle = xl_open_file(full);
-	int st = 1;
+	int	 st	= 1;
 
 	handle->new_text = 1;
 
-	if(handle != NULL && xl_parse(handle)){
-		if(handle->root == NULL || strcmp(handle->root->name, "document") != 0){
+	if(handle != NULL && xl_parse(handle)) {
+		if(handle->root == NULL || strcmp(handle->root->name, "document") != 0) {
 			fprintf(stderr, "Root element has to be document\n");
 			st = 0;
 		}
 
-		if(st){
-			char* title = NULL;
-			xl_node_t* node = NULL;
+		if(st) {
+			char*	   title  = NULL;
+			xl_node_t* node	  = NULL;
 			xl_node_t* header = NULL;
-			xl_node_t* body = NULL;
-			
+			xl_node_t* body	  = NULL;
+
 			if(handle->root != NULL) node = handle->root->first_child;
-			while(node != NULL){
-				if(node->type == XL_NODE_NODE && strcmp(node->name, "header") == 0){
+			while(node != NULL) {
+				if(node->type == XL_NODE_NODE && strcmp(node->name, "header") == 0) {
 					xl_node_t* n = node->first_child;
 
-					while(n != NULL){
-						if(n->type == XL_NODE_NODE && strcmp(n->name, "title") == 0){
+					while(n != NULL) {
+						if(n->type == XL_NODE_NODE && strcmp(n->name, "title") == 0) {
 							if(title != NULL) free(title);
 							title = u_strdup(n->text);
 						}
@@ -34,7 +34,7 @@ static int parse_file(const char* top, const char* full){
 					}
 
 					header = node;
-				}else if(node->type == XL_NODE_NODE && strcmp(node->name, "body") == 0){
+				} else if(node->type == XL_NODE_NODE && strcmp(node->name, "body") == 0) {
 					body = node;
 				}
 
@@ -57,7 +57,7 @@ static int parse_file(const char* top, const char* full){
 
 			free(title);
 		}
-	}else{
+	} else {
 		fprintf(stderr, "Parse failed!\n", full);
 		st = 0;
 	}
@@ -67,12 +67,12 @@ static int parse_file(const char* top, const char* full){
 	return st;
 }
 
-int process(const char* top, const char* out, const char* full){
+int process(const char* top, const char* out, const char* full) {
 	char* fn = strrchr(full, '/');
 
 	if(fn != NULL) fn = fn + 1;
 
-	if(fn != NULL){
+	if(fn != NULL) {
 		char* n;
 		char* p;
 
@@ -80,8 +80,8 @@ int process(const char* top, const char* out, const char* full){
 		if((n = strrchr(fn, '.')) != NULL) n[0] = 0;
 
 		p = u_strvacat(out, fn, ".html", NULL);
-		if((f = fopen(p, "w")) != NULL){
-			if(!parse_file(top, full)){
+		if((f = fopen(p, "w")) != NULL) {
+			if(!parse_file(top, full)) {
 				fclose(f);
 				free(p);
 				free(fn);

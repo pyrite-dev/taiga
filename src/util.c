@@ -1,10 +1,10 @@
 #include <taiga.h>
 
-char* u_strvacat(const char* str, ...){
-	va_list va;
-	int len = 0;
+char* u_strvacat(const char* str, ...) {
+	va_list	    va;
+	int	    len = 0;
 	const char* s;
-	char* r;
+	char*	    r;
 
 	len += strlen(str);
 	va_start(va, str);
@@ -21,7 +21,7 @@ char* u_strvacat(const char* str, ...){
 	return r;
 }
 
-char* u_strdup(const char* str){
+char* u_strdup(const char* str) {
 	char* s = malloc(strlen(str) + 1);
 
 	strcpy(s, str);

@@ -1,6 +1,6 @@
 #!/bin/sh
 echo > objs.mk
-ls src/*.c external/xemil/src/*.c | while read a; do
+ls src/*.c src/image/*.c external/xemil/src/*.c | while read a; do
 	O="src/`echo "$a" | sed 's/.c$/.o/' | sed 's/\//_/g'`"
 	echo "OBJS += $O" >> objs.mk
 	echo "$O: $a" >> objs.mk

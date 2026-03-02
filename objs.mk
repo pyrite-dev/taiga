@@ -20,6 +20,15 @@ src/src_classic.o: src/classic.c
 OBJS += src/src_help.o
 src/src_help.o: src/help.c
 	$(CC) $(CFLAGS) -c -o $@ src/help.c
+OBJS += src/src_image_fill.o
+src/src_image_fill.o: src/image/fill.c
+	$(CC) $(CFLAGS) -c -o $@ src/image/fill.c
+OBJS += src/src_image_valid-css.o
+src/src_image_valid-css.o: src/image/valid-css.c
+	$(CC) $(CFLAGS) -c -o $@ src/image/valid-css.c
+OBJS += src/src_image_valid-html401.o
+src/src_image_valid-html401.o: src/image/valid-html401.c
+	$(CC) $(CFLAGS) -c -o $@ src/image/valid-html401.c
 OBJS += src/src_main.o
 src/src_main.o: src/main.c
 	$(CC) $(CFLAGS) -c -o $@ src/main.c

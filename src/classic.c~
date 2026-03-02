@@ -3,22 +3,13 @@
 #include "image/fill.h"
 
 void classic_stylesheet(FILE* out, const char* top) {
-	FILE*	    f;
-	char	    path[128];
-	char*	    breadcrumb_bgcolor = NULL;
-	xl_node_t** nodes;
+	FILE* f;
+	char path[128];
 
 	sprintf(path, "%sfill.gif", top);
 	f = fopen(path, "wb");
 	fwrite(image_fill, 1, image_fill_len, f);
 	fclose(f);
-
-	if((nodes = xl_get_path(skinconf->root, "breadcrumb")) != NULL) {
-		breadcrumb_bgcolor = xl_get_attribute(nodes[0], "color");
-
-		free(nodes);
-	}
-	if(breadcrumb_bgcolor == NULL) breadcrumb_bgcolor = "#003366";
 
 	fprintf(out, "body {\n");
 	fprintf(out, "	padding: 0;\n");
@@ -27,19 +18,12 @@ void classic_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
 	fprintf(out, "#breadcrumb {\n");
-	fprintf(out, "	background-color: %s;\n", breadcrumb_bgcolor);
+	fprintf(out, "	background-color: #600000;\n");
 	fprintf(out, "	font-weight: bold;\n");
 	fprintf(out, "	color: #fff;\n");
 	fprintf(out, "	padding-left: 8px;\n");
 	fprintf(out, "	padding-top: 2px;\n");
 	fprintf(out, "	padding-bottom: 2px;\n");
-	fprintf(out, "}\n");
-	fprintf(out, "form {\n");
-	fprintf(out, "	margin-top: 0;\n");
-	fprintf(out, "	margin-bottom: 0;\n");
-	fprintf(out, "}\n");
-	fprintf(out, "#breadcrumb, #breadcrumb *, #copyright, #nav {\n");
-	fprintf(out, "	font-size: x-small;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
 	fprintf(out, "#nav {\n");
@@ -106,9 +90,8 @@ void classic_head(FILE* out, const char* top, xl_node_t* header) {
 }
 
 void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body) {
-	char	    year[4 + 1 + 4 + 1]; /* no one would use our software in year 10000... right? :) */
-	char*	    holder     = "Unknown people";
-	char*	    sitesearch = NULL;
+	char	   year[4 + 1 + 4 + 1]; /* no one would use our software in year 10000... right? :) */
+	char*	   holder = "Unknown people";
 	xl_node_t** nodes;
 
 	strcpy(year, "Some year");
@@ -120,15 +103,15 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 	}
 
 	if((nodes = xl_get_path(skinconf->root, "copyright.year")) != NULL) {
-		time_t	   t	 = time(NULL);
-		struct tm* tm	 = localtime(&t);
-		int	   cyear = tm->tm_year + 1900;
-		int	   xyear = atoi(nodes[0]->text);
+		time_t t = time(NULL);
+		struct tm* tm = localtime(&t);
+		int cyear = tm->tm_year + 1900;
+		int xyear = atoi(nodes[0]->text);
 
-		if(cyear == xyear) {
+		if(cyear == xyear){
 			sprintf(year, "%d", cyear);
-		} else {
-			int low	 = cyear < xyear ? cyear : xyear;
+		}else{
+			int low = cyear < xyear ? cyear : xyear;
 			int high = cyear > xyear ? cyear : xyear;
 
 			sprintf(year, "%d-%d", low, high);
@@ -137,57 +120,18 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 		free(nodes);
 	}
 
-	if((nodes = xl_get_path(skinconf->root, "search")) != NULL) {
-		sitesearch = xl_get_attribute(nodes[0], "domain");
-
-		free(nodes);
-	}
-	if(sitesearch == NULL) sitesearch = "https://invalid.link";
-
-	fprintf(out, "		<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\" id=\"breadcrumb\">\n");
-	fprintf(out, "			<tr width=\"100%%\">\n");
-	fprintf(out, "				<td>\n");
-	if((nodes = xl_get_path(skinconf->root, "breadcrumb.link")) != NULL) {
-		int i;
-
-		for(i = 0; nodes[i] != NULL; i++) {
-			char* link = xl_get_attribute(nodes[i], "href");
-			char* name = xl_get_attribute(nodes[i], "name");
-
-			if(link == NULL) link = "https://invalid.link";
-			if(title == NULL) title = link;
-
-			if(i > 0) fprintf(out, "					|\n");
-			fprintf(out, "					<a href=\"%s\">%s</a>\n", link, name);
-		}
-
-		free(nodes);
-	}
-	fprintf(out, "				</td>\n");
-	fprintf(out, "				<td nowrap=\"1\" align=\"right\">\n");
-	fprintf(out, "					<form action=\"https://www.google.com/search\" method=\"GET\">\n");
-	fprintf(out, "						Search\n");
-	fprintf(out, "						<input type=\"hidden\" name=\"sitesearch\" value=\"%s\">\n", sitesearch);
-	fprintf(out, "						<input name=\"q\" size=\"10\">\n");
-	fprintf(out, "						<input type=\"submit\" value=\"Go\">\n");
-	fprintf(out, "					</form>\n");
-	fprintf(out, "				</td>\n");
-	fprintf(out, "			</tr>\n");
-	fprintf(out, "		</table>\n");
 	fprintf(out, "		<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\">\n");
 	fprintf(out, "			<tr>\n");
-	fprintf(out, "				<td width=\"150\" valign=\"top\">\n");
-	fprintf(out, "					<div id=\"nav\">\n");
-	fprintf(out, "					</div>\n");
+	fprintf(out, "				<td colspan=\"2\" id=\"breadcrumb\">\n");
 	fprintf(out, "				</td>\n");
-	fprintf(out, "				<td valign=\"top\">\n");
-	fprintf(out, "					<div id=\"content\">\n");
-	fprintf(out, "					</div>\n");
+	fprintf(out, "			</tr>\n");
+	fprintf(out, "			<tr>\n");
+	fprintf(out, "				<td width=\"150\" valign=\"top\">\n");
 	fprintf(out, "				</td>\n");
 	fprintf(out, "			</tr>\n");
 	fprintf(out, "		</table>\n");
-	fprintf(out, "		<center id=\"copyright\">\n");
-	fprintf(out, "			Copyright &copy; %s %s%s All rights reserved.\n", year, holder, (strlen(holder) > 0 && holder[strlen(holder) - 1] == '.') ? "" : ".");
+	fprintf(out, "		<center>\n");
+	fprintf(out, "			<small>Copyright &copy; %s %s%s All rights reserved.</small>\n", year, holder, (strlen(holder) > 0 && holder[strlen(holder) - 1] == '.') ? "" : ".");
 	fprintf(out, "		</center>\n");
 	fprintf(out, "		<!--[if lte IE 6]>\n");
 	fprintf(out, "		<script language=\"javascript\" type=\"text/javascript\">\n");

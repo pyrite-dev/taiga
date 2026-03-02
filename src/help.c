@@ -1,6 +1,6 @@
 #include <taiga.h>
 
-int action_help(int argc, char** argv){
+int action_help(int argc, char** argv) {
 	printf("Actions:\n");
 	printf("  help     Show this help\n");
 	printf("  seed     Creates a new website\n");
