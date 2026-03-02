@@ -23,12 +23,21 @@ src/src_help.o: src/help.c
 OBJS += src/src_image_fill.o
 src/src_image_fill.o: src/image/fill.c
 	$(CC) $(CFLAGS) -c -o $@ src/image/fill.c
+OBJS += src/src_image_fixme.o
+src/src_image_fixme.o: src/image/fixme.c
+	$(CC) $(CFLAGS) -c -o $@ src/image/fixme.c
+OBJS += src/src_image_note.o
+src/src_image_note.o: src/image/note.c
+	$(CC) $(CFLAGS) -c -o $@ src/image/note.c
 OBJS += src/src_image_valid-css.o
 src/src_image_valid-css.o: src/image/valid-css.c
 	$(CC) $(CFLAGS) -c -o $@ src/image/valid-css.c
 OBJS += src/src_image_valid-html401.o
 src/src_image_valid-html401.o: src/image/valid-html401.c
 	$(CC) $(CFLAGS) -c -o $@ src/image/valid-html401.c
+OBJS += src/src_image_warning.o
+src/src_image_warning.o: src/image/warning.c
+	$(CC) $(CFLAGS) -c -o $@ src/image/warning.c
 OBJS += src/src_main.o
 src/src_main.o: src/main.c
 	$(CC) $(CFLAGS) -c -o $@ src/main.c
