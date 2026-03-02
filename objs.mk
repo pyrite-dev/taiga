@@ -20,6 +20,9 @@ src/src_classic.o: src/classic.c
 OBJS += src/src_default.o
 src/src_default.o: src/default.c
 	$(CC) $(CFLAGS) -c -o $@ src/default.c
+OBJS += src/src_dirent.o
+src/src_dirent.o: src/dirent.c
+	$(CC) $(CFLAGS) -c -o $@ src/dirent.c
 OBJS += src/src_help.o
 src/src_help.o: src/help.c
 	$(CC) $(CFLAGS) -c -o $@ src/help.c

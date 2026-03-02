@@ -1,12 +1,5 @@
 #include <taiga.h>
 
-#include "image/fill.h"
-#include "image/valid-html401.h"
-#include "image/valid-css.h"
-#include "image/fixme.h"
-#include "image/warning.h"
-#include "image/note.h"
-
 void classic_stylesheet(FILE* out, const char* top) {
 	FILE*	    f;
 	char	    path[128];
@@ -18,36 +11,6 @@ void classic_stylesheet(FILE* out, const char* top) {
 		  "warning", "#990000", /**/
 		  "note", "#006699"	/**/
 	      };
-
-	sprintf(path, "%sfill.gif", top);
-	f = fopen(path, "wb");
-	fwrite(image_fill, 1, image_fill_len, f);
-	fclose(f);
-
-	sprintf(path, "%svalid-html401.png", top);
-	f = fopen(path, "wb");
-	fwrite(image_valid_html401, 1, image_valid_html401_len, f);
-	fclose(f);
-
-	sprintf(path, "%svalid-css.png", top);
-	f = fopen(path, "wb");
-	fwrite(image_valid_css, 1, image_valid_css_len, f);
-	fclose(f);
-
-	sprintf(path, "%sfixme.png", top);
-	f = fopen(path, "wb");
-	fwrite(image_fixme, 1, image_fixme_len, f);
-	fclose(f);
-
-	sprintf(path, "%swarning.png", top);
-	f = fopen(path, "wb");
-	fwrite(image_warning, 1, image_warning_len, f);
-	fclose(f);
-
-	sprintf(path, "%snote.png", top);
-	f = fopen(path, "wb");
-	fwrite(image_note, 1, image_note_len, f);
-	fclose(f);
 
 	if((nodes = xl_get_path(skinconf->root, "breadcrumb")) != NULL) {
 		breadcrumb_bgcolor = xl_get_attribute(nodes[0], "color");
@@ -224,7 +187,7 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 
 			if(text != NULL) {
 				text = u_path(top, text);
-				fprintf(out, "					<a href=\"%s\"><img src=\"%s\" alt=\"%s\"></a>\n", link, text, images[i + 1], name);
+				fprintf(out, "					<a href=\"%s\"><img src=\"%s\" alt=\"%s\" border=\"0\"></a>\n", link, text, images[i + 1], name);
 				free(text);
 			}
 
@@ -306,8 +269,8 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 	fprintf(out, "			</tr>\n");
 	fprintf(out, "			<tr>\n");
 	fprintf(out, "				<td align=\"right\">\n");
-	fprintf(out, "					<a href=\"https://validator.w3.org/check/referer\"><img src=\"%svalid-html401.png\" alt=\"Valid HTML 4.01\" border=\"0\"></a>", top);
-	fprintf(out, "					<a href=\"https://jigsaw.w3.org/css-validator/\"><img src=\"%svalid-css.png\" alt=\"Valid CSS\" border=\"0\"></a>", top);
+	fprintf(out, "					<a href=\"https://validator.w3.org/check/referer\"><img src=\"%simage/valid-html401.png\" alt=\"Valid HTML 4.01\" border=\"0\"></a>\n", top);
+	fprintf(out, "					<a href=\"https://jigsaw.w3.org/css-validator/\"><img src=\"%simage/valid-css.png\" alt=\"Valid CSS\" border=\"0\"></a>\n", top);
 	fprintf(out, "				<td>\n");
 	fprintf(out, "			</tr>\n");
 	fprintf(out, "		</table>\n");
@@ -318,7 +281,7 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 	fprintf(out, "				if(s.indexOf('.png') > 0){\n");
 	fprintf(out, "					var oldw = document.images[i].clientWidth;\n");
 	fprintf(out, "					var oldh = document.images[i].clientHeight;\n");
-	fprintf(out, "					document.images[i].src = '%sfill.gif';\n", top);
+	fprintf(out, "					document.images[i].src = '%simage/fill.gif';\n", top);
 	fprintf(out, "					document.images[i].style.filter = \"progid:DXImageTransform.Microsoft.AlphaImageLoader(src='\" + s + \"', sizingMethod='scale')\";\n");
 	fprintf(out, "					document.images[i].style.width = oldw + \"px\";\n");
 	fprintf(out, "					document.images[i].style.height = oldh + \"px\";\n");

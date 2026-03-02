@@ -1,5 +1,11 @@
 #include <taiga.h>
 
+#include "image/fill.h"
+#include "image/valid-html401.h"
+#include "image/valid-css.h"
+#include "image/fixme.h"
+#include "image/warning.h"
+#include "image/note.h"
 #include "image/logo1.h"
 #include "image/logo2.h"
 
@@ -13,6 +19,14 @@ static void describe(const char* path, const char* what) {
 	printf("%s%s# %s\n", path, space, what);
 }
 
+#define IMAGE(token, path) \
+	if((f = fopen("site/content/image/" path, "wb")) == NULL) { \
+		fprintf(stderr, "Failed to open site/content/image/%s\n", path); \
+		return 1; \
+	} \
+	fwrite(image_##token, 1, image_##token##_len, f); \
+	fclose(f);
+
 int action_seed(int argc, char** argv) {
 	FILE* f;
 
@@ -20,19 +34,14 @@ int action_seed(int argc, char** argv) {
 	io_mkdir("site/content", 0755);
 	io_mkdir("site/content/image", 0755);
 
-	if((f = fopen("site/content/image/group-logo.png", "w")) == NULL) {
-		fprintf(stderr, "Failed to open site/content/image/group-logo.png\n");
-		return 1;
-	}
-	fwrite(image_logo1, image_logo1_len, 1, f);
-	fclose(f);
-
-	if((f = fopen("site/content/image/project-logo.png", "w")) == NULL) {
-		fprintf(stderr, "Failed to open site/content/image/project-logo.png\n");
-		return 1;
-	}
-	fwrite(image_logo2, image_logo2_len, 1, f);
-	fclose(f);
+	IMAGE(fill, "fill.gif");
+	IMAGE(valid_html401, "valid-html401.png");
+	IMAGE(valid_css, "valid-css.png");
+	IMAGE(fixme, "fixme.png");
+	IMAGE(warning, "warning.png");
+	IMAGE(note, "note.png");
+	IMAGE(logo1, "group-logo.png");
+	IMAGE(logo2, "project-logo.png");
 
 	if((f = fopen("site/skinconf.xml", "w")) == NULL) {
 		fprintf(stderr, "Failed to open site/skinconf.xml\n");

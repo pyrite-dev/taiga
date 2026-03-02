@@ -69,7 +69,7 @@ void default_node(FILE* out, const char* top, xl_node_t* element, int indent) {
 		sprintf(tag + strlen(tag), "	<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\">\n");
 		sprintf(tag + strlen(tag), "		<tr>\n");
 		sprintf(tag + strlen(tag), "			<td rowspan=\"2\">\n");
-		sprintf(tag + strlen(tag), "				<img src=\"%s%s.png\">\n", top, element->name);
+		sprintf(tag + strlen(tag), "				<img src=\"%simage/%s.png\">\n", top, element->name);
 		sprintf(tag + strlen(tag), "			</td>\n");
 		sprintf(tag + strlen(tag), "			<td>\n");
 		sprintf(tag + strlen(tag), "				<b>%s</b>\n", text);

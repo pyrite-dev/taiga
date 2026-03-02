@@ -23,6 +23,15 @@
 #define io_chdir(x) _chdir(x)
 #define io_stat _stat
 
+#define IO_DIR void
+struct io_dirent {
+	int  d_namlen;
+	char d_name[512]; /* seems good enough for windows */
+};
+IO_DIR*		  io_opendir(const char* path);
+struct io_dirent* io_readdir(IO_DIR* dir);
+void		  io_closedir(IO_DIR* dir);
+
 #define IO_S_ISDIR(m) ((m) & _S_IFDIR)
 #else
 #define io_mkdir mkdir

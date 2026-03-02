@@ -5,7 +5,7 @@ LIBS =
 
 .PHONY: all format clean
 
-all: taiga
+all: taiga$(E)
 
 include objs.mk
 
