@@ -7,7 +7,8 @@ if [ -d image ]; then
 fi
 for i in *.gif *.png; do
 	NAME="`echo "$i" | rev | cut -d/ -f1 | rev | cut -d. -f1`"
-	xxd -i -n image_$NAME $i > $NAME.c
-	echo "extern unsigned char image_$NAME[];" > $NAME.h
-	echo "extern unsigned int image_${NAME}_len;" >> $NAME.h
+	NAME2="`echo "$NAME" | sed 's/-/_/g'`"
+	xxd -i -n image_$NAME2 $i > $NAME.c
+	echo "extern unsigned char image_$NAME2[];" > $NAME.h
+	echo "extern unsigned int image_${NAME2}_len;" >> $NAME.h
 done

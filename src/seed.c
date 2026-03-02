@@ -45,8 +45,12 @@ int action_seed(int argc, char** argv) {
 	fprintf(f, "		<title><![CDATA[Welcome to template]]></title>\n");
 	fprintf(f, "	</header>\n");
 	fprintf(f, "	<body>\n");
-	fprintf(f, "		<section id=\"status\">\n");
-	fprintf(f, "			<title>Congratulations</title>\n");
+	fprintf(f, "		<section title=\"Congratulations\">\n");
+	fprintf(f, "			<p>\n");
+	fprintf(f, "				You have successfully generated and rendered a website using Taiga - static website generator.\n");
+	fprintf(f, "				This page is from the site template. It is found in <code>site/content/index.xml</code>.\n");
+	fprintf(f, "				Please edit it and replace this text with content of your own.\n");
+	fprintf(f, "			</p>\n");
 	fprintf(f, "		</section>\n");
 	fprintf(f, "	</body>\n");
 	fprintf(f, "</document>\n");

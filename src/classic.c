@@ -1,6 +1,8 @@
 #include <taiga.h>
 
 #include "image/fill.h"
+#include "image/valid-html401.h"
+#include "image/valid-css.h"
 
 void classic_stylesheet(FILE* out, const char* top) {
 	FILE*	    f;
@@ -11,6 +13,16 @@ void classic_stylesheet(FILE* out, const char* top) {
 	sprintf(path, "%sfill.gif", top);
 	f = fopen(path, "wb");
 	fwrite(image_fill, 1, image_fill_len, f);
+	fclose(f);
+
+	sprintf(path, "%svalid-html401.png", top);
+	f = fopen(path, "wb");
+	fwrite(image_valid_html401, 1, image_valid_html401_len, f);
+	fclose(f);
+
+	sprintf(path, "%svalid-css.png", top);
+	f = fopen(path, "wb");
+	fwrite(image_valid_css, 1, image_valid_css_len, f);
 	fclose(f);
 
 	if((nodes = xl_get_path(skinconf->root, "breadcrumb")) != NULL) {
@@ -105,11 +117,51 @@ void classic_head(FILE* out, const char* top, xl_node_t* header) {
 	fprintf(out, "		<link rel=\"stylesheet\" href=\"%sstyle.css\">\n", top);
 }
 
+static void recursive(FILE* out, xl_node_t* element) {
+	int	   i;
+	xl_node_t* child;
+	char*	   tag = NULL;
+	char*	   end = NULL;
+
+	if(element->name == NULL) return;
+
+	if(strcmp(element->name, "section") == 0) {
+		char* title = xl_get_attribute(element, "title");
+
+		if(title != NULL) fprintf(out, "						<div class=\"section\">%s</div>\n", title);
+	} else if(strcmp(element->name, "p") == 0) {
+		tag = "<p>";
+		end = "</p>";
+	} else if(strcmp(element->name, "code") == 0) {
+		tag = "<code>";
+		end = "</code>";
+	}
+
+	if(tag != NULL) fprintf(out, "						%s\n", tag);
+
+	child = element->first_child;
+	while(child != NULL) {
+		if(child->type == XL_NODE_NODE && child->name != NULL) {
+			recursive(out, child);
+		} else if(child->type == XL_NODE_TEXT && child->text != NULL) {
+			if(strcmp(element->name, "title") == 0) {
+			} else {
+				fprintf(out, "%s ", child->text);
+			}
+		}
+
+		child = child->next;
+	}
+
+	if(end != NULL) fprintf(out, "						%s\n", end);
+}
+
 void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body) {
 	char	    year[4 + 1 + 4 + 1]; /* no one would use our software in year 10000... right? :) */
 	char*	    holder     = "Unknown people";
 	char*	    sitesearch = NULL;
 	xl_node_t** nodes;
+	xl_node_t*  child;
 
 	strcpy(year, "Some year");
 
@@ -182,13 +234,31 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 	fprintf(out, "				</td>\n");
 	fprintf(out, "				<td valign=\"top\">\n");
 	fprintf(out, "					<div id=\"content\">\n");
+
+	child = body->first_child;
+	while(child != NULL) {
+		recursive(out, child);
+
+		child = child->next;
+	}
+
 	fprintf(out, "					</div>\n");
 	fprintf(out, "				</td>\n");
 	fprintf(out, "			</tr>\n");
 	fprintf(out, "		</table>\n");
-	fprintf(out, "		<center id=\"copyright\">\n");
-	fprintf(out, "			Copyright &copy; %s %s%s All rights reserved.\n", year, holder, (strlen(holder) > 0 && holder[strlen(holder) - 1] == '.') ? "" : ".");
-	fprintf(out, "		</center>\n");
+	fprintf(out, "		<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\">\n");
+	fprintf(out, "			<tr>\n");
+	fprintf(out, "				<td id=\"copyright\" align=\"center\">\n");
+	fprintf(out, "					Copyright &copy; %s %s%s All rights reserved.\n", year, holder, (strlen(holder) > 0 && holder[strlen(holder) - 1] == '.') ? "" : ".");
+	fprintf(out, "				<td>\n");
+	fprintf(out, "			</tr>\n");
+	fprintf(out, "			<tr>\n");
+	fprintf(out, "				<td align=\"right\">\n");
+	fprintf(out, "					<a href=\"https://validator.w3.org/check/referer\"><img src=\"%svalid-html401.png\" alt=\"Valid HTML 4.01\" border=\"0\"></a>", top);
+	fprintf(out, "					<a href=\"https://jigsaw.w3.org/css-validator/\"><img src=\"%svalid-css.png\" alt=\"Valid CSS\" border=\"0\"></a>", top);
+	fprintf(out, "				<td>\n");
+	fprintf(out, "			</tr>\n");
+	fprintf(out, "		</table>\n");
 	fprintf(out, "		<!--[if lte IE 6]>\n");
 	fprintf(out, "		<script language=\"javascript\" type=\"text/javascript\">\n");
 	fprintf(out, "			for(var i = 0; i < document.images.length; i++){\n");
@@ -196,7 +266,7 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 	fprintf(out, "				if(s.indexOf('.png') > 0){\n");
 	fprintf(out, "					var oldw = document.images[i].clientWidth;\n");
 	fprintf(out, "					var oldh = document.images[i].clientHeight;\n");
-	fprintf(out, "					document.images[i].src = '/static/fill.gif';\n");
+	fprintf(out, "					document.images[i].src = '%sfill.gif';\n", top);
 	fprintf(out, "					document.images[i].style.filter = \"progid:DXImageTransform.Microsoft.AlphaImageLoader(src='\" + s + \"', sizingMethod='scale')\";\n");
 	fprintf(out, "					document.images[i].style.width = oldw + \"px\";\n");
 	fprintf(out, "					document.images[i].style.height = oldh + \"px\";\n");
