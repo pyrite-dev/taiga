@@ -109,6 +109,10 @@ int action_seed(int argc, char** argv) {
 	fprintf(f, "		<note>\n");
 	fprintf(f, "			Please read this!\n");
 	fprintf(f, "		</note>\n");
+	fprintf(f, "		<table>\n");
+	fprintf(f, "			<tr><th>Test</th><th>Test</th></tr>\n");
+	fprintf(f, "			<tr><td>Test</td><td>Test</td></tr>\n");
+	fprintf(f, "		</table>\n");
 	fprintf(f, "		<section title=\"Congratulations\">\n");
 	fprintf(f, "			<p>\n");
 	fprintf(f, "				You have successfully generated and rendered a website using Taiga - static website generator.\n");
