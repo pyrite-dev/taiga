@@ -1,7 +1,8 @@
 #include <taiga.h>
 
 #ifdef _WIN32
-/* reason why this is included here, is because it makes compilation REALLY slow */
+/* reason why this is included here, is because it makes compilation REALLY slow
+ */
 #include <windows.h>
 
 typedef struct io_dir {

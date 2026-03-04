@@ -1,19 +1,19 @@
 #ifndef __TAIGA_H__
 #define __TAIGA_H__
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 #include <stdarg.h>
-#include <time.h>
-#include <sys/types.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <time.h>
 #ifdef _WIN32
 #include <direct.h>
 #include <io.h>
 #else
-#include <unistd.h>
 #include <dirent.h>
+#include <unistd.h>
 #endif
 
 #include <xemil.h>
@@ -67,9 +67,11 @@ char* u_path(const char* top, const char* path);
 int process(const char* top, const char* out, const char* full);
 
 /* classic.c */
-void classic_stylesheet(FILE* out, const char* top); /* also create files here if you need one */
+void classic_stylesheet(
+    FILE* out, const char* top); /* also create files here if you need one */
 void classic_head(FILE* out, const char* top, xl_node_t* header);
-void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body);
+void classic_body(FILE* out, const char* top, const char* title,
+		  xl_node_t* body);
 
 /* default.c */
 void default_head(FILE* out, const char* top, xl_node_t* element, int indent);

@@ -17,7 +17,8 @@ void classic_stylesheet(FILE* out, const char* top) {
 
 		free(nodes);
 	}
-	if(breadcrumb_bgcolor == NULL) breadcrumb_bgcolor = "#003366";
+	if(breadcrumb_bgcolor == NULL)
+		breadcrumb_bgcolor = "#003366";
 
 	fprintf(out, "body {\n");
 	fprintf(out, "	padding: 0;\n");
@@ -129,7 +130,8 @@ void classic_stylesheet(FILE* out, const char* top) {
 void classic_head(FILE* out, const char* top, xl_node_t* header) {
 	xl_node_t* child;
 
-	fprintf(out, "		<link rel=\"stylesheet\" href=\"%sstyle.css\">\n", top);
+	fprintf(out, "		<link rel=\"stylesheet\" href=\"%sstyle.css\">\n",
+		top);
 
 	child = header->first_child;
 	while(child != NULL) {
@@ -139,8 +141,10 @@ void classic_head(FILE* out, const char* top, xl_node_t* header) {
 	}
 }
 
-void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body) {
-	char	    year[4 + 1 + 4 + 1]; /* no one would use our software in year 10000... right? :) */
+void classic_body(FILE* out, const char* top, const char* title,
+		  xl_node_t* body) {
+	char	    year[4 + 1 + 4 +
+			 1]; /* no one would use our software in year 10000... right? :) */
 	char*	    holder     = "Unknown people";
 	char*	    sitesearch = NULL;
 	xl_node_t** nodes;
@@ -182,9 +186,11 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 
 		free(nodes);
 	}
-	if(sitesearch == NULL) sitesearch = "https://invalid.link";
+	if(sitesearch == NULL)
+		sitesearch = "https://invalid.link";
 
-	fprintf(out, "		<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\">\n");
+	fprintf(out, "		<table border=\"0\" cellpadding=\"0\" "
+		     "cellspacing=\"0\" width=\"100%%\">\n");
 	fprintf(out, "			<tr width=\"100%%\">\n");
 	fprintf(out, "				<td>\n");
 	for(i = 0; i < sizeof(images) / sizeof(images[0]); i++) {
@@ -197,14 +203,16 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 			name = nodes[0]->text;
 			free(nodes);
 		}
-		if(name == NULL) name = "Logo";
+		if(name == NULL)
+			name = "Logo";
 
 		sprintf(path, "%s.link", images[i]);
 		if((nodes = xl_get_path(skinconf->root, path)) != NULL) {
 			link = xl_get_attribute(nodes[0], "href");
 			free(nodes);
 		}
-		if(link == NULL) link = "https://invalid.link";
+		if(link == NULL)
+			link = "https://invalid.link";
 
 		link = u_path(top, link);
 
@@ -214,7 +222,10 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 
 			if(text != NULL) {
 				text = u_path(top, text);
-				fprintf(out, "					<a href=\"%s\"><img src=\"%s\" alt=\"%s\" border=\"0\"></a>\n", link, text, images[i + 1], name);
+				fprintf(out,
+					"					<a href=\"%s\"><img "
+					"src=\"%s\" alt=\"%s\" border=\"0\"></a>\n",
+					link, text, images[i + 1], name);
 				free(text);
 			}
 
@@ -226,7 +237,8 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 	fprintf(out, "				</td>\n");
 	fprintf(out, "			</tr>\n");
 	fprintf(out, "		</table>\n");
-	fprintf(out, "		<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\" id=\"breadcrumb\">\n");
+	fprintf(out, "		<table border=\"0\" cellpadding=\"0\" "
+		     "cellspacing=\"0\" width=\"100%%\" id=\"breadcrumb\">\n");
 	fprintf(out, "			<tr width=\"100%%\">\n");
 	fprintf(out, "				<td>\n");
 	if((nodes = xl_get_path(skinconf->root, "breadcrumb.link")) != NULL) {
@@ -236,14 +248,18 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 			char* link = xl_get_attribute(nodes[i], "href");
 			char* name = xl_get_attribute(nodes[i], "name");
 
-			if(link == NULL) link = "https://invalid.link";
+			if(link == NULL)
+				link = "https://invalid.link";
 
 			link = u_path(top, link);
 
-			if(title == NULL) title = link;
+			if(title == NULL)
+				title = link;
 
-			if(i > 0) fprintf(out, "					|\n");
-			fprintf(out, "					<a href=\"%s\">%s</a>\n", link, name);
+			if(i > 0)
+				fprintf(out, "					|\n");
+			fprintf(out, "					<a href=\"%s\">%s</a>\n",
+				link, name);
 
 			free(link);
 		}
@@ -251,19 +267,28 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 		free(nodes);
 	}
 	fprintf(out, "				</td>\n");
-	fprintf(out, "				<td nowrap=\"1\" align=\"right\">\n");
-	fprintf(out, "					<form action=\"https://www.google.com/search\" method=\"GET\">\n");
+	fprintf(out, "				<td nowrap=\"1\" "
+		     "align=\"right\">\n");
+	fprintf(out, "					<form "
+		     "action=\"https://www.google.com/search\" method=\"GET\">\n");
 	fprintf(out, "						Search\n");
-	fprintf(out, "						<input type=\"hidden\" name=\"sitesearch\" value=\"%s\">\n", sitesearch);
-	fprintf(out, "						<input name=\"q\" size=\"10\">\n");
-	fprintf(out, "						<input type=\"submit\" value=\"Go\">\n");
+	fprintf(out,
+		"						<input type=\"hidden\" "
+		"name=\"sitesearch\" value=\"%s\">\n",
+		sitesearch);
+	fprintf(out, "						<input "
+		     "name=\"q\" size=\"10\">\n");
+	fprintf(out, "						<input "
+		     "type=\"submit\" value=\"Go\">\n");
 	fprintf(out, "					</form>\n");
 	fprintf(out, "				</td>\n");
 	fprintf(out, "			</tr>\n");
 	fprintf(out, "		</table>\n");
-	fprintf(out, "		<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\">\n");
+	fprintf(out, "		<table border=\"0\" cellpadding=\"0\" "
+		     "cellspacing=\"0\" width=\"100%%\">\n");
 	fprintf(out, "			<tr>\n");
-	fprintf(out, "				<td width=\"150\" valign=\"top\">\n");
+	fprintf(out, "				<td width=\"150\" "
+		     "valign=\"top\">\n");
 	fprintf(out, "					<div id=\"nav\">\n");
 
 	if((nodes = xl_get_path(skinconf->root, "nav")) != NULL) {
@@ -282,7 +307,8 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 	fprintf(out, "					</div>\n");
 	fprintf(out, "				</td>\n");
 	fprintf(out, "				<td valign=\"top\">\n");
-	fprintf(out, "					<div id=\"content\">\n");
+	fprintf(out, "					<div "
+		     "id=\"content\">\n");
 
 	child = body->first_child;
 	while(child != NULL) {
@@ -295,30 +321,62 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 	fprintf(out, "				</td>\n");
 	fprintf(out, "			</tr>\n");
 	fprintf(out, "		</table>\n");
-	fprintf(out, "		<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\">\n");
+	fprintf(out, "		<table border=\"0\" cellpadding=\"0\" "
+		     "cellspacing=\"0\" width=\"100%%\">\n");
 	fprintf(out, "			<tr>\n");
-	fprintf(out, "				<td id=\"copyright\" align=\"center\">\n");
-	fprintf(out, "					Copyright &copy; %s %s%s All rights reserved.\n", year, holder, (strlen(holder) > 0 && holder[strlen(holder) - 1] == '.') ? "" : ".");
+	fprintf(
+	    out,
+	    "				<td id=\"copyright\" align=\"center\">\n");
+	fprintf(out,
+		"					Copyright &copy; %s %s%s All "
+		"rights reserved.\n",
+		year, holder,
+		(strlen(holder) > 0 && holder[strlen(holder) - 1] == '.') ? "" : ".");
 	fprintf(out, "				<td>\n");
 	fprintf(out, "			</tr>\n");
 	fprintf(out, "			<tr>\n");
 	fprintf(out, "				<td align=\"right\">\n");
-	fprintf(out, "					<a href=\"https://validator.w3.org/check/referer\"><img src=\"%simage/valid-html401.png\" alt=\"Valid HTML 4.01\" border=\"0\"></a>\n", top);
-	fprintf(out, "					<a href=\"https://jigsaw.w3.org/css-validator/\"><img src=\"%simage/valid-css.png\" alt=\"Valid CSS\" border=\"0\"></a>\n", top);
+	fprintf(out,
+		"					<a "
+		"href=\"https://validator.w3.org/check/referer\"><img "
+		"src=\"%simage/valid-html401.png\" alt=\"Valid HTML 4.01\" "
+		"border=\"0\"></a>\n",
+		top);
+	fprintf(out,
+		"					<a "
+		"href=\"https://jigsaw.w3.org/css-validator/\"><img "
+		"src=\"%simage/valid-css.png\" alt=\"Valid CSS\" border=\"0\"></a>\n",
+		top);
 	fprintf(out, "				<td>\n");
 	fprintf(out, "			</tr>\n");
 	fprintf(out, "		</table>\n");
 	fprintf(out, "		<!--[if lte IE 6]>\n");
-	fprintf(out, "		<script language=\"javascript\" type=\"text/javascript\">\n");
-	fprintf(out, "			for(var i = 0; i < document.images.length; i++){\n");
-	fprintf(out, "				var s = document.images[i].src;\n");
+	fprintf(
+	    out,
+	    "		<script language=\"javascript\" type=\"text/javascript\">\n");
+	fprintf(
+	    out,
+	    "			for(var i = 0; i < document.images.length; i++){\n");
+	fprintf(out, "				var s = "
+		     "document.images[i].src;\n");
 	fprintf(out, "				if(s.indexOf('.png') > 0){\n");
-	fprintf(out, "					var oldw = document.images[i].clientWidth;\n");
-	fprintf(out, "					var oldh = document.images[i].clientHeight;\n");
-	fprintf(out, "					document.images[i].src = '%simage/fill.gif';\n", top);
-	fprintf(out, "					document.images[i].style.filter = \"progid:DXImageTransform.Microsoft.AlphaImageLoader(src='\" + s + \"', sizingMethod='scale')\";\n");
-	fprintf(out, "					document.images[i].style.width = oldw + \"px\";\n");
-	fprintf(out, "					document.images[i].style.height = oldh + \"px\";\n");
+	fprintf(out, "					var oldw = "
+		     "document.images[i].clientWidth;\n");
+	fprintf(out, "					var oldh = "
+		     "document.images[i].clientHeight;\n");
+	fprintf(out,
+		"					document.images[i].src = "
+		"'%simage/fill.gif';\n",
+		top);
+	fprintf(
+	    out,
+	    "					document.images[i].style.filter = "
+	    "\"progid:DXImageTransform.Microsoft.AlphaImageLoader(src='\" + s + \"', "
+	    "sizingMethod='scale')\";\n");
+	fprintf(out, "					"
+		     "document.images[i].style.width = oldw + \"px\";\n");
+	fprintf(out, "					"
+		     "document.images[i].style.height = oldh + \"px\";\n");
 	fprintf(out, "				}\n");
 	fprintf(out, "			}\n");
 	fprintf(out, "		</script>\n");

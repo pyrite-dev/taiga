@@ -15,7 +15,8 @@ static int scan(const char* top, const char* path) {
 			char*	       p;
 			struct io_stat s;
 
-			if(strcmp(d->d_name, ".") == 0 || strcmp(d->d_name, "..") == 0) continue;
+			if(strcmp(d->d_name, ".") == 0 || strcmp(d->d_name, "..") == 0)
+				continue;
 
 			p = u_strvacat(in, d->d_name, NULL);
 			if(io_stat(p, &s) == 0) {
@@ -81,7 +82,8 @@ int action_site(int argc, char** argv) {
 
 	io_mkdir("build", 0755);
 
-	if((skinconf = xl_open_file("site/skinconf.xml")) == NULL || !xl_parse(skinconf)) {
+	if((skinconf = xl_open_file("site/skinconf.xml")) == NULL ||
+	   !xl_parse(skinconf)) {
 		fprintf(stderr, "Failed to parse site/skinconf.xml!\n");
 		st = 1;
 		goto cleanup;
@@ -100,7 +102,8 @@ int action_site(int argc, char** argv) {
 	}
 
 cleanup:;
-	if(skinconf != NULL) xl_close(skinconf);
+	if(skinconf != NULL)
+		xl_close(skinconf);
 
 	if(st == 0) {
 		fprintf(stderr, "\nBuild successful\n");
