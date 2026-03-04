@@ -1,0 +1,4 @@
+CC = owcc -bnt
+E = .exe
+
+include Makefile

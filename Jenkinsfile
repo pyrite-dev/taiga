@@ -27,7 +27,7 @@ pipeline {
 					}
 					steps {
 						sh("git submodule update --init --recursive --force")
-						sh("make -j4 CC='owcc -bnt' E=.exe")
+						sh("make -j4 -f Makefile.watcom")
 						sh("mv taiga.exe taiga-win32.exe")
 						archiveArtifacts("taiga-win32.exe")
 					}

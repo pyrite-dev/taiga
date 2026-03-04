@@ -1,7 +1,9 @@
-CC = cc
-CFLAGS = -I external/xemil/include -I src
-LDFLAGS =
-LIBS =
+CC ?= cc
+CFLAGS ?= -I external/xemil/include -I src
+LDFLAGS ?=
+LIBS ?=
+
+E ?=
 
 .PHONY: all format clean
 
