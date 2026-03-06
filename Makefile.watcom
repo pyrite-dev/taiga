@@ -1,5 +1,5 @@
 CC = owcc -bnt
 E = .exe
-AFTER = wrc src/taiga.rc taiga.exe
+AFTER = wrc -q -bt=nt src/taiga.rc taiga.exe
 
 include Makefile

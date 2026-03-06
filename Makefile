@@ -15,10 +15,9 @@ include objs.mk
 taiga$(E): $(OBJS)
 	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
 	$(AFTER)
-	-rm -f *.res
 
 format:
 	clang-format --verbose -i `find src -name "*.c" -or -name "*.h"`
 
 clean:
-	rm -f src/*.o taiga taiga.exe
+	rm -f src/*.o src/*.res taiga taiga.exe
