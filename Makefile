@@ -2,6 +2,7 @@ CC ?= cc
 CFLAGS ?= -I external/xemil/include -I src
 LDFLAGS ?=
 LIBS ?=
+AFTER ?=
 
 E ?=
 
@@ -13,6 +14,8 @@ include objs.mk
 
 taiga$(E): $(OBJS)
 	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
+	$(AFTER)
+	-rm -f *.res
 
 format:
 	clang-format --verbose -i `find src -name "*.c" -or -name "*.h"`
