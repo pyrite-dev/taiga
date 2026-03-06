@@ -11,6 +11,7 @@ pipeline {
 					}
 					steps {
 						sh("git submodule update --init --recursive --force")
+						sh("make clean")
 						sh("make -j4 CC=musl-gcc LDFLAGS=-static")
 						sh("mv taiga taiga-linux64")
 						archiveArtifacts("taiga-linux64")
@@ -22,6 +23,7 @@ pipeline {
 					}
 					steps {
 						sh("git submodule update --init --recursive --force")
+						sh("make clean")
 						sh("make -j4 CC='musl-gcc -g' LDFLAGS=-static")
 						sh("mv taiga taiga-debug-linux64")
 						archiveArtifacts("taiga-debug-linux64")
@@ -38,6 +40,7 @@ pipeline {
 					}
 					steps {
 						sh("git submodule update --init --recursive --force")
+						sh("make clean")
 						sh("make -j4 -f Makefile.watcom")
 						sh("mv taiga.exe taiga-win32.exe")
 						archiveArtifacts("taiga-win32.exe")
