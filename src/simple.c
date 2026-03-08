@@ -298,12 +298,24 @@ void simple_body(FILE* out, const char* top, const char* title, xl_node_t* body)
 
 	child = body->first_child;
 	while(child != NULL) {
-		default_body(out, top, child, 5);
+		default_body(out, top, child, 0, 5);
 
 		child = child->next;
 	}
 
 	fprintf(out, "					<div id=\"footer\">\n");
+
+	if((nodes = xl_get_path(skinconf->root, "footer")) != NULL) {
+		child = nodes[0]->first_child;
+		while(child != NULL) {
+			default_body(out, top, child, 1, 6);
+
+			child = child->next;
+		}
+
+		free(nodes);
+	}
+
 	fprintf(out, "						<a href=\"https://validator.w3.org/check/referer\"><img src=\"%simage/valid-html401.png\" alt=\"Valid HTML 4.01\" border=\"0\" width=\"88\" height=\"31\"></a>\n", top);
 	fprintf(out, "						<a href=\"https://jigsaw.w3.org/css-validator/\"><img src=\"%simage/valid-css.png\" alt=\"Valid CSS\" border=\"0\" width=\"88\" height=\"31\"></a>\n", top);
 	fprintf(out, "						<p id=\"copyright\">\n");

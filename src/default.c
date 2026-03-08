@@ -18,7 +18,7 @@ static void print(FILE* out, const char* txt, int indent) {
 	}
 }
 
-static void accept_attr(char* text, xl_node_t* element, ...) {
+static void accept_attr(const char* top, char* text, int spec, xl_node_t* element, ...) {
 	xl_attribute_t* attr = element->first_attribute;
 
 	text[0] = 0;
@@ -33,7 +33,17 @@ static void accept_attr(char* text, xl_node_t* element, ...) {
 			if(attr->value == NULL) {
 				sprintf(text + strlen(text), " %s", attr->key);
 			} else {
-				sprintf(text + strlen(text), " %s=\"%s\"", attr->key, attr->value);
+				char* t;
+
+				if(spec && (strcmp(attr->key, "href") == 0 || strcmp(attr->key, "src") == 0)) {
+					t = u_path(top, attr->value);
+				} else {
+					t = u_strdup(attr->value);
+				}
+
+				sprintf(text + strlen(text), " %s=\"%s\"", attr->key, t);
+
+				free(t);
 			}
 		}
 		va_end(va);
@@ -55,7 +65,7 @@ void default_head(FILE* out, const char* top, xl_node_t* element, int indent) {
 	if(strcmp(element->name, "link") == 0) {
 		char text[2048];
 
-		accept_attr(text, element, "rel", "href", NULL);
+		accept_attr(top, text, 0, element, "rel", "href", NULL);
 
 		sprintf(tag, "<%s%s>", element->name, text);
 	}
@@ -80,7 +90,7 @@ void default_head(FILE* out, const char* top, xl_node_t* element, int indent) {
 		print(out, end, indent);
 }
 
-void default_body(FILE* out, const char* top, xl_node_t* element, int indent) {
+void default_body(FILE* out, const char* top, xl_node_t* element, int spec, int indent) {
 	xl_node_t* child;
 	char	   tag[2048]; /* enough for most cases... :) */
 	char	   end[128];
@@ -104,7 +114,7 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int indent) {
 
 		author[0] = 0;
 
-		accept_attr(text, element, "id", "class", NULL);
+		accept_attr(top, text, 0, element, "id", "class", NULL);
 
 		if(strcmp(element->name, "fixme") == 0) {
 			say = "Fixme";
@@ -153,27 +163,27 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int indent) {
 		  strcmp(element->name, "h4") == 0 ||	      /**/
 		  strcmp(element->name, "h5") == 0 ||	      /**/
 		  strcmp(element->name, "h6") == 0) {
-		accept_attr(text, element, "id", "class", NULL);
+		accept_attr(top, text, 0, element, "id", "class", NULL);
 
 		sprintf(tag, "<%s%s>", element->name, text);
 
 		sprintf(end, "</%s>", element->name);
 	} else if(strcmp(element->name, "ul") == 0 || /**/
 		  strcmp(element->name, "ol") == 0) {
-		accept_attr(text, element, "id", "class", "spacing", NULL);
+		accept_attr(top, text, 0, element, "id", "class", "spacing", NULL);
 
 		sprintf(tag, "<%s%s>", element->name, text);
 
 		sprintf(end, "</%s>", element->name);
 	} else if(strcmp(element->name, "a") == 0) {
-		accept_attr(text, element, "id", "class", "href", "title", "rel", NULL);
+		accept_attr(top, text, 0, element, "id", "class", "href", "title", "rel", NULL);
 
 		sprintf(tag, "<%s%s>", element->name, text);
 
 		sprintf(end, "</%s>", element->name);
 	} else if(strcmp(element->name, "td") == 0 || /**/
 		  strcmp(element->name, "th") == 0) {
-		accept_attr(text, element, "id", "class", "rowspan", "colspan", NULL);
+		accept_attr(top, text, 0, element, "id", "class", "rowspan", "colspan", NULL);
 
 		sprintf(tag, "<%s%s>", element->name, text);
 
@@ -184,7 +194,7 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int indent) {
 		char* h;
 		int   ws, hs;
 
-		accept_attr(text, element, "src", "alt", "title", "height", "width", "id", "class", NULL);
+		accept_attr(top, text, 0, element, "src", "alt", "title", "height", "width", "id", "class", NULL);
 
 		w = xl_get_attribute(element, "width");
 		h = xl_get_attribute(element, "height");
@@ -202,20 +212,20 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int indent) {
 
 		sprintf(tag, "<%s%s border=\"0\">", element->name, text);
 	} else if(strcmp(element->name, "script") == 0) {
-		accept_attr(text, element, "src", "type", NULL);
+		accept_attr(top, text, 0, element, "src", "type", NULL);
 
 		sprintf(tag, "<%s%s>", element->name, text);
 
 		sprintf(end, "</%s>", element->name);
 	} else if(strcmp(element->name, "table") == 0) {
-		accept_attr(text, element, "id", "class", NULL);
+		accept_attr(top, text, 0, element, "id", "class", NULL);
 
 		sprintf(tag, "<%s%s class=\"grid\" width=\"100%%\" cellpadding=\"3\" cellspacing=\"2\" border=\"1\">", element->name, text);
 
 		sprintf(end, "</%s>", element->name);
 	} else if(strcmp(element->name, "hr") == 0 || /**/
 		  strcmp(element->name, "br") == 0) {
-		accept_attr(text, element, "id", "class", NULL);
+		accept_attr(top, text, 0, element, "id", "class", NULL);
 
 		sprintf(tag, "<%s%text>", element->name, text);
 	}
@@ -225,7 +235,7 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int indent) {
 	child = element->first_child;
 	while(child != NULL) {
 		if(child->type == XL_NODE_NODE && child->name != NULL) {
-			default_body(out, top, child, indent + 1 + add);
+			default_body(out, top, child, spec, indent + 1 + add);
 		} else if(child->type == XL_NODE_TEXT && child->text != NULL) {
 			print(out, child->text, indent + 1 + add);
 		}

@@ -49,7 +49,7 @@ void classic_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "	padding: 8px;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
-	fprintf(out, "#content {\n");
+	fprintf(out, "#content, #footer {\n");
 	fprintf(out, "	padding: 8px;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
@@ -298,9 +298,23 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 
 	child = body->first_child;
 	while(child != NULL) {
-		default_body(out, top, child, 6);
+		default_body(out, top, child, 0, 6);
 
 		child = child->next;
+	}
+
+	fprintf(out, "					</div>\n");
+	fprintf(out, "					<div id=\"footer\">\n");
+
+	if((nodes = xl_get_path(skinconf->root, "footer")) != NULL) {
+		child = nodes[0]->first_child;
+		while(child != NULL) {
+			default_body(out, top, child, 1, 6);
+
+			child = child->next;
+		}
+
+		free(nodes);
 	}
 
 	fprintf(out, "					</div>\n");

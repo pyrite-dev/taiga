@@ -71,6 +71,17 @@ int   u_image_size(const char* top, const char* path, char* (*path_func)(const c
 /* process.c */
 int process(const char* top, const char* out, const char* full);
 
+/* default.c */
+void default_head(FILE* out, const char* top, xl_node_t* element, int indent);
+void default_body(FILE* out, const char* top, xl_node_t* element, int spec, int indent); /* pass non-zero to spec if you want links to be relative from top */
+void default_nav(FILE* out, const char* top, xl_node_t* element, int indent);
+
+/*** skins ***/
+
+/* they should share compatible class/id names for elements but
+ * they're not documented... oh well
+ */
+
 /* classic.c */
 void classic_stylesheet(FILE* out, const char* top);
 void classic_head(FILE* out, const char* top, xl_node_t* header);
@@ -80,10 +91,5 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 void simple_stylesheet(FILE* out, const char* top);
 void simple_head(FILE* out, const char* top, xl_node_t* header);
 void simple_body(FILE* out, const char* top, const char* title, xl_node_t* body);
-
-/* default.c */
-void default_head(FILE* out, const char* top, xl_node_t* element, int indent);
-void default_body(FILE* out, const char* top, xl_node_t* element, int indent);
-void default_nav(FILE* out, const char* top, xl_node_t* element, int indent);
 
 #endif

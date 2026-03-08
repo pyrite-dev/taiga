@@ -54,6 +54,7 @@ int action_seed(int argc, char** argv) {
 	fprintf(f, "	NOTE!\n");
 	fprintf(f, "	  - Relative path in this config is relative to site/content\n");
 	fprintf(f, "	  - If relative path starts from ./ or ../, it's relative to URL when accessed\n");
+	fprintf(f, "	  - This rule applies to footer's src/href too\n");
 	fprintf(f, "-->\n");
 	fprintf(f, "<skinconfig>\n");
 	fprintf(f, "	<search domain=\"example.com\" />\n");
@@ -91,6 +92,9 @@ int action_seed(int argc, char** argv) {
 	fprintf(f, "		<year>%d</year> <!-- Year when you started this project/whatever copyright holder -->\n", 1900 + tm->tm_year);
 	fprintf(f, "		<link href=\"https://example.com\" />\n");
 	fprintf(f, "	</copyright>\n");
+	fprintf(f, "	<footer>\n");
+	fprintf(f, "		<p>This part is shared between files!</p>\n");
+	fprintf(f, "	</footer>\n");
 	fprintf(f, "</skinconfig>\n");
 	fclose(f);
 

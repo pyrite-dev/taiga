@@ -90,7 +90,7 @@ int action_site(int argc, char** argv) {
 
 	io_mkdir("build", 0755);
 
-	if((skinconf = xl_open_file("site/skinconf.xml")) == NULL || !xl_parse(skinconf)) {
+	if((skinconf = xl_open_file("site/skinconf.xml")) == NULL || !(skinconf->new_text = 1) || !xl_parse(skinconf)) {
 		fprintf(stderr, "Failed to parse site/skinconf.xml!\n");
 		st = 1;
 		goto cleanup;
