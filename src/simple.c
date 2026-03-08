@@ -223,7 +223,7 @@ void simple_body(FILE* out, const char* top, const char* title, xl_node_t* body)
 		free(nodes);
 	}
 
-	/* should this be default behavior? */
+	/* TODO: should this be default behavior? */
 	if(strcmp(top, "") != 0 && title != NULL) project_desc = (char*)title;
 
 	if((nodes = xl_get_path(skinconf->root, "copyright.year")) != NULL) {

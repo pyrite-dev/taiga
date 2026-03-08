@@ -13,9 +13,9 @@ unsigned int crc32(void* input, unsigned int len) {
 	i   = 0;
 	crc = 0xFFFFFFFF;
 	while(i < len) {
-		byte = message[i]; // Get next byte.
+		byte = message[i]; /* Get next byte. */
 		crc  = crc ^ byte;
-		for(j = 7; j >= 0; j--) { // Do eight times.
+		for(j = 7; j >= 0; j--) { /* Do eight times. */
 			mask = -(crc & 1);
 			crc  = (crc >> 1) ^ (0xEDB88320 & mask);
 		}
