@@ -1,7 +1,7 @@
 CC ?= cc
-CFLAGS ?= -I external/xemil/include -I external/stb -I src $(DEFS)
+CFLAGS ?= -I external/xemil/include -I src $(DEFS)
 LDFLAGS ?=
-LIBS ?= -lm
+LIBS ?=
 AFTER ?=
 
 E ?=
