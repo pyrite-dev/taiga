@@ -215,8 +215,18 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 			char* text = xl_get_attribute(nodes[0], "src");
 
 			if(text != NULL) {
+				int  ws, hs;
+				char size[256];
+
+				size[0] = 0;
+
+				if(u_image_size(top, text, u_http_path, &ws, &hs)) {
+					sprintf(size, " width=\"%d\" height=\"%d\"", ws, hs);
+				}
+
 				text = u_path(top, text);
-				fprintf(out, "					<a href=\"%s\"><img src=\"%s\" alt=\"%s\" border=\"0\"></a>\n", link, text, images[i + 1], name);
+
+				fprintf(out, "					<a href=\"%s\"><img src=\"%s\" alt=\"%s\" border=\"0\"%s></a>\n", link, text, name, size);
 				free(text);
 			}
 

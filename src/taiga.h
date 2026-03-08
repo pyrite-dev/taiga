@@ -65,6 +65,8 @@ int action_seed(int argc, char** argv);
 char* u_strvacat(const char* str, ...);
 char* u_strdup(const char* str);
 char* u_path(const char* top, const char* path);
+char* u_http_path(const char* top, const char* path);
+int   u_image_size(const char* top, const char* path, char* (*path_func)(const char* top, const char* path), int* w, int* h);
 
 /* process.c */
 int process(const char* top, const char* out, const char* full);

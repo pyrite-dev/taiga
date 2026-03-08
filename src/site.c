@@ -5,7 +5,7 @@ void (*site_stylesheet)(FILE* out, const char* top); /* also create files here i
 void (*site_head)(FILE* out, const char* top, xl_node_t* header);
 void (*site_body)(FILE* out, const char* top, const char* title, xl_node_t* body);
 
-static int scan(const char* top, const char* path) {
+static int scan(const char* top, int mode, const char* path) {
 	char*	in  = u_strvacat("site/content/", path, NULL);
 	char*	out = u_strvacat("build/", path, NULL);
 	IO_DIR* dir;
@@ -29,7 +29,7 @@ static int scan(const char* top, const char* path) {
 
 					io_mkdir(o, 0755);
 					free(o);
-					if(!scan(t, p2)) {
+					if(!scan(t, mode, p2)) {
 						free(t);
 						free(p2);
 						free(p);
@@ -41,7 +41,7 @@ static int scan(const char* top, const char* path) {
 					}
 					free(t);
 					free(p2);
-				} else if(strcmp(d->d_name, "index.xml") == 0) {
+				} else if(mode && strcmp(d->d_name, "index.xml") == 0) {
 					printf("%s:\n", p);
 					if(!process(top, out, p)) {
 						free(p);
@@ -51,7 +51,7 @@ static int scan(const char* top, const char* path) {
 
 						return 0;
 					}
-				} else {
+				} else if(!mode) {
 					char* po   = u_strvacat(out, d->d_name, NULL);
 					FILE* fin  = fopen(p, "rb");
 					FILE* fout = fopen(po, "wb");
@@ -130,7 +130,12 @@ int action_site(int argc, char** argv) {
 
 	fclose(css);
 
-	if(!scan("", "")) {
+	if(!scan("", 0, "")) {
+		st = 1;
+		goto cleanup;
+	}
+
+	if(!scan("", 1, "")) {
 		st = 1;
 		goto cleanup;
 	}

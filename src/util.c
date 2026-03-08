@@ -36,3 +36,68 @@ char* u_path(const char* top, const char* path) {
 
 	return u_strvacat(top, path, NULL); /* otherwise, concat */
 }
+
+char* u_http_path(const char* top, const char* path) {
+	if(strlen(path) > 3 && strstr(path, "://") != NULL) return u_strdup(path); /* link - return as is */
+
+	return u_strvacat(top, "build/", path, NULL); /* otherwise, concat */
+}
+
+int u_image_size(const char* top, const char* path, char* (*path_func)(const char* top, const char* path), int* w, int* h) {
+	char* p;
+	int   ch;
+	FILE* f;
+	int   st = 0;
+
+	p = path_func(top, path);
+
+	if(strlen(p) > 3 && strstr(p, "://") != NULL) {
+		free(p);
+		return 0;
+	}
+
+	if((f = fopen(p, "rb")) != NULL) {
+		unsigned char buffer[512];
+		unsigned char png_sig[16] = {
+		    0x89,
+		    0x50,
+		    0x4e,
+		    0x47,
+		    0x0d,
+		    0x0a,
+		    0x1a,
+		    0x0a,
+		    /**/
+		    0x00,
+		    0x00,
+		    0x00,
+		    0x0d,
+		    0x49,
+		    0x48,
+		    0x44,
+		    0x52};
+
+		if(fread(buffer, 1, 16, f) == 16 && memcmp(buffer, png_sig, 16) == 0 && fread(buffer, 1, 13, f) == 13) {
+			int i;
+
+			*w = 0;
+			*h = 0;
+
+			for(i = 0; i < 4; i++) {
+				*w = (*w) << 8;
+				*w |= buffer[i + 0];
+
+				*h = (*h) << 8;
+				*h |= buffer[i + 4];
+			}
+
+			st = 1;
+		}
+
+		fclose(f);
+	}
+
+	free(p);
+
+	return st;
+}

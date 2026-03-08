@@ -179,9 +179,26 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int indent) {
 
 		sprintf(end, "</%s>", element->name);
 	} else if(strcmp(element->name, "img") == 0) {
-		xl_attribute_t* attr = element->first_attribute;
+		char* r;
+		char* w;
+		char* h;
+		int   ws, hs;
 
 		accept_attr(text, element, "src", "alt", "title", "height", "width", "id", "class", NULL);
+
+		w = xl_get_attribute(element, "width");
+		h = xl_get_attribute(element, "height");
+		if((w == NULL || h == NULL) && (r = xl_get_attribute(element, "src")) != NULL) {
+			if(u_image_size(top, r, u_http_path, &ws, &hs)) {
+				if(w == NULL && h == NULL) {
+					sprintf(text + strlen(text), "width=\"%d\" height=\"%d\"", ws, hs);
+				} else if(w != NULL) {
+					sprintf(text + strlen(text), "width=\"%d\" height=\"%d\"", atoi(w), hs * atoi(w) / ws);
+				} else if(h != NULL) {
+					sprintf(text + strlen(text), "width=\"%d\" height=\"%d\"", ws * atoi(h) / hs, atoi(h));
+				}
+			}
+		}
 
 		sprintf(tag, "<%s%s border=\"0\">", element->name, text);
 	} else if(strcmp(element->name, "script") == 0) {

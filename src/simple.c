@@ -187,6 +187,9 @@ void simple_body(FILE* out, const char* top, const char* title, xl_node_t* body)
 	xl_node_t*  child;
 	char*	    text;
 	char*	    link;
+	char	    size[256];
+
+	size[0] = 0;
 
 	strcpy(year, "Some year");
 
@@ -254,7 +257,13 @@ void simple_body(FILE* out, const char* top, const char* title, xl_node_t* body)
 	}
 
 	if(text != NULL) {
-		fprintf(out, "								<a href=\"%s\"><img src=\"%s\" alt=\"Project logo\" border=\"0\"></a>\n", link, text);
+		int ws, hs;
+
+		if(u_image_size(top, text, u_http_path, &ws, &hs)) {
+			sprintf(size, " width=\"%d\" height=\"%d\"", ws, hs);
+		}
+
+		fprintf(out, "								<a href=\"%s\"><img src=\"%s\" alt=\"Project logo\" border=\"0\"%s></a>\n", link, text, size);
 		free(text);
 	}
 
