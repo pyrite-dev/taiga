@@ -14,8 +14,7 @@ static void print(FILE* out, const char* txt, int indent) {
 				fprintf(out, "\t");
 		}
 
-		if(txt[i] != '\n')
-			fprintf(out, "%c", txt[i]);
+		if(txt[i] != '\n') fprintf(out, "%c", txt[i]);
 	}
 }
 
@@ -51,8 +50,7 @@ void default_head(FILE* out, const char* top, xl_node_t* element, int indent) {
 
 	tag[0] = end[0] = 0;
 
-	if(element->name == NULL)
-		return;
+	if(element->name == NULL) return;
 
 	if(strcmp(element->name, "link") == 0) {
 		char text[2048];
@@ -62,8 +60,7 @@ void default_head(FILE* out, const char* top, xl_node_t* element, int indent) {
 		sprintf(tag, "<%s%s>", element->name, text);
 	}
 
-	if(tag[0] != 0)
-		print(out, tag, indent);
+	if(tag[0] != 0) print(out, tag, indent);
 
 	child = element->first_child;
 	while(child != NULL) {
@@ -92,8 +89,7 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int indent) {
 
 	tag[0] = end[0] = 0;
 
-	if(element->name == NULL)
-		return;
+	if(element->name == NULL) return;
 
 	if(strcmp(element->name, "section") == 0) {
 		char* title = xl_get_attribute(element, "title");
@@ -114,28 +110,21 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int indent) {
 			say = "Fixme";
 
 			strcpy(author, " ()");
-			if((attr = xl_get_attribute(element, "author")) != NULL)
-				sprintf(author, " (%s)", attr);
+			if((attr = xl_get_attribute(element, "author")) != NULL) sprintf(author, " (%s)", attr);
 		} else if(strcmp(element->name, "warning") == 0) {
 			say = "Warning";
 		} else if(strcmp(element->name, "note") == 0) {
 			say = "Note";
 		}
 
-		sprintf(tag + strlen(tag), "<div class=\"%s-message\"%s>\n", element->name,
-			text);
-		sprintf(tag + strlen(tag), "	<table border=\"0\" cellpadding=\"0\" "
-					   "cellspacing=\"0\" width=\"100%%\">\n");
+		sprintf(tag + strlen(tag), "<div class=\"%s-message\"%s>\n", element->name, text);
+		sprintf(tag + strlen(tag), "	<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\">\n");
 		sprintf(tag + strlen(tag), "		<tr>\n");
-		sprintf(tag + strlen(tag),
-			"			<td rowspan=\"2\" class=\"message-icon\">\n");
-		sprintf(tag + strlen(tag),
-			"				<img src=\"%simage/%s.png\">\n", top,
-			element->name);
+		sprintf(tag + strlen(tag), "			<td rowspan=\"2\" class=\"message-icon\">\n");
+		sprintf(tag + strlen(tag), "				<img src=\"%simage/%s.png\">\n", top, element->name);
 		sprintf(tag + strlen(tag), "			</td>\n");
 		sprintf(tag + strlen(tag), "			<td>\n");
-		sprintf(tag + strlen(tag), "				<b>%s%s</b>\n", say,
-			author);
+		sprintf(tag + strlen(tag), "				<b>%s%s</b>\n", say, author);
 		sprintf(tag + strlen(tag), "			</td>\n");
 		sprintf(tag + strlen(tag), "		</tr>\n");
 		sprintf(tag + strlen(tag), "		<tr>\n");
@@ -199,10 +188,7 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int indent) {
 	} else if(strcmp(element->name, "table") == 0) {
 		accept_attr(text, element, "id", "class", NULL);
 
-		sprintf(tag,
-			"<%s%s class=\"grid\" width=\"100%%\" cellpadding=\"3\" "
-			"cellspacing=\"2\" border=\"1\">",
-			element->name, text);
+		sprintf(tag, "<%s%s class=\"grid\" width=\"100%%\" cellpadding=\"3\" cellspacing=\"2\" border=\"1\">", element->name, text);
 
 		sprintf(end, "</%s>", element->name);
 	} else if(strcmp(element->name, "hr") == 0 || /**/
@@ -212,8 +198,7 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int indent) {
 		sprintf(tag, "<%s%text>", element->name, text);
 	}
 
-	if(tag[0] != 0)
-		print(out, tag, indent);
+	if(tag[0] != 0) print(out, tag, indent);
 
 	child = element->first_child;
 	while(child != NULL) {
@@ -226,29 +211,24 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int indent) {
 		child = child->next;
 	}
 
-	if(end[0] != 0)
-		print(out, end, indent);
+	if(end[0] != 0) print(out, end, indent);
 }
 
 void default_nav(FILE* out, const char* top, xl_node_t* element, int indent) {
 	int i;
 
-	if(element->name == NULL)
-		return;
+	if(element->name == NULL) return;
 
 	if(strcmp(element->name, "link") == 0) {
 		char* link;
 		char* name;
 
-		if((link = xl_get_attribute(element, "href")) == NULL)
-			link = "https://invalid.link";
-		if((name = xl_get_attribute(element, "name")) == NULL)
-			name = "";
+		if((link = xl_get_attribute(element, "href")) == NULL) link = "https://invalid.link";
+		if((name = xl_get_attribute(element, "name")) == NULL) name = "";
 
 		link = u_path(top, link);
 
-		for(i = 0; i < indent; i++)
-			fprintf(out, "\t");
+		for(i = 0; i < indent; i++) fprintf(out, "\t");
 		fprintf(out, " - <a href=\"%s\">%s</a><br>\n", link, name);
 
 		free(link);
@@ -256,17 +236,14 @@ void default_nav(FILE* out, const char* top, xl_node_t* element, int indent) {
 		char*	   title;
 		xl_node_t* child;
 
-		if((title = xl_get_attribute(element, "title")) == NULL)
-			title = "";
+		if((title = xl_get_attribute(element, "title")) == NULL) title = "";
 
 		if(title != NULL) {
-			for(i = 0; i < indent; i++)
-				fprintf(out, "\t");
+			for(i = 0; i < indent; i++) fprintf(out, "\t");
 			fprintf(out, "<div class=\"linkgrouptitle\"> - %s</div>\n", title);
 		}
 
-		for(i = 0; i < indent; i++)
-			fprintf(out, "\t");
+		for(i = 0; i < indent; i++) fprintf(out, "\t");
 		fprintf(out, "<div class=\"linkgroup\">\n");
 
 		child = element->first_child;
@@ -276,8 +253,7 @@ void default_nav(FILE* out, const char* top, xl_node_t* element, int indent) {
 			child = child->next;
 		}
 
-		for(i = 0; i < indent; i++)
-			fprintf(out, "\t");
+		for(i = 0; i < indent; i++) fprintf(out, "\t");
 		fprintf(out, "</div>\n");
 	}
 }

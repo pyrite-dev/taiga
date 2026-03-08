@@ -59,6 +59,9 @@ src/src_process.o: src/process.c
 OBJS += src/src_seed.o
 src/src_seed.o: src/seed.c
 	$(CC) $(CFLAGS) -c -o $@ src/seed.c
+OBJS += src/src_simple.o
+src/src_simple.o: src/simple.c
+	$(CC) $(CFLAGS) -c -o $@ src/simple.c
 OBJS += src/src_site.o
 src/src_site.o: src/site.c
 	$(CC) $(CFLAGS) -c -o $@ src/site.c

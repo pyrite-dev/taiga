@@ -14,8 +14,7 @@ static void describe(const char* path, const char* what) {
 	int  i;
 
 	memset(space, 0, sizeof(space));
-	for(i = 0; i < (48 - strlen(path)); i++)
-		space[i] = ' ';
+	for(i = 0; i < (48 - strlen(path)); i++) space[i] = ' ';
 
 	printf("%s%s# %s\n", path, space, what);
 }
@@ -53,45 +52,34 @@ int action_seed(int argc, char** argv) {
 	fprintf(f, "<?xml version=\"1.0\"?>\n");
 	fprintf(f, "<!--\n");
 	fprintf(f, "	NOTE!\n");
-	fprintf(
-	    f,
-	    "	  - Relative path in this config is relative to site/content\n");
-	fprintf(f, "	  - If relative path starts from ./ or ../, it's relative to "
-		   "URL when accessed\n");
+	fprintf(f, "	  - Relative path in this config is relative to site/content\n");
+	fprintf(f, "	  - If relative path starts from ./ or ../, it's relative to URL when accessed\n");
 	fprintf(f, "-->\n");
 	fprintf(f, "<skinconfig>\n");
 	fprintf(f, "	<search domain=\"example.com\" />\n");
 	fprintf(f, "	<breadcrumb>\n");
-	fprintf(f, "		<link name=\"Example Co, Ltd\" "
-		   "href=\"https://example.com\" />\n");
-	fprintf(f, "		<link name=\"Example Project\" "
-		   "href=\"https://example.com\" />\n");
+	fprintf(f, "		<link name=\"Example Co, Ltd\" href=\"https://example.com\" />\n");
+	fprintf(f, "		<link name=\"Example Project\" href=\"https://example.com\" />\n");
 	fprintf(f, "	</breadcrumb>\n");
 	fprintf(f, "	<group>\n");
 	fprintf(f, "		<name>Example Co, Ltd</name>\n");
-	fprintf(
-	    f,
-	    "		<description>Example Co, Ltd Description</description>\n");
+	fprintf(f, "		<description>Example Co, Ltd Description</description>\n");
 	fprintf(f, "		<link href=\"https://example.com\" />\n");
 	fprintf(f, "		<image src=\"image/group-logo.png\" />\n");
 	fprintf(f, "	</group>\n");
 	fprintf(f, "	<project>\n");
 	fprintf(f, "		<name>Example Project</name>\n");
-	fprintf(
-	    f,
-	    "		<description>Example Project Description</description>\n");
+	fprintf(f, "		<description>Example Project Description</description>\n");
 	fprintf(f, "		<link href=\"https://example.com\" />\n");
 	fprintf(f, "		<image src=\"image/project-logo.png\" />\n");
 	fprintf(f, "	</project>\n");
 	fprintf(f, "	<nav>\n");
 	fprintf(f, "		<group title=\"Example Project\">\n");
 	fprintf(f, "			<link name=\"Home\" href=\"/\" />\n");
-	fprintf(f, "			<link name=\"Example Co, Ltd.\" "
-		   "href=\"https://example.com\" />\n");
+	fprintf(f, "			<link name=\"Example Co, Ltd.\" href=\"https://example.com\" />\n");
 	fprintf(f, "			<group title=\"Example Project\">\n");
 	fprintf(f, "				<link name=\"Home\" href=\"/\" />\n");
-	fprintf(f, "				<link name=\"Example Co, Ltd.\" "
-		   "href=\"https://example.com\" />\n");
+	fprintf(f, "				<link name=\"Example Co, Ltd.\" href=\"https://example.com\" />\n");
 	fprintf(f, "			</group>\n");
 	fprintf(f, "		</group>\n");
 	fprintf(f, "	</nav>\n");
@@ -129,12 +117,9 @@ int action_seed(int argc, char** argv) {
 	fprintf(f, "		</table>\n");
 	fprintf(f, "		<section title=\"Congratulations\">\n");
 	fprintf(f, "			<p>\n");
-	fprintf(f, "				You have successfully generated and "
-		   "rendered a website using Taiga - static website generator.\n");
-	fprintf(f, "				This page is from the site template. "
-		   "It is found in <code>site/content/index.xml</code>.\n");
-	fprintf(f, "				Please edit it and replace this text "
-		   "with content of your own.\n");
+	fprintf(f, "				You have successfully generated and rendered a website using Taiga - static website generator.\n");
+	fprintf(f, "				This page is from the site template. It is found in <code>site/content/index.xml</code>.\n");
+	fprintf(f, "				Please edit it and replace this text with content of your own.\n");
 	fprintf(f, "			</p>\n");
 	fprintf(f, "		</section>\n");
 	fprintf(f, "	</body>\n");

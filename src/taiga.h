@@ -49,6 +49,9 @@ void		  io_closedir(IO_DIR* dir);
 
 /* site.c */
 extern xemil_t* skinconf;
+extern void (*site_stylesheet)(FILE* out, const char* top); /* also create files here if you need one */
+extern void (*site_head)(FILE* out, const char* top, xl_node_t* header);
+extern void (*site_body)(FILE* out, const char* top, const char* title, xl_node_t* body);
 
 int action_site(int argc, char** argv);
 
@@ -67,11 +70,14 @@ char* u_path(const char* top, const char* path);
 int process(const char* top, const char* out, const char* full);
 
 /* classic.c */
-void classic_stylesheet(
-    FILE* out, const char* top); /* also create files here if you need one */
+void classic_stylesheet(FILE* out, const char* top);
 void classic_head(FILE* out, const char* top, xl_node_t* header);
-void classic_body(FILE* out, const char* top, const char* title,
-		  xl_node_t* body);
+void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body);
+
+/* simple.c */
+void simple_stylesheet(FILE* out, const char* top);
+void simple_head(FILE* out, const char* top, xl_node_t* header);
+void simple_body(FILE* out, const char* top, const char* title, xl_node_t* body);
 
 /* default.c */
 void default_head(FILE* out, const char* top, xl_node_t* element, int indent);

@@ -1,6 +1,9 @@
 #include <taiga.h>
 
 xemil_t* skinconf;
+void (*site_stylesheet)(FILE* out, const char* top); /* also create files here if you need one */
+void (*site_head)(FILE* out, const char* top, xl_node_t* header);
+void (*site_body)(FILE* out, const char* top, const char* title, xl_node_t* body);
 
 static int scan(const char* top, const char* path) {
 	char*	in  = u_strvacat("site/content/", path, NULL);
@@ -15,8 +18,7 @@ static int scan(const char* top, const char* path) {
 			char*	       p;
 			struct io_stat s;
 
-			if(strcmp(d->d_name, ".") == 0 || strcmp(d->d_name, "..") == 0)
-				continue;
+			if(strcmp(d->d_name, ".") == 0 || strcmp(d->d_name, "..") == 0) continue;
 
 			p = u_strvacat(in, d->d_name, NULL);
 			if(io_stat(p, &s) == 0) {
@@ -76,11 +78,18 @@ static int scan(const char* top, const char* path) {
 	return 1;
 }
 
+#define USE_THEME(x) \
+	site_stylesheet = x##_stylesheet; \
+	site_head	= x##_head; \
+	site_body	= x##_body;
+
 int action_site(int argc, char** argv) {
 	int   st = 0;
 	FILE* css;
 
 	io_mkdir("build", 0755);
+
+	USE_THEME(simple);
 
 	if((skinconf = xl_open_file("site/skinconf.xml")) == NULL ||
 	   !xl_parse(skinconf)) {
@@ -93,7 +102,7 @@ int action_site(int argc, char** argv) {
 		st = 1;
 		goto cleanup;
 	}
-	classic_stylesheet(css, "build/");
+	site_stylesheet(css, "build/");
 	fclose(css);
 
 	if(!scan("", "")) {
@@ -102,8 +111,7 @@ int action_site(int argc, char** argv) {
 	}
 
 cleanup:;
-	if(skinconf != NULL)
-		xl_close(skinconf);
+	if(skinconf != NULL) xl_close(skinconf);
 
 	if(st == 0) {
 		fprintf(stderr, "\nBuild successful\n");
