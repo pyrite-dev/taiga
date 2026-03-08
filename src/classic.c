@@ -53,6 +53,10 @@ void classic_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "	padding: 8px;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
+	fprintf(out, "#footer {\n");
+	fprintf(out, "	padding-top: 0;\n");
+	fprintf(out, "}\n");
+	fprintf(out, "\n");
 	fprintf(out, ".section {\n");
 	fprintf(out, "	background-color: #eeeeee;\n");
 	fprintf(out, "	padding-left: 8px;\n");
@@ -277,6 +281,27 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 	fprintf(out, "			<tr>\n");
 	fprintf(out, "				<td width=\"150\" valign=\"top\">\n");
 	fprintf(out, "					<div id=\"nav\">\n");
+
+	if((nodes = xl_get_path(body, "section")) != NULL) {
+		int i;
+
+		fprintf(out, "						<div class=\"linkgrouptitle\"> - Contents</div>\n");
+		fprintf(out, "						<div class=\"linkgroup\">\n");
+
+		for(i = 0; nodes[i] != NULL; i++) {
+			char* name = NULL;
+			char* id;
+
+			if((name = xl_get_attribute(nodes[i], "title")) == NULL) continue;
+
+			id = u_section_id(nodes[i]);
+
+			fprintf(out, "							 - <a href=\"#%s\">%s</a><br>\n", id, name);
+		}
+
+		fprintf(out, "						</div>\n");
+		fprintf(out, "						<br>\n");
+	}
 
 	if((nodes = xl_get_path(skinconf->root, "nav")) != NULL) {
 		int i;

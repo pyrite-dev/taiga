@@ -67,6 +67,10 @@ char* u_strdup(const char* str);
 char* u_path(const char* top, const char* path);
 char* u_http_path(const char* top, const char* path);
 int   u_image_size(const char* top, const char* path, char* (*path_func)(const char* top, const char* path), int* w, int* h);
+char* u_section_id(xl_node_t* node);
+
+/* crc.c */
+unsigned int crc32(void* input, unsigned int len);
 
 /* process.c */
 int process(const char* top, const char* out, const char* full);

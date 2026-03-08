@@ -127,7 +127,7 @@ int action_seed(int argc, char** argv) {
 	fprintf(f, "				<td>Test</td>\n");
 	fprintf(f, "			</tr>\n");
 	fprintf(f, "		</table>\n");
-	fprintf(f, "		<section title=\"Congratulations\">\n");
+	fprintf(f, "		<section id=\"congrats\" title=\"Congratulations\">\n");
 	fprintf(f, "			<p>\n");
 	fprintf(f, "				You have successfully generated and rendered a website using Taiga - static website generator.\n");
 	fprintf(f, "				This page is from the site template. It is found in <code>site/content/index.xml</code>.\n");

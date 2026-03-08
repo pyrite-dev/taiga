@@ -103,8 +103,9 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int spec, int 
 
 	if(strcmp(element->name, "section") == 0) {
 		char* title = xl_get_attribute(element, "title");
+		char* id    = u_section_id(element);
 
-		sprintf(tag, "<div class=\"section\">%s</div>", title);
+		if(id != NULL) sprintf(tag, "<div class=\"section\" id=\"%s\">%s</div>", id, title);
 	} else if(strcmp(element->name, "fixme") == 0 ||   /**/
 		  strcmp(element->name, "warning") == 0 || /**/
 		  strcmp(element->name, "note") == 0) {

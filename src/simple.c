@@ -156,7 +156,6 @@ void simple_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "\n");
 	fprintf(out, ".message-icon {\n");
 	fprintf(out, "	padding-right: 5px;\n");
-	;
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
 	fprintf(out, ".message-title {\n");
@@ -166,6 +165,14 @@ void simple_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "hr {\n");
 	fprintf(out, "	border: none;\n");
 	fprintf(out, "	border-bottom: solid 1px #808080;\n");
+	fprintf(out, "}\n");
+	fprintf(out, "\n");
+	fprintf(out, ".box-content ul {\n");
+	fprintf(out, "	margin: 0;\n");
+	fprintf(out, "	padding-top: 8px;\n");
+	fprintf(out, "	padding-bottom: 8px;\n");
+	fprintf(out, "	padding-left: 28px;\n");
+	fprintf(out, "	padding-right: 18px;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
 
@@ -281,6 +288,32 @@ void simple_body(FILE* out, const char* top, const char* title, xl_node_t* body)
 	fprintf(out, "			</tr>\n");
 	fprintf(out, "			<tr>\n");
 	fprintf(out, "				<td id=\"nav\" valign=\"top\">\n");
+
+	if((nodes = xl_get_path(body, "section")) != NULL) {
+		int i;
+
+		fprintf(out, "					<div class=\"box\">\n");
+		fprintf(out, "						<h2>CONTENTS</h2>\n");
+		fprintf(out, "						<div class=\"box-content\">\n");
+		fprintf(out, "							<ul>\n");
+
+		for(i = 0; nodes[i] != NULL; i++) {
+			char* name = NULL;
+			char* id;
+
+			if((name = xl_get_attribute(nodes[i], "title")) == NULL) continue;
+
+			id = u_section_id(nodes[i]);
+
+			fprintf(out, "								<li><a href=\"#%s\">%s</a></li>\n", id, name);
+		}
+
+		fprintf(out, "							</ul>\n");
+		fprintf(out, "						</div>\n");
+		fprintf(out, "					</div>\n");
+		free(nodes);
+	}
+
 	fprintf(out, "					<div class=\"box\">\n");
 	fprintf(out, "						<h2>LINKS</h2>\n");
 	fprintf(out, "						<div class=\"box-content\">\n");

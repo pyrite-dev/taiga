@@ -110,3 +110,29 @@ int u_image_size(const char* top, const char* path, char* (*path_func)(const cha
 
 	return st;
 }
+
+char* u_section_id(xl_node_t* node) {
+	char* name;
+	char* id;
+
+	if((name = xl_get_attribute(node, "title")) == NULL) return NULL;
+
+	if((id = xl_get_attribute(node, "id")) != NULL) id = u_strdup(id);
+	if(id == NULL) {
+		int	   unique = 0;
+		xl_node_t* child  = node->parent->first_child;
+
+		while(child != NULL) {
+			if(child == node) break;
+
+			unique++;
+			child = child->next;
+		}
+
+		id = malloc(64);
+
+		sprintf(id, "%d-%d", unique, crc32(name, strlen(name)));
+	}
+
+	return id;
+}
