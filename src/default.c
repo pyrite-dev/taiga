@@ -227,7 +227,7 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int spec, int 
 		  strcmp(element->name, "br") == 0) {
 		accept_attr(top, text, 0, element, "id", "class", NULL);
 
-		sprintf(tag, "<%s%text>", element->name, text);
+		sprintf(tag, "<%s%s>", element->name, text);
 	}
 
 	if(tag[0] != 0) print(out, tag, indent);

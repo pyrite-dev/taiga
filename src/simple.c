@@ -163,6 +163,11 @@ void simple_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "	font-family: Arial, Helvetica, sans-serif;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
+	fprintf(out, "hr {\n");
+	fprintf(out, "	border: none;\n");
+	fprintf(out, "	border-bottom: solid 1px #808080;\n");
+	fprintf(out, "}\n");
+	fprintf(out, "\n");
 
 	for(i = 0; i < sizeof(messages) / sizeof(messages[0]); i++) {
 		fprintf(out, ".%s-message {\n", messages[i]);

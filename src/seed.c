@@ -118,8 +118,14 @@ int action_seed(int argc, char** argv) {
 	fprintf(f, "			Please read this!\n");
 	fprintf(f, "		</note>\n");
 	fprintf(f, "		<table>\n");
-	fprintf(f, "			<tr><th>Test</th><th>Test</th></tr>\n");
-	fprintf(f, "			<tr><td>Test</td><td>Test</td></tr>\n");
+	fprintf(f, "			<tr>\n");
+	fprintf(f, "				<th>Test</th>\n");
+	fprintf(f, "				<th>Test</th>\n");
+	fprintf(f, "			</tr>\n");
+	fprintf(f, "			<tr>\n");
+	fprintf(f, "				<td>Test</td>\n");
+	fprintf(f, "				<td>Test</td>\n");
+	fprintf(f, "			</tr>\n");
 	fprintf(f, "		</table>\n");
 	fprintf(f, "		<section title=\"Congratulations\">\n");
 	fprintf(f, "			<p>\n");
