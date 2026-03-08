@@ -84,18 +84,33 @@ static int scan(const char* top, const char* path) {
 	site_body	= x##_body;
 
 int action_site(int argc, char** argv) {
-	int   st = 0;
-	FILE* css;
+	int	    st = 0;
+	FILE*	    css;
+	xl_node_t** nodes;
 
 	io_mkdir("build", 0755);
 
-	USE_THEME(simple);
-
-	if((skinconf = xl_open_file("site/skinconf.xml")) == NULL ||
-	   !xl_parse(skinconf)) {
+	if((skinconf = xl_open_file("site/skinconf.xml")) == NULL || !xl_parse(skinconf)) {
 		fprintf(stderr, "Failed to parse site/skinconf.xml!\n");
 		st = 1;
 		goto cleanup;
+	}
+
+	USE_THEME(classic);
+	if((nodes = xl_get_path(skinconf->root, "skin")) != NULL) {
+		if(nodes[0]->text != NULL) {
+			if(strcmp(nodes[0]->text, "classic") == 0) {
+				USE_THEME(classic);
+			} else if(strcmp(nodes[0]->text, "simple") == 0) {
+				USE_THEME(simple);
+			} else {
+				fprintf(stderr, "Unknown skin: %s\n", nodes[0]->text);
+				st = 1;
+				goto cleanup;
+			}
+		}
+
+		free(nodes);
 	}
 
 	if((css = fopen("build/style.css", "w")) == NULL) {
@@ -103,6 +118,16 @@ int action_site(int argc, char** argv) {
 		goto cleanup;
 	}
 	site_stylesheet(css, "build/");
+
+	if((nodes = xl_get_path(skinconf->root, "extra-css")) != NULL) {
+		if(nodes[0]->text != NULL) {
+			fwrite("\n", 1, 1, css);
+			fwrite(nodes[0]->text, 1, strlen(nodes[0]->text), css);
+		}
+
+		free(nodes);
+	}
+
 	fclose(css);
 
 	if(!scan("", "")) {

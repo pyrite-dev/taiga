@@ -84,9 +84,11 @@ int action_seed(int argc, char** argv) {
 	fprintf(f, "		</group>\n");
 	fprintf(f, "	</nav>\n");
 	fprintf(f, "	<favicon></favicon>\n");
+	fprintf(f, "	<extra-css></extra-css>\n");
+	fprintf(f, "	<skin>classic</skin> <!-- classic or simple -->\n");
 	fprintf(f, "	<copyright>\n");
 	fprintf(f, "		<holder>Example Co, Ltd</holder>\n");
-	fprintf(f, "		<year>%d</year>\n", 1900 + tm->tm_year);
+	fprintf(f, "		<year>%d</year> <!-- Year when you started this project/whatever copyright holder -->\n", 1900 + tm->tm_year);
 	fprintf(f, "		<link href=\"https://example.com\" />\n");
 	fprintf(f, "	</copyright>\n");
 	fprintf(f, "</skinconfig>\n");

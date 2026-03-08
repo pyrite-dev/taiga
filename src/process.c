@@ -71,6 +71,7 @@ static int parse_file(const char* top, const char* full) {
 
 			site_head(f, top, header);
 
+			fprintf(f, "		<link rel=\"stylesheet\" href=\"%sstyle.css\">\n", top);
 			if(!has_own_icon && (nodes = xl_get_path(skinconf->root, "favicon")) != NULL) {
 				if(nodes[0]->text != NULL) {
 					char* p = u_path(top, nodes[0]->text);
@@ -84,6 +85,21 @@ static int parse_file(const char* top, const char* full) {
 			fprintf(f, "	</head>\n");
 			fprintf(f, "	<body>\n");
 			site_body(f, top, title, body);
+			fprintf(f, "		<!--[if lte IE 6]>\n");
+			fprintf(f, "		<script language=\"javascript\" type=\"text/javascript\">\n");
+			fprintf(f, "			for(var i = 0; i < document.images.length; i++){\n");
+			fprintf(f, "				var s = document.images[i].src;\n");
+			fprintf(f, "				if(s.indexOf('.png') > 0){\n");
+			fprintf(f, "					var oldw = document.images[i].clientWidth;\n");
+			fprintf(f, "					var oldh = document.images[i].clientHeight;\n");
+			fprintf(f, "					document.images[i].src = '%simage/fill.gif';\n", top);
+			fprintf(f, "					document.images[i].style.filter = \"progid:DXImageTransform.Microsoft.AlphaImageLoader(src='\" + s + \"', sizingMethod='scale')\";\n");
+			fprintf(f, "					document.images[i].style.width = oldw + \"px\";\n");
+			fprintf(f, "					document.images[i].style.height = oldh + \"px\";\n");
+			fprintf(f, "				}\n");
+			fprintf(f, "			}\n");
+			fprintf(f, "		</script>\n");
+			fprintf(f, "		<![endif]-->\n");
 			fprintf(f, "	</body>\n");
 			fprintf(f, "</html>\n");
 

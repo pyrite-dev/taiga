@@ -121,9 +121,9 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int indent) {
 		sprintf(tag + strlen(tag), "	<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\">\n");
 		sprintf(tag + strlen(tag), "		<tr>\n");
 		sprintf(tag + strlen(tag), "			<td rowspan=\"2\" class=\"message-icon\">\n");
-		sprintf(tag + strlen(tag), "				<img src=\"%simage/%s.png\">\n", top, element->name);
+		sprintf(tag + strlen(tag), "				<img src=\"%simage/%s.png\" alt=\"%s\" width=\"32\" height=\"32\">\n", top, element->name, say);
 		sprintf(tag + strlen(tag), "			</td>\n");
-		sprintf(tag + strlen(tag), "			<td>\n");
+		sprintf(tag + strlen(tag), "			<td class=\"message-title\">\n");
 		sprintf(tag + strlen(tag), "				<b>%s%s</b>\n", say, author);
 		sprintf(tag + strlen(tag), "			</td>\n");
 		sprintf(tag + strlen(tag), "		</tr>\n");
@@ -146,7 +146,13 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int indent) {
 		  strcmp(element->name, "sub") == 0 ||	      /**/
 		  strcmp(element->name, "sup") == 0 ||	      /**/
 		  strcmp(element->name, "tr") == 0 ||	      /**/
-		  strcmp(element->name, "em") == 0) {
+		  strcmp(element->name, "em") == 0 ||	      /**/
+		  strcmp(element->name, "h1") == 0 ||	      /**/
+		  strcmp(element->name, "h2") == 0 ||	      /**/
+		  strcmp(element->name, "h3") == 0 ||	      /**/
+		  strcmp(element->name, "h4") == 0 ||	      /**/
+		  strcmp(element->name, "h5") == 0 ||	      /**/
+		  strcmp(element->name, "h6") == 0) {
 		accept_attr(text, element, "id", "class", NULL);
 
 		sprintf(tag, "<%s%s>", element->name, text);
@@ -173,12 +179,11 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int indent) {
 
 		sprintf(end, "</%s>", element->name);
 	} else if(strcmp(element->name, "img") == 0) {
-		accept_attr(text, element, "src", "alt", "title", "height", "width", "id",
-			    "class", NULL);
+		xl_attribute_t* attr = element->first_attribute;
 
-		sprintf(tag, "<%s%s>", element->name, text);
+		accept_attr(text, element, "src", "alt", "title", "height", "width", "id", "class", NULL);
 
-		sprintf(end, "</%s>", element->name);
+		sprintf(tag, "<%s%s border=\"0\">", element->name, text);
 	} else if(strcmp(element->name, "script") == 0) {
 		accept_attr(text, element, "src", "type", NULL);
 

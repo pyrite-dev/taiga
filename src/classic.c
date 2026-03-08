@@ -123,6 +123,7 @@ void classic_stylesheet(FILE* out, const char* top) {
 		fprintf(out, "	padding: 0.33em 0 0.67em 5px;\n");
 		fprintf(out, "	margin: 0.67em 0;\n");
 		fprintf(out, "}\n");
+		fprintf(out, "\n");
 	}
 }
 
@@ -186,7 +187,7 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 		sitesearch = "https://invalid.link";
 
 	fprintf(out, "		<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\">\n");
-	fprintf(out, "			<tr width=\"100%%\">\n");
+	fprintf(out, "			<tr>\n");
 	fprintf(out, "				<td>\n");
 	for(i = 0; i < sizeof(images) / sizeof(images[0]); i++) {
 		char  path[64];
@@ -228,7 +229,7 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 	fprintf(out, "			</tr>\n");
 	fprintf(out, "		</table>\n");
 	fprintf(out, "		<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\" id=\"breadcrumb\">\n");
-	fprintf(out, "			<tr width=\"100%%\">\n");
+	fprintf(out, "			<tr>\n");
 	fprintf(out, "				<td>\n");
 	if((nodes = xl_get_path(skinconf->root, "breadcrumb.link")) != NULL) {
 		int i;
@@ -252,7 +253,7 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 		free(nodes);
 	}
 	fprintf(out, "				</td>\n");
-	fprintf(out, "				<td nowrap=\"1\" align=\"right\">\n");
+	fprintf(out, "				<td nowrap=\"nowrap\" align=\"right\">\n");
 	fprintf(out, "					<form action=\"https://www.google.com/search\" method=\"GET\">\n");
 	fprintf(out, "						Search\n");
 	fprintf(out, "						<input type=\"hidden\" name=\"sitesearch\" value=\"%s\">\n", sitesearch);
@@ -304,25 +305,9 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 	fprintf(out, "			</tr>\n");
 	fprintf(out, "			<tr>\n");
 	fprintf(out, "				<td align=\"right\">\n");
-	fprintf(out, "					<a href=\"https://validator.w3.org/check/referer\"><img src=\"%simage/valid-html401.png\" alt=\"Valid HTML 4.01\" border=\"0\"></a>\n", top);
-	fprintf(out, "					<a href=\"https://jigsaw.w3.org/css-validator/\"><img src=\"%simage/valid-css.png\" alt=\"Valid CSS\" border=\"0\"></a>\n", top);
+	fprintf(out, "					<a href=\"https://validator.w3.org/check/referer\"><img src=\"%simage/valid-html401.png\" alt=\"Valid HTML 4.01\" border=\"0\" width=\"88\" height=\"31\"></a>\n", top);
+	fprintf(out, "					<a href=\"https://jigsaw.w3.org/css-validator/\"><img src=\"%simage/valid-css.png\" alt=\"Valid CSS\" border=\"0\" width=\"88\" height=\"31\"></a>\n", top);
 	fprintf(out, "				<td>\n");
 	fprintf(out, "			</tr>\n");
 	fprintf(out, "		</table>\n");
-	fprintf(out, "		<!--[if lte IE 6]>\n");
-	fprintf(out, "		<script language=\"javascript\" type=\"text/javascript\">\n");
-	fprintf(out, "			for(var i = 0; i < document.images.length; i++){\n");
-	fprintf(out, "				var s = document.images[i].src;\n");
-	fprintf(out, "				if(s.indexOf('.png') > 0){\n");
-	fprintf(out, "					var oldw = document.images[i].clientWidth;\n");
-	fprintf(out, "					var oldh = document.images[i].clientHeight;\n");
-	fprintf(out, "					document.images[i].src = '%simage/fill.gif';\n", top);
-	fprintf(out, "					document.images[i].style.filter = \"progid:DXImageTransform.Microsoft.AlphaImageLoader(src='\" + s + \"', sizingMethod='scale')\";\n");
-	fprintf(out, "					"
-		     "document.images[i].style.width = oldw + \"px\";\n");
-	fprintf(out, "					document.images[i].style.height = oldh + \"px\";\n");
-	fprintf(out, "				}\n");
-	fprintf(out, "			}\n");
-	fprintf(out, "		</script>\n");
-	fprintf(out, "		<![endif]-->\n");
 }

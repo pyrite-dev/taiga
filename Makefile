@@ -1,5 +1,5 @@
 CC ?= cc
-CFLAGS ?= -I external/xemil/include -I src
+CFLAGS ?= -I external/xemil/include -I src $(DEFS)
 LDFLAGS ?=
 LIBS ?=
 AFTER ?=
