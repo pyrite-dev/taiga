@@ -125,7 +125,7 @@ char* u_section_id(xl_node_t* node) {
 		while(child != NULL) {
 			if(child == node) break;
 
-			unique++;
+			if(child->type == XL_NODE_NODE && child->name != NULL && strcmp(child->name, "section") == 0) unique++;
 			child = child->next;
 		}
 
