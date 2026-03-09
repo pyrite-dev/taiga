@@ -53,6 +53,7 @@ static int parse_file(const char* top, const char* full) {
 			fprintf(f, "<html>\n");
 			fprintf(f, "	<head>\n");
 			fprintf(f, "		<meta http-equiv=\"Content-Type\" content=\"text/html;charset=UTF-8\">\n");
+			fprintf(f, "		<meta name=\"generator\" content=\"Taiga\">\n");
 			fprintf(f, "		<title>%s</title>\n", title);
 
 			if((nodes = xl_get_path(header, "link")) != NULL) {
