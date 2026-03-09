@@ -232,7 +232,7 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 				text = u_path(top, text);
 
 				fprintf(out, "					<a href=\"%s\"><img src=\"%s\" alt=\"%s\" border=\"0\"%s></a>\n", link, text, name, size);
-				fprintf(out, "					<img src=\"%simage/fill.gif\" width=\"96\">\n", top);
+				fprintf(out, "					<img src=\"%simage/fill.gif\" width=\"96\" alt=\"filling\">\n", top);
 				free(text);
 			}
 
