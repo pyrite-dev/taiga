@@ -225,37 +225,39 @@ static int enter_span(MD_SPANTYPE type, void* detail, void* user) {
 
 		while((str = strstr(href_wd, "./")) == href_wd) href_wd += 2;
 
-		for(i = 0; i < mapping_len; i++) {
-			char* key   = u_strdup(mapping[i]);
-			char* value = strchr(key, '=');
-			char* path_abs;
-			char* href_abs;
+		if(strstr(href_wd, "://") == NULL) {
+			for(i = 0; i < mapping_len; i++) {
+				char* key   = u_strdup(mapping[i]);
+				char* value = strchr(key, '=');
+				char* path_abs;
+				char* href_abs;
 
-			if(value != NULL) {
-				value[0] = 0;
-				value++;
-			}
+				if(value != NULL) {
+					value[0] = 0;
+					value++;
+				}
 
-			path_abs = u_path_combine(argbase, key);
+				path_abs = u_path_combine(argbase, key);
 
-			if(href_wd[0] == '/') {
-				href_abs = u_path_combine(argbase, href_wd);
-			} else {
-				href_abs = u_path_combine(argbase2, href_wd);
-			}
+				if(href_wd[0] == '/') {
+					href_abs = u_path_combine(argbase, href_wd);
+				} else {
+					href_abs = u_path_combine(argbase2, href_wd);
+				}
 
-			if(value != NULL && strcmp(path_abs, href_abs) == 0) {
+				if(value != NULL && strcmp(path_abs, href_abs) == 0) {
+					free(path_abs);
+					free(href_abs);
+					free(href);
+					href = encode(value, -1);
+					free(key);
+					break;
+				}
 				free(path_abs);
 				free(href_abs);
-				free(href);
-				href = encode(value, -1);
-				free(key);
-				break;
-			}
-			free(path_abs);
-			free(href_abs);
 
-			free(key);
+				free(key);
+			}
 		}
 
 		print_indent();
