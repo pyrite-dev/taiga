@@ -32,6 +32,8 @@ int main(int argc, char** argv) {
 		return action_seed(target_argc, target_argv);
 	} else if(strcmp(action, "markdown") == 0) {
 		return action_markdown(target_argc, target_argv);
+	} else if(strcmp(action, "markdown-dir") == 0) {
+		return action_markdown_dir(target_argc, target_argv);
 	}
 
 	fprintf(stderr, "Unknown action\n");

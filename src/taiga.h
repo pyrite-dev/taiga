@@ -18,6 +18,7 @@
 
 #include <xemil.h>
 #include <md4c.h>
+#include <stb_ds.h>
 
 #ifdef _WIN32
 #define io_mkdir(x, y) _mkdir(x)
@@ -64,6 +65,9 @@ int action_seed(int argc, char** argv);
 
 /* action/markdown.c */
 int action_markdown(int argc, char** argv);
+
+/* action/markdown_dir.c */
+int action_markdown_dir(int argc, char** argv);
 
 /* util.c */
 char* u_strvacat(const char* str, ...);

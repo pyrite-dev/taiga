@@ -454,6 +454,7 @@ int action_markdown(int argc, char** argv) {
 	indent--;
 
 	if(title != NULL) free(title);
+	title = NULL;
 
 	free(buffer);
 

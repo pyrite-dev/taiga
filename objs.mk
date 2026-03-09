@@ -29,6 +29,9 @@ src/src_action_help.o: src/action/help.c
 OBJS += src/src_action_markdown.o
 src/src_action_markdown.o: src/action/markdown.c
 	$(CC) $(CFLAGS) -c -o $@ src/action/markdown.c
+OBJS += src/src_action_markdown_dir.o
+src/src_action_markdown_dir.o: src/action/markdown_dir.c
+	$(CC) $(CFLAGS) -c -o $@ src/action/markdown_dir.c
 OBJS += src/src_action_seed.o
 src/src_action_seed.o: src/action/seed.c
 	$(CC) $(CFLAGS) -c -o $@ src/action/seed.c
@@ -80,6 +83,9 @@ src/src_skin_classic.o: src/skin/classic.c
 OBJS += src/src_skin_simple.o
 src/src_skin_simple.o: src/skin/simple.c
 	$(CC) $(CFLAGS) -c -o $@ src/skin/simple.c
+OBJS += src/src_stb_ds.o
+src/src_stb_ds.o: src/stb_ds.c
+	$(CC) $(CFLAGS) -c -o $@ src/stb_ds.c
 OBJS += src/src_util.o
 src/src_util.o: src/util.c
 	$(CC) $(CFLAGS) -c -o $@ src/util.c
