@@ -224,6 +224,7 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 
 				size[0] = 0;
 
+				ws = 0;
 				if(u_image_size(top, text, u_http_path, &ws, &hs)) {
 					sprintf(size, " width=\"%d\" height=\"%d\"", ws, hs);
 				}
@@ -231,6 +232,7 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 				text = u_path(top, text);
 
 				fprintf(out, "					<a href=\"%s\"><img src=\"%s\" alt=\"%s\" border=\"0\"%s></a>\n", link, text, name, size);
+				fprintf(out, "					<img src=\"%simage/fill.gif\" width=\"96\">\n", top);
 				free(text);
 			}
 
