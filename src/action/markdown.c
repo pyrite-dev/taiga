@@ -8,6 +8,10 @@ static int    in_title	 = 0;
 static int    in_section = 0;
 static char** mapping;
 static int    mapping_len;
+static char*  argin    = NULL;
+static char*  argout   = NULL;
+static char*  argbase  = NULL;
+static char*  argbase2 = NULL;
 
 static void print_indent(void) {
 	int i;
@@ -219,21 +223,37 @@ static int enter_span(MD_SPANTYPE type, void* detail, void* user) {
 		int		  i;
 		char*		  str;
 
-		while((str = strstr(href_wd, "./")) == href_wd) href_wd = str + 2;
+		while((str = strstr(href_wd, "./")) == href_wd) href_wd += 2;
 
 		for(i = 0; i < mapping_len; i++) {
 			char* key   = u_strdup(mapping[i]);
 			char* value = strchr(key, '=');
+			char* path_abs;
+			char* href_abs;
 
 			if(value != NULL) {
 				value[0] = 0;
 				value++;
 			}
 
-			if(value != NULL && strcmp(key, href_wd) == 0) {
+			path_abs = u_path_combine(argbase, key);
+
+			if(href_wd[0] == '/') {
+				href_abs = u_path_combine(argbase, href_wd);
+			} else {
+				href_abs = u_path_combine(argbase2, href_wd);
+			}
+
+			if(value != NULL && strcmp(path_abs, href_abs) == 0) {
+				free(path_abs);
+				free(href_abs);
 				free(href);
 				href = encode(value, -1);
+				free(key);
+				break;
 			}
+			free(path_abs);
+			free(href_abs);
 
 			free(key);
 		}
@@ -359,9 +379,8 @@ int action_markdown(int argc, char** argv) {
 	char*	  buffer;
 	int	  size;
 	MD_PARSER parser;
-	char*	  argin	 = NULL;
-	char*	  argout = NULL;
 	int	  i;
+	char*	  s;
 
 	memset(&parser, 0, sizeof(parser));
 	parser.flags	   = MD_FLAG_COLLAPSEWHITESPACE | MD_FLAG_TABLES | MD_FLAG_STRIKETHROUGH | MD_FLAG_UNDERLINE;
@@ -371,6 +390,9 @@ int action_markdown(int argc, char** argv) {
 	parser.leave_span  = leave_span;
 	parser.text	   = text;
 
+	argin	    = NULL;
+	argout	    = NULL;
+	argbase	    = NULL;
 	mapping	    = NULL;
 	mapping_len = 0;
 	for(i = 0; i < argc; i++) {
@@ -378,6 +400,8 @@ int action_markdown(int argc, char** argv) {
 			argin = argv[i];
 		} else if(argout == NULL) {
 			argout = argv[i];
+		} else if(argbase == NULL) {
+			argbase = argv[i];
 		} else if(mapping == NULL) {
 			mapping	    = &argv[i];
 			mapping_len = argc - i;
@@ -385,9 +409,14 @@ int action_markdown(int argc, char** argv) {
 	}
 
 	if(argin == NULL || argout == NULL) {
-		fprintf(stderr, "Usage: markdown input output [linksrc=linkdest ...]\n");
+		fprintf(stderr, "Usage: markdown input output [base [linksrc=linkdest ...]]\n");
 		return 1;
 	}
+
+	if(argbase2 != NULL) free(argbase2);
+	argbase2 = u_strdup(argin);
+
+	if((s = strrchr(argbase2, '/')) != NULL) s[0] = 0;
 
 	if((f = fopen(argin, "r")) == NULL) {
 		fprintf(stderr, "Failed to open input\n");

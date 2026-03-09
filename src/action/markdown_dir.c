@@ -129,6 +129,7 @@ static int scan(const char* top, const char* path) {
 					}
 
 					arrput(argv, o);
+					arrput(argv, (char*)inp);
 
 					for(i = 0; i < shlen(paths); i++) {
 						char* t;
@@ -140,19 +141,14 @@ static int scan(const char* top, const char* path) {
 							t = u_strvacat(top, "../", NULL);
 						}
 
-						if(strstr(paths[i].value, path) == paths[i].value) {
-							v = u_strvacat(paths[i].key + strlen(path), "=", paths[i].value + strlen(path), NULL);
-							arrput(argv, v);
-						}
-
-						v = u_strvacat(top, paths[i].key, "=", t, paths[i].value, NULL);
+						v = u_strvacat(paths[i].key, "=", t, paths[i].value, NULL);
 						arrput(argv, v);
 
 						free(t);
 					}
 
 					if(action_markdown(arrlen(argv), argv)) {
-						for(i = 2; i < arrlen(argv); i++) free(argv[i]);
+						for(i = 3; i < arrlen(argv); i++) free(argv[i]);
 						free(o);
 						arrfree(argv);
 						free(p);
@@ -162,7 +158,7 @@ static int scan(const char* top, const char* path) {
 						return 0;
 					}
 					free(o);
-					for(i = 2; i < arrlen(argv); i++) free(argv[i]);
+					for(i = 3; i < arrlen(argv); i++) free(argv[i]);
 					arrfree(argv);
 				}
 			}

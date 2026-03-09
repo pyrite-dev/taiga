@@ -136,3 +136,45 @@ char* u_section_id(xl_node_t* node) {
 
 	return id;
 }
+
+char* u_path_combine(const char* a, const char* b) {
+	char* p = u_strvacat(a, strlen(a) == 0 ? "" : "/", b, NULL);
+	char* r = malloc(strlen(p) + 1);
+	int   i;
+	int   s = 0;
+
+	r[0] = 0;
+
+	for(i = 0;; i++) {
+		if(p[i] == '/' || p[i] == 0) {
+			char  old  = p[i];
+			char* path = p + s;
+
+			p[i] = 0;
+
+			if(strcmp(path, ".") == 0) {
+			} else if(strcmp(path, "..") == 0) {
+				char* str = strrchr(r, '/');
+
+				if(str != NULL) str[0] = 0;
+			} else if(strlen(path) > 0) {
+				if(r[0] == 0) {
+					strcpy(r, path);
+				} else {
+					strcat(r, "/");
+					strcat(r, path);
+				}
+			}
+
+			s = i + 1;
+
+			if(old == 0) break;
+		}
+	}
+
+	return r;
+}
+
+char* u_path_sanitize(const char* a) {
+	return u_path_combine("", a);
+}
