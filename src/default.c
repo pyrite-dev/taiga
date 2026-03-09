@@ -221,9 +221,11 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int spec, int 
 
 		sprintf(end, "</%s>", element->name);
 	} else if(strcmp(element->name, "table") == 0) {
-		accept_attr(top, text, 0, element, "id", "class", NULL);
+		char* t = xl_get_attribute(element, "class");
 
-		sprintf(tag, "<%s%s class=\"grid\" width=\"100%%\" cellpadding=\"3\" cellspacing=\"2\" border=\"1\">", element->name, text);
+		accept_attr(top, text, 0, element, "id", NULL);
+
+		sprintf(tag, "<%s%s class=\"grid%s%s\" width=\"100%%\" cellpadding=\"3\" cellspacing=\"2\" border=\"1\">", element->name, text, t == NULL ? "" : " ", t == NULL ? "" : t);
 
 		sprintf(end, "</%s>", element->name);
 	} else if(strcmp(element->name, "hr") == 0 || /**/

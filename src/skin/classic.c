@@ -102,8 +102,11 @@ void classic_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "\n");
 	fprintf(out, ".grid th, .grid td {\n");
 	fprintf(out, "	text-align: left;\n");
-	fprintf(out, "	vertical-align: top;\n");
 	fprintf(out, "	padding: 2px 3px;\n");
+	fprintf(out, "}\n");
+	fprintf(out, "\n");
+	fprintf(out, ".grid td {\n");
+	fprintf(out, "	vertical-align: top;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
 	fprintf(out, ".grid th {\n");
