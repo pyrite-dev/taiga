@@ -6,7 +6,6 @@ static int    mode	 = 0;
 static char*  title	 = NULL;
 static int    in_title	 = 0;
 static int    in_section = 0;
-static int    in_pre	 = 0;
 static char** mapping;
 static int    mapping_len;
 
@@ -90,12 +89,11 @@ static int enter_block(MD_BLOCKTYPE type, void* detail, void* user) {
 		indent++;
 	} else if(type == MD_BLOCK_CODE) {
 		print_indent();
-		fprintf(out, "<pre>");
+		fprintf(out, "<pre>\n");
 		indent++;
 		print_indent();
-		fprintf(out, "<code>");
+		fprintf(out, "<code>\n");
 		indent++;
-		in_pre = 1;
 	} else if(type == MD_BLOCK_TABLE) {
 		print_indent();
 		fprintf(out, "<table>\n");
@@ -178,7 +176,6 @@ static int leave_block(MD_BLOCKTYPE type, void* detail, void* user) {
 		indent--;
 		print_indent();
 		fprintf(out, "</pre>\n");
-		in_pre = 0;
 	} else if(type == MD_BLOCK_TABLE) {
 		indent--;
 		print_indent();
@@ -216,9 +213,13 @@ static int enter_span(MD_SPANTYPE type, void* detail, void* user) {
 		fprintf(out, "<strong>\n");
 		indent++;
 	} else if(type == MD_SPAN_A) {
-		MD_SPAN_A_DETAIL* det  = detail;
-		char*		  href = encode(det->href.text, det->href.size);
+		MD_SPAN_A_DETAIL* det	  = detail;
+		char*		  href	  = encode(det->href.text, det->href.size);
+		char*		  href_wd = href;
 		int		  i;
+		char*		  str;
+
+		while((str = strstr(href_wd, "./")) == href_wd) href_wd = str + 2;
 
 		for(i = 0; i < mapping_len; i++) {
 			char* key   = u_strdup(mapping[i]);
@@ -229,7 +230,7 @@ static int enter_span(MD_SPANTYPE type, void* detail, void* user) {
 				value++;
 			}
 
-			if(value != NULL && strcmp(key, href) == 0) {
+			if(value != NULL && strcmp(key, href_wd) == 0) {
 				free(href);
 				href = encode(value, -1);
 			}
@@ -311,7 +312,7 @@ static int leave_span(MD_SPANTYPE type, void* detail, void* user) {
 }
 
 static int text(MD_TEXTTYPE type, const MD_CHAR* text, MD_SIZE size, void* user) {
-	if(in_title && (type == MD_TEXT_NORMAL || type == MD_TEXT_ENTITY)) {
+	if(in_title && (type == MD_TEXT_NORMAL || type == MD_TEXT_ENTITY || type == MD_TEXT_CODE)) {
 		if(title == NULL) {
 			title = malloc(size + 1);
 
@@ -411,7 +412,6 @@ int action_markdown(int argc, char** argv) {
 
 	in_title   = 0;
 	in_section = 0;
-	in_pre	   = 0;
 	mode	   = 0;
 	if(md_parse(buffer, size, &parser, NULL)) {
 		free(buffer);
@@ -432,7 +432,6 @@ int action_markdown(int argc, char** argv) {
 
 	in_title   = 0;
 	in_section = 0;
-	in_pre	   = 0;
 	mode	   = 1;
 	if(md_parse(buffer, size, &parser, NULL)) {
 		free(buffer);

@@ -23,7 +23,7 @@ static int scan(const char* top, int mode, const char* path) {
 			p = u_strvacat(in, d->d_name, NULL);
 			if(io_stat(p, &s) == 0) {
 				if(IO_S_ISDIR(s.st_mode)) {
-					char* p2 = u_strvacat(d->d_name, "/", NULL);
+					char* p2 = u_strvacat(path, d->d_name, "/", NULL);
 					char* t	 = u_strvacat(top, "../", NULL);
 					char* o	 = u_strvacat(out, d->d_name, NULL);
 
