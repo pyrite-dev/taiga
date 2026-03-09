@@ -2,8 +2,9 @@
 
 int action_help(int argc, char** argv) {
 	printf("Actions:\n");
-	printf("  help     Show this help\n");
-	printf("  seed     Creates a new website\n");
-	printf("  site     Builds an website (default action)\n");
+	printf("  help         Show this help\n");
+	printf("  seed         Creates a new website\n");
+	printf("  site         Builds an website (default action)\n");
+	printf("  markdown     Converts Markdown document to Taiga document\n");
 	return 0;
 }
