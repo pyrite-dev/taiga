@@ -17,6 +17,7 @@
 #endif
 
 #include <xemil.h>
+#include <md4c.h>
 
 #ifdef _WIN32
 #define io_mkdir(x, y) _mkdir(x)

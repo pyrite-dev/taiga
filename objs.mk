@@ -1,4 +1,7 @@
 
+OBJS += src/external_md4c_src_md4c.o
+src/external_md4c_src_md4c.o: external/md4c/src/md4c.c
+	$(CC) $(CFLAGS) -c -o $@ external/md4c/src/md4c.c
 OBJS += src/external_xemil_src_array.o
 src/external_xemil_src_array.o: external/xemil/src/array.c
 	$(CC) $(CFLAGS) -c -o $@ external/xemil/src/array.c
