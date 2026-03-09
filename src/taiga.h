@@ -48,7 +48,7 @@ void		  io_closedir(IO_DIR* dir);
 #define io_closedir closedir
 #endif
 
-/* site.c */
+/* action/site.c */
 extern xemil_t* skinconf;
 extern void (*site_stylesheet)(FILE* out, const char* top); /* also create files here if you need one */
 extern void (*site_head)(FILE* out, const char* top, xl_node_t* header);
@@ -56,10 +56,10 @@ extern void (*site_body)(FILE* out, const char* top, const char* title, xl_node_
 
 int action_site(int argc, char** argv);
 
-/* help.c */
+/* action/help.c */
 int action_help(int argc, char** argv);
 
-/* seed.c */
+/* action/seed.c */
 int action_seed(int argc, char** argv);
 
 /* util.c */
@@ -87,12 +87,12 @@ void default_nav(FILE* out, const char* top, xl_node_t* element, int indent);
  * they're not documented... oh well
  */
 
-/* classic.c */
+/* skin/classic.c */
 void classic_stylesheet(FILE* out, const char* top);
 void classic_head(FILE* out, const char* top, xl_node_t* header);
 void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body);
 
-/* simple.c */
+/* skin/simple.c */
 void simple_stylesheet(FILE* out, const char* top);
 void simple_head(FILE* out, const char* top, xl_node_t* header);
 void simple_body(FILE* out, const char* top, const char* title, xl_node_t* body);

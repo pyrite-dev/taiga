@@ -23,9 +23,15 @@ src/external_xemil_src_xinclude.o: external/xemil/src/xinclude.c
 OBJS += src/external_xemil_src_xpointer.o
 src/external_xemil_src_xpointer.o: external/xemil/src/xpointer.c
 	$(CC) $(CFLAGS) -c -o $@ external/xemil/src/xpointer.c
-OBJS += src/src_classic.o
-src/src_classic.o: src/classic.c
-	$(CC) $(CFLAGS) -c -o $@ src/classic.c
+OBJS += src/src_action_help.o
+src/src_action_help.o: src/action/help.c
+	$(CC) $(CFLAGS) -c -o $@ src/action/help.c
+OBJS += src/src_action_seed.o
+src/src_action_seed.o: src/action/seed.c
+	$(CC) $(CFLAGS) -c -o $@ src/action/seed.c
+OBJS += src/src_action_site.o
+src/src_action_site.o: src/action/site.c
+	$(CC) $(CFLAGS) -c -o $@ src/action/site.c
 OBJS += src/src_crc.o
 src/src_crc.o: src/crc.c
 	$(CC) $(CFLAGS) -c -o $@ src/crc.c
@@ -35,9 +41,6 @@ src/src_default.o: src/default.c
 OBJS += src/src_dirent.o
 src/src_dirent.o: src/dirent.c
 	$(CC) $(CFLAGS) -c -o $@ src/dirent.c
-OBJS += src/src_help.o
-src/src_help.o: src/help.c
-	$(CC) $(CFLAGS) -c -o $@ src/help.c
 OBJS += src/src_image_fill.o
 src/src_image_fill.o: src/image/fill.c
 	$(CC) $(CFLAGS) -c -o $@ src/image/fill.c
@@ -68,15 +71,12 @@ src/src_main.o: src/main.c
 OBJS += src/src_process.o
 src/src_process.o: src/process.c
 	$(CC) $(CFLAGS) -c -o $@ src/process.c
-OBJS += src/src_seed.o
-src/src_seed.o: src/seed.c
-	$(CC) $(CFLAGS) -c -o $@ src/seed.c
-OBJS += src/src_simple.o
-src/src_simple.o: src/simple.c
-	$(CC) $(CFLAGS) -c -o $@ src/simple.c
-OBJS += src/src_site.o
-src/src_site.o: src/site.c
-	$(CC) $(CFLAGS) -c -o $@ src/site.c
+OBJS += src/src_skin_classic.o
+src/src_skin_classic.o: src/skin/classic.c
+	$(CC) $(CFLAGS) -c -o $@ src/skin/classic.c
+OBJS += src/src_skin_simple.o
+src/src_skin_simple.o: src/skin/simple.c
+	$(CC) $(CFLAGS) -c -o $@ src/skin/simple.c
 OBJS += src/src_util.o
 src/src_util.o: src/util.c
 	$(CC) $(CFLAGS) -c -o $@ src/util.c
