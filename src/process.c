@@ -6,7 +6,8 @@ static int parse_file(const char* top, const char* full) {
 	xemil_t* handle = xl_open_file(full);
 	int	 st	= 1;
 
-	handle->new_text = 1;
+	handle->param.new_text	  = 1;
+	handle->param.do_xinclude = 1;
 
 	if(handle != NULL && xl_parse(handle)) {
 		if(handle->root == NULL || strcmp(handle->root->name, "document") != 0) {
