@@ -41,7 +41,7 @@ pipeline {
 					steps {
 						sh("git submodule update --init --recursive --force")
 						sh("make clean")
-						sh("make -j4 -f Makefile.watcom")
+						sh("make -j4 TARGET=watcom")
 						sh("mv taiga.exe taiga-win32.exe")
 						archiveArtifacts("taiga-win32.exe")
 					}

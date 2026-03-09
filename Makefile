@@ -1,10 +1,12 @@
-CC ?= cc
-CFLAGS ?= -I external/xemil/include -I external/md4c/src -I external/stb -I src $(DEFS)
-LDFLAGS ?=
-LIBS ?=
-AFTER ?=
+CC = cc
+CFLAGS = -I external/xemil/include -I external/md4c/src -I external/stb -I src $(DEFS)
+LDFLAGS =
+LIBS =
+AFTER =
 
-E ?=
+E =
+
+-include Makefile.$(TARGET)
 
 .PHONY: all format clean
 

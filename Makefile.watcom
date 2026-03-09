@@ -1,7 +1,4 @@
 CC = owcc -bnt
-DEFS = -DSTBI_NO_SIMD
+DEFS += -DSTBI_NO_SIMD
 E = .exe
 AFTER = wrc -q -bt=nt src/taiga.rc taiga.exe
-LIBS =
-
-include Makefile
