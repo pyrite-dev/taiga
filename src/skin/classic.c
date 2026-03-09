@@ -323,11 +323,13 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 	fprintf(out, "				<td valign=\"top\">\n");
 	fprintf(out, "					<div id=\"content\">\n");
 
-	child = body->first_child;
-	while(child != NULL) {
-		default_body(out, top, child, 0, 6);
+	if(body != NULL) {
+		child = body->first_child;
+		while(child != NULL) {
+			default_body(out, top, child, 0, 0, 6);
 
-		child = child->next;
+			child = child->next;
+		}
 	}
 
 	fprintf(out, "					</div>\n");
@@ -336,7 +338,7 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 	if((nodes = xl_get_path(skinconf->root, "footer")) != NULL) {
 		child = nodes[0]->first_child;
 		while(child != NULL) {
-			default_body(out, top, child, 1, 6);
+			default_body(out, top, child, 1, 0, 6);
 
 			child = child->next;
 		}

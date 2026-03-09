@@ -131,7 +131,7 @@ char* u_section_id(xl_node_t* node) {
 
 		id = malloc(64);
 
-		sprintf(id, "%d-%d", unique, crc32(name, strlen(name)));
+		sprintf(id, "section%d-%d", unique, crc32(name, strlen(name)));
 	}
 
 	return id;

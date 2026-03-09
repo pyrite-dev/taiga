@@ -7,7 +7,7 @@ int main(int argc, char** argv) {
 	char** target_argv = malloc(sizeof(*target_argv));
 	target_argv[0]	   = NULL;
 
-	printf("Taiga, static website generator - run `%s help' for help\n\n", argv[0]);
+	fprintf(stderr, "Taiga, static website generator - run `%s help' for help\n\n", argv[0]);
 
 	for(i = 1; i < argc; i++) {
 		if(argv[i][0] == '-') {
@@ -30,6 +30,8 @@ int main(int argc, char** argv) {
 		return action_help(target_argc, target_argv);
 	} else if(strcmp(action, "seed") == 0) {
 		return action_seed(target_argc, target_argv);
+	} else if(strcmp(action, "markdown") == 0) {
+		return action_markdown(target_argc, target_argv);
 	}
 
 	fprintf(stderr, "Unknown action\n");

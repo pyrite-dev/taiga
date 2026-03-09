@@ -62,6 +62,9 @@ int action_help(int argc, char** argv);
 /* action/seed.c */
 int action_seed(int argc, char** argv);
 
+/* action/markdown.c */
+int action_markdown(int argc, char** argv);
+
 /* util.c */
 char* u_strvacat(const char* str, ...);
 char* u_strdup(const char* str);
@@ -78,7 +81,7 @@ int process(const char* top, const char* out, const char* full);
 
 /* default.c */
 void default_head(FILE* out, const char* top, xl_node_t* element, int indent);
-void default_body(FILE* out, const char* top, xl_node_t* element, int spec, int indent); /* pass non-zero to spec if you want links to be relative from top */
+void default_body(FILE* out, const char* top, xl_node_t* element, int spec, int pre, int indent); /* pass non-zero to spec if you want links to be relative from top */
 void default_nav(FILE* out, const char* top, xl_node_t* element, int indent);
 
 /*** skins ***/

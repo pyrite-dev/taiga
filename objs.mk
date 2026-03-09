@@ -26,6 +26,9 @@ src/external_xemil_src_xpointer.o: external/xemil/src/xpointer.c
 OBJS += src/src_action_help.o
 src/src_action_help.o: src/action/help.c
 	$(CC) $(CFLAGS) -c -o $@ src/action/help.c
+OBJS += src/src_action_markdown.o
+src/src_action_markdown.o: src/action/markdown.c
+	$(CC) $(CFLAGS) -c -o $@ src/action/markdown.c
 OBJS += src/src_action_seed.o
 src/src_action_seed.o: src/action/seed.c
 	$(CC) $(CFLAGS) -c -o $@ src/action/seed.c

@@ -1,17 +1,15 @@
 #include <taiga.h>
 
-static void print(FILE* out, const char* txt, int indent) {
+static void print(FILE* out, const char* txt, int pre, int indent) {
 	int i;
 
 	for(i = 0;; i++) {
 		if(i == 0 || txt[i] == '\n' || txt[i] == 0) {
 			int j;
-			if(i > 0)
-				fprintf(out, "\n");
-			if(txt[i] == 0)
-				break;
-			for(j = 0; j < indent; j++)
-				fprintf(out, "\t");
+			if(pre ? (txt[i] == '\n') : (i > 0)) fprintf(out, "\n");
+			if(txt[i] == 0) break;
+			if(!pre)
+				for(j = 0; j < indent; j++) fprintf(out, "\t");
 		}
 
 		if(txt[i] != '\n') fprintf(out, "%c", txt[i]);
@@ -70,7 +68,7 @@ void default_head(FILE* out, const char* top, xl_node_t* element, int indent) {
 		sprintf(tag, "<%s%s>", element->name, text);
 	}
 
-	if(tag[0] != 0) print(out, tag, indent);
+	if(tag[0] != 0) print(out, tag, 0, indent);
 
 	child = element->first_child;
 	while(child != NULL) {
@@ -86,11 +84,10 @@ void default_head(FILE* out, const char* top, xl_node_t* element, int indent) {
 		child = child->next;
 	}
 
-	if(end[0] != 0)
-		print(out, end, indent);
+	if(end[0] != 0) print(out, end, 0, indent);
 }
 
-void default_body(FILE* out, const char* top, xl_node_t* element, int spec, int indent) {
+void default_body(FILE* out, const char* top, xl_node_t* element, int spec, int pre, int indent) {
 	xl_node_t* child;
 	char	   tag[2048]; /* enough for most cases... :) */
 	char	   end[128];
@@ -149,11 +146,14 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int spec, int 
 		add = 3;
 	} else if(strcmp(element->name, "p") == 0 ||	      /**/
 		  strcmp(element->name, "code") == 0 ||	      /**/
+		  strcmp(element->name, "pre") == 0 ||	      /**/
 		  strcmp(element->name, "blockquote") == 0 || /**/
 		  strcmp(element->name, "li") == 0 ||	      /**/
 		  strcmp(element->name, "dt") == 0 ||	      /**/
 		  strcmp(element->name, "dd") == 0 ||	      /**/
 		  strcmp(element->name, "strong") == 0 ||     /**/
+		  strcmp(element->name, "del") == 0 ||	      /**/
+		  strcmp(element->name, "u") == 0 ||	      /**/
 		  strcmp(element->name, "sub") == 0 ||	      /**/
 		  strcmp(element->name, "sup") == 0 ||	      /**/
 		  strcmp(element->name, "tr") == 0 ||	      /**/
@@ -165,6 +165,8 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int spec, int 
 		  strcmp(element->name, "h5") == 0 ||	      /**/
 		  strcmp(element->name, "h6") == 0) {
 		accept_attr(top, text, 0, element, "id", "class", NULL);
+
+		if(strcmp(element->name, "pre") == 0) pre = 1;
 
 		sprintf(tag, "<%s%s>", element->name, text);
 
@@ -231,20 +233,21 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int spec, int 
 		sprintf(tag, "<%s%s>", element->name, text);
 	}
 
-	if(tag[0] != 0) print(out, tag, indent);
+	if(tag[0] != 0) print(out, tag, pre, indent);
 
 	child = element->first_child;
 	while(child != NULL) {
 		if(child->type == XL_NODE_NODE && child->name != NULL) {
-			default_body(out, top, child, spec, indent + 1 + add);
+			default_body(out, top, child, spec, pre, indent + 1 + add);
 		} else if(child->type == XL_NODE_TEXT && child->text != NULL) {
-			print(out, child->text, indent + 1 + add);
+			print(out, child->text, pre, pre ? 0 : (indent + 1 + add));
 		}
 
 		child = child->next;
 	}
 
-	if(end[0] != 0) print(out, end, indent);
+	if(end[0] != 0) print(out, end, pre, indent);
+	if(strcmp(end, "</pre>") == 0) fprintf(out, "\n");
 }
 
 void default_nav(FILE* out, const char* top, xl_node_t* element, int indent) {

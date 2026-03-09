@@ -46,8 +46,7 @@ static int parse_file(const char* top, const char* full) {
 				node = node->next;
 			}
 
-			if(title == NULL)
-				title = u_strdup("Untitled");
+			if(title == NULL) title = u_strdup("Untitled");
 
 			fprintf(f, "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n");
 			fprintf(f, "<html>\n");
