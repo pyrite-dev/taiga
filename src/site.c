@@ -51,7 +51,7 @@ static int scan(const char* top, int mode, const char* path) {
 
 						return 0;
 					}
-				} else if(!mode) {
+				} else if(!mode && strcmp(d->d_name, "index.xml") != 0) {
 					char* po   = u_strvacat(out, d->d_name, NULL);
 					FILE* fin  = fopen(p, "rb");
 					FILE* fout = fopen(po, "wb");
