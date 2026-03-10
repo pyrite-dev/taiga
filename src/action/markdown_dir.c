@@ -176,7 +176,7 @@ static int scan(const char* top, const char* path) {
 
 int action_markdown_dir(int argc, char** argv) {
 	int i;
-	if(argc != 1) {
+	if(argc < 1) {
 		fprintf(stderr, "Usage: markdown-dir input [output]\n");
 
 		return 1;
