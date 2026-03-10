@@ -25,6 +25,10 @@ void classic_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "	font-family: Verdana, Helvetica, Arial, sans-serif;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
+	fprintf(out, "p {\n");
+	fprintf(out, "	margin: 0;\n");
+	fprintf(out, "}\n");
+	fprintf(out, "\n");
 	fprintf(out, "#breadcrumb {\n");
 	fprintf(out, "	background-color: %s;\n", breadcrumb_bgcolor);
 	fprintf(out, "	font-weight: bold;\n");
@@ -62,10 +66,6 @@ void classic_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "	padding-left: 8px;\n");
 	fprintf(out, "	font-weight: bold;\n");
 	fprintf(out, "	color: #000088;\n");
-	fprintf(out, "}\n");
-	fprintf(out, "\n");
-	fprintf(out, "p {\n");
-	fprintf(out, "	margin: 0;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
 	fprintf(out, "a {\n");

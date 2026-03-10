@@ -17,6 +17,10 @@ void simple_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "	font-size: 16px;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
+	fprintf(out, "p {\n");
+	fprintf(out, "	margin: 0;\n");
+	fprintf(out, "}\n");
+	fprintf(out, "\n");
 	fprintf(out, "a:link {\n");
 	fprintf(out, "	color: #0000ee;\n");
 	fprintf(out, "}\n");
