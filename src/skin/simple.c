@@ -106,7 +106,7 @@ void simple_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "}\n");
 	fprintf(out, ".grid {\n");
 	fprintf(out, "	border-collapse: collapse;\n");
-	fprintf(out, "	margin-top: 10px 0;\n");
+	fprintf(out, "	margin: 10px 0;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
 	fprintf(out, ".grid, .grid th, .grid td {\n");
