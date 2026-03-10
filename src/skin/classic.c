@@ -64,6 +64,10 @@ void classic_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "	color: #000088;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
+	fprintf(out, "p {\n");
+	fprintf(out, "	margin: 0;\n");
+	fprintf(out, "}\n");
+	fprintf(out, "\n");
 	fprintf(out, "a {\n");
 	fprintf(out, "	text-decoration: none;\n");
 	fprintf(out, "}\n");

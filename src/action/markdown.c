@@ -6,12 +6,15 @@ static int    mode	 = 0;
 static char*  title	 = NULL;
 static int    in_title	 = 0;
 static int    in_section = 0;
+static int    in_message = 0;
 static char** mapping;
 static int    mapping_len;
 static char*  argin    = NULL;
 static char*  argout   = NULL;
 static char*  argbase  = NULL;
 static char*  argbase2 = NULL;
+
+static void setup_parser(MD_PARSER* parser);
 
 static void print_indent(void) {
 	int i;
@@ -92,12 +95,32 @@ static int enter_block(MD_BLOCKTYPE type, void* detail, void* user) {
 		fprintf(out, "<hr>\n");
 		indent++;
 	} else if(type == MD_BLOCK_CODE) {
-		print_indent();
-		fprintf(out, "<pre>\n");
-		indent++;
-		print_indent();
-		fprintf(out, "<code>\n");
-		indent++;
+		MD_BLOCK_CODE_DETAIL* det = detail;
+		char		      lang[2048];
+
+		memcpy(lang, det->lang.text, det->lang.size);
+		lang[det->lang.size] = 0;
+
+		if(strcmp(lang, "warn") == 0) {
+			print_indent();
+			fprintf(out, "<warning>\n");
+			indent++;
+
+			in_message = 1;
+		} else if(strcmp(lang, "note") == 0) {
+			print_indent();
+			fprintf(out, "<note>\n");
+			indent++;
+
+			in_message = 1;
+		} else {
+			print_indent();
+			fprintf(out, "<pre>\n");
+			indent++;
+			print_indent();
+			fprintf(out, "<code>\n");
+			indent++;
+		}
 	} else if(type == MD_BLOCK_TABLE) {
 		print_indent();
 		fprintf(out, "<table>\n");
@@ -174,12 +197,32 @@ static int leave_block(MD_BLOCKTYPE type, void* detail, void* user) {
 		print_indent();
 		fprintf(out, "</li>\n");
 	} else if(type == MD_BLOCK_CODE) {
-		indent--;
-		print_indent();
-		fprintf(out, "</code>\n");
-		indent--;
-		print_indent();
-		fprintf(out, "</pre>\n");
+		MD_BLOCK_CODE_DETAIL* det = detail;
+		char		      lang[2048];
+
+		memcpy(lang, det->lang.text, det->lang.size);
+		lang[det->lang.size] = 0;
+
+		if(strcmp(lang, "warn") == 0) {
+			indent--;
+			print_indent();
+			fprintf(out, "</warning>\n");
+
+			in_message = 0;
+		} else if(strcmp(lang, "note") == 0) {
+			indent--;
+			print_indent();
+			fprintf(out, "</note>\n");
+
+			in_message = 0;
+		} else {
+			indent--;
+			print_indent();
+			fprintf(out, "</code>\n");
+			indent--;
+			print_indent();
+			fprintf(out, "</pre>\n");
+		}
 	} else if(type == MD_BLOCK_TABLE) {
 		indent--;
 		print_indent();
@@ -362,18 +405,44 @@ static int text(MD_TEXTTYPE type, const MD_CHAR* text, MD_SIZE size, void* user)
 		print_indent();
 		fprintf(out, "<br />\n");
 	} else if(type == MD_TEXT_NORMAL || type == MD_TEXT_ENTITY || type == MD_TEXT_CODE) {
-		char* buf;
+		if(in_message) {
+			MD_PARSER parser;
+			int	  s;
 
-		print_indent();
+			setup_parser(&parser);
 
-		buf = encode(text, size);
-		fwrite(buf, 1, strlen(buf), out);
-		free(buf);
+			fwrite(text, 1, size, stdout);
+			fprintf(stdout, "\n");
 
-		fprintf(out, "\n");
+			in_message = 0;
+			s	   = md_parse(text, size, &parser, NULL);
+			in_message = 1;
+
+			return s;
+		} else {
+			char* buf;
+
+			print_indent();
+
+			buf = encode(text, size);
+			fwrite(buf, 1, strlen(buf), out);
+			free(buf);
+
+			fprintf(out, "\n");
+		}
 	}
 
 	return 0;
+}
+
+static void setup_parser(MD_PARSER* parser) {
+	memset(parser, 0, sizeof(*parser));
+	parser->flags	    = MD_FLAG_COLLAPSEWHITESPACE | MD_FLAG_TABLES | MD_FLAG_STRIKETHROUGH | MD_FLAG_UNDERLINE;
+	parser->enter_block = enter_block;
+	parser->leave_block = leave_block;
+	parser->enter_span  = enter_span;
+	parser->leave_span  = leave_span;
+	parser->text	    = text;
 }
 
 int action_markdown(int argc, char** argv) {
@@ -384,13 +453,7 @@ int action_markdown(int argc, char** argv) {
 	int	  i;
 	char*	  s;
 
-	memset(&parser, 0, sizeof(parser));
-	parser.flags	   = MD_FLAG_COLLAPSEWHITESPACE | MD_FLAG_TABLES | MD_FLAG_STRIKETHROUGH | MD_FLAG_UNDERLINE;
-	parser.enter_block = enter_block;
-	parser.leave_block = leave_block;
-	parser.enter_span  = enter_span;
-	parser.leave_span  = leave_span;
-	parser.text	   = text;
+	setup_parser(&parser);
 
 	argin	    = NULL;
 	argout	    = NULL;
@@ -443,6 +506,7 @@ int action_markdown(int argc, char** argv) {
 
 	in_title   = 0;
 	in_section = 0;
+	in_message = 0;
 	mode	   = 0;
 	if(md_parse(buffer, size, &parser, NULL)) {
 		free(buffer);
@@ -463,6 +527,7 @@ int action_markdown(int argc, char** argv) {
 
 	in_title   = 0;
 	in_section = 0;
+	in_message = 0;
 	mode	   = 1;
 	if(md_parse(buffer, size, &parser, NULL)) {
 		free(buffer);

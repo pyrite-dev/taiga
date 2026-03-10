@@ -136,7 +136,7 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int spec, int 
 		sprintf(tag + strlen(tag), "			</td>\n");
 		sprintf(tag + strlen(tag), "		</tr>\n");
 		sprintf(tag + strlen(tag), "		<tr>\n");
-		sprintf(tag + strlen(tag), "			<td width=\"100%%\">");
+		sprintf(tag + strlen(tag), "			<td width=\"100%%\" class=\"message-content\">");
 
 		sprintf(end + strlen(end), "			</td>\n");
 		sprintf(end + strlen(end), "		</tr>\n");
