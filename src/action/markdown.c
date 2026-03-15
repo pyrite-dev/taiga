@@ -411,9 +411,6 @@ static int text(MD_TEXTTYPE type, const MD_CHAR* text, MD_SIZE size, void* user)
 
 			setup_parser(&parser);
 
-			fwrite(text, 1, size, stdout);
-			fprintf(stdout, "\n");
-
 			in_message = 0;
 			s	   = md_parse(text, size, &parser, NULL);
 			in_message = 1;
