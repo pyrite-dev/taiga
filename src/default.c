@@ -241,8 +241,8 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int spec, int 
 	while(child != NULL) {
 		if(child->type == XL_NODE_NODE && child->name != NULL) {
 			default_body(out, top, child, spec, pre, indent + 1 + add);
-		} else if(child->type == XL_NODE_TEXT && child->text != NULL) {
-			print(out, child->text, pre, pre ? 0 : (indent + 1 + add));
+		} else if(child->type == XL_NODE_TEXT && (pre ? (child->text_raw != NULL) : (child->text != NULL))) {
+			print(out, pre ? child->text_raw : child->text, pre, pre ? 0 : (indent + 1 + add));
 		}
 
 		child = child->next;

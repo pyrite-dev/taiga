@@ -51,6 +51,7 @@ void classic_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "	border-right: solid 1px #aaaaaa;\n");
 	fprintf(out, "	border-bottom: solid 1px #aaaaaa;\n");
 	fprintf(out, "	padding: 8px;\n");
+	fprintf(out, "	width: 150px;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
 	fprintf(out, "#content, #footer {\n");
