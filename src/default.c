@@ -252,6 +252,101 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int spec, int 
 	if(strcmp(end, "</pre>") == 0) fprintf(out, "\n");
 }
 
+static int sort_xml(const void* a, const void* b) {
+	const char* sa = *(const char**)a;
+	const char* sb = *(const char**)b;
+	int	    na = 0;
+	int	    nb = 0;
+	int	    i;
+
+	for(i = 0; sa[i] != 0; i++) {
+		if(sa[i] == '/') na++;
+	}
+
+	for(i = 0; sb[i] != 0; i++) {
+		if(sb[i] == '/') nb++;
+	}
+
+	if(na == nb) return strcmp(sa, sb);
+	return a > b ? 1 : -1;
+}
+
+static char** scan_xml(const char* path, const char* path2, xl_node_t** excludes, int layer) {
+	IO_DIR* dir;
+	char**	arr = NULL;
+
+	if((dir = io_opendir(path)) != NULL) {
+		struct io_dirent* d;
+
+		while((d = io_readdir(dir)) != NULL) {
+			char*	       p;
+			struct io_stat s;
+
+			if(strcmp(d->d_name, "..") == 0 || strcmp(d->d_name, ".") == 0) continue;
+
+			p = u_strvacat(path, d->d_name, NULL);
+
+			if(io_stat(p, &s) == 0) {
+				if(IO_S_ISDIR(s.st_mode)) {
+					char*  p2;
+					char** arr2;
+					int    i;
+
+					if(layer > 0 || layer == -0xffff) {
+						char* p3 = u_strvacat(path2, d->d_name, "/", NULL);
+
+						p2   = u_strvacat(p, "/", NULL);
+						arr2 = scan_xml(p2, p3, excludes, layer - 1);
+
+						free(p3);
+
+						for(i = 0; i < arrlen(arr2); i++) {
+							arrput(arr, arr2[i]);
+						}
+
+						arrfree(arr2);
+						free(p2);
+						free(p);
+					}
+				} else if(strcmp(d->d_name, "index.xml") == 0) {
+					char* p3 = u_strvacat(path2, d->d_name, NULL);
+					int   i;
+
+					for(i = 0; excludes[i] != NULL; i++) {
+						if(excludes[i]->text == NULL) continue;
+
+						if(strcmp(excludes[i]->text, p3) == 0) break;
+						if(strlen(excludes[i]->text) > 0 && excludes[i]->text[strlen(excludes[i]->text) - 1] == '/' && strstr(p3, excludes[i]->text) == p3) break;
+						if(strlen(excludes[i]->text) > 0) {
+							char* p4 = u_strvacat(excludes[i]->text, "/", NULL);
+
+							if(strstr(p3, p4) == p3) {
+								free(p4);
+								break;
+							}
+							free(p4);
+						}
+					}
+
+					free(p3);
+
+					if(excludes[i] == NULL) arrput(arr, p);
+				} else {
+					free(p);
+				}
+			} else {
+				free(p);
+			}
+		}
+
+		io_closedir(dir);
+	}
+
+	qsort(arr, arrlen(arr), sizeof(char*), sort_xml);
+
+	return arr;
+}
+
 void default_nav(FILE* out, const char* top, xl_node_t* element, int indent) {
 	int i;
 
@@ -293,5 +388,43 @@ void default_nav(FILE* out, const char* top, xl_node_t* element, int indent) {
 
 		for(i = 0; i < indent; i++) fprintf(out, "\t");
 		fprintf(out, "</div>\n");
+	} else if(strcmp(element->name, "autogenerate") == 0) {
+		char**	    xml;
+		int	    i;
+		char*	    layer;
+		xl_node_t*  child;
+		xl_node_t** excludes;
+
+		if((layer = xl_get_attribute(element, "layer")) == NULL) layer = "*";
+
+		excludes = xl_get_path(element, "exclude");
+
+		xml = scan_xml("site/content/", "", excludes, strcmp(layer, "*") == 0 ? -0xffff : (atoi(layer) - 1));
+
+		if(excludes != NULL) free(excludes);
+
+		for(i = 0; i < arrlen(xml); i++) {
+			xemil_t* handle;
+
+			if((handle = xl_open_file(xml[i])) != NULL && (handle->param.new_text = handle->param.do_xinclude = 1) && xl_parse(handle)) {
+				xl_node_t** nodes = xl_get_path(handle->root, "header.title");
+
+				if(nodes != NULL && nodes[0]->text != NULL) {
+					int j;
+
+					xml[i][strlen(xml[i]) - strlen("index.xml")] = 0;
+
+					for(j = 0; j < indent; j++) fprintf(out, "\t");
+					fprintf(out, " - <a href=\"%s%s\">%s</a><br>\n", top, xml[i] + strlen("site/content/"), nodes[0]->text);
+
+					free(nodes);
+				}
+			}
+
+			if(handle != NULL) xl_close(handle);
+		}
+
+		for(i = 0; i < arrlen(xml); i++) free(xml[i]);
+		arrfree(xml);
 	}
 }
