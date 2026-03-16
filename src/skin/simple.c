@@ -171,6 +171,12 @@ void simple_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "	border-bottom: solid 1px #808080;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
+	fprintf(out, "pre {\n");
+	fprintf(out, "	overflow-wrap: break-word;\n");
+	fprintf(out, "	word-wrap: break-word;\n");
+	fprintf(out, "	white-space: pre-wrap;\n");
+	fprintf(out, "}\n");
+	fprintf(out, "\n");
 	fprintf(out, ".box-content ul {\n");
 	fprintf(out, "	margin: 0;\n");
 	fprintf(out, "	padding-top: 8px;\n");

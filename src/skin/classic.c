@@ -124,6 +124,12 @@ void classic_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "	border-left: 1px solid #cccccc;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
+	fprintf(out, "pre {\n");
+	fprintf(out, "	overflow-wrap: break-word;\n");
+	fprintf(out, "	word-wrap: break-word;\n");
+	fprintf(out, "	white-space: pre-wrap;\n");
+	fprintf(out, "}\n");
+	fprintf(out, "\n");
 	fprintf(out, ".message-icon {\n");
 	fprintf(out, "	padding-right: 5px;\n");
 	fprintf(out, "}\n");
