@@ -88,6 +88,7 @@ void simple_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "	padding-bottom: 18px;\n");
 	fprintf(out, "	padding-left: 8px;\n");
 	fprintf(out, "	padding-right: 26px;\n");
+	fprintf(out, "	font-size: 13px;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
 	fprintf(out, ".linkgroup {\n");
