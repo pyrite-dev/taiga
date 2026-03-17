@@ -184,9 +184,9 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int spec, int 
 		sprintf(tag, "<%s%s>", element->name, text);
 
 		sprintf(end, "</%s>", element->name);
-	} else if(strcmp(element->name, "td") == 0 || /**/
-		  strcmp(element->name, "th") == 0) {
-		accept_attr(top, text, 0, element, "id", "class", "rowspan", "colspan", NULL);
+	} else if(strcmp(element->name, "th") == 0 || /**/
+		  strcmp(element->name, "td") == 0) {
+		accept_attr(top, text, 0, element, "id", "class", "rowspan", "colspan", "width", "height", NULL);
 
 		sprintf(tag, "<%s%s>", element->name, text);
 
