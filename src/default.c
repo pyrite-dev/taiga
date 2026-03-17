@@ -399,7 +399,7 @@ void default_nav(FILE* out, const char* top, xl_node_t* element, int indent) {
 
 		excludes = xl_get_path(element, "exclude");
 
-		xml = scan_xml("site/content/", "", excludes, strcmp(layer, "*") == 0 ? -0xffff : (atoi(layer) - 1));
+		xml = scan_xml("site/content/", "", excludes, strcmp(layer, "*") == 0 ? 0xffff : (atoi(layer) - 1));
 
 		if(excludes != NULL) free(excludes);
 

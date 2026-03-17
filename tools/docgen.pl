@@ -12,6 +12,7 @@ sub scan {
 	my @args = @_;
 	my $path = $args[0];
 	my $top = $args[1];
+	my $dirname = $args[2];
 
 	opendir(my $dh, $path);
 
@@ -22,11 +23,11 @@ sub scan {
 		}
 
 		if(-d "$path/$file"){
-			scan("$path/$file", $top);
+			scan("$path/$file", $top, $dirname . $file . "/");
 		}else{
 			print("$path/$file\n");
 
-			my $dir = "$ARGV[1]/$file";
+			my $dir = "$ARGV[1]/$dirname$file";
 
 			$dir =~ s/\..*$//;
 
@@ -40,5 +41,5 @@ sub scan {
 }
 
 for(my $i = 2; $i < @ARGV; $i += 1){
-	scan($ARGV[$i], $ARGV[$i]);
+	scan($ARGV[$i], $ARGV[$i], "");
 }
