@@ -52,8 +52,8 @@ void		  io_closedir(IO_DIR* dir);
 /* action/site.c */
 extern xemil_t* skinconf;
 extern void (*site_stylesheet)(FILE* out, const char* top); /* also create files here if you need one */
-extern void (*site_head)(FILE* out, const char* top, xl_node_t* header);
-extern void (*site_body)(FILE* out, const char* top, const char* title, xl_node_t* body);
+extern void (*site_head)(FILE* out, const char* top, xl_node_t* header, const char* input);
+extern void (*site_body)(FILE* out, const char* top, const char* title, xl_node_t* body, const char* input);
 
 int action_site(int argc, char** argv);
 
@@ -86,9 +86,9 @@ unsigned int crc32(void* input, unsigned int len);
 int process(const char* top, const char* out, const char* full);
 
 /* default.c */
-void default_head(FILE* out, const char* top, xl_node_t* element, int indent);
-void default_body(FILE* out, const char* top, xl_node_t* element, int spec, int pre, int indent); /* pass non-zero to spec if you want links to be relative from top */
-void default_nav(FILE* out, const char* top, xl_node_t* element, int indent);
+void default_head(FILE* out, const char* top, xl_node_t* element, const char* input, int indent);
+void default_body(FILE* out, const char* top, xl_node_t* element, const char* input, int spec, int pre, int indent); /* pass non-zero to spec if you want links to be relative from top */
+void default_nav(FILE* out, const char* top, xl_node_t* element, const char* input, int indent);
 
 /*** skins ***/
 
@@ -98,12 +98,12 @@ void default_nav(FILE* out, const char* top, xl_node_t* element, int indent);
 
 /* skin/classic.c */
 void classic_stylesheet(FILE* out, const char* top);
-void classic_head(FILE* out, const char* top, xl_node_t* header);
-void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body);
+void classic_head(FILE* out, const char* top, xl_node_t* header, const char* input);
+void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body, const char* input);
 
 /* skin/simple.c */
 void simple_stylesheet(FILE* out, const char* top);
-void simple_head(FILE* out, const char* top, xl_node_t* header);
-void simple_body(FILE* out, const char* top, const char* title, xl_node_t* body);
+void simple_head(FILE* out, const char* top, xl_node_t* header, const char* input);
+void simple_body(FILE* out, const char* top, const char* title, xl_node_t* body, const char* input);
 
 #endif

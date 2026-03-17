@@ -50,7 +50,7 @@ static void accept_attr(const char* top, char* text, int spec, xl_node_t* elemen
 	}
 }
 
-void default_head(FILE* out, const char* top, xl_node_t* element, int indent) {
+void default_head(FILE* out, const char* top, xl_node_t* element, const char* input, int indent) {
 	xl_node_t* child;
 	char	   tag[2048];
 	char	   end[128];
@@ -73,7 +73,7 @@ void default_head(FILE* out, const char* top, xl_node_t* element, int indent) {
 	child = element->first_child;
 	while(child != NULL) {
 		if(child->type == XL_NODE_NODE && child->name != NULL) {
-			default_head(out, top, child, indent + 1 + add);
+			default_head(out, top, child, input, indent + 1 + add);
 		} else if(child->type == XL_NODE_TEXT && child->text != NULL) {
 			/* most likely junk */
 #if 0
@@ -87,7 +87,7 @@ void default_head(FILE* out, const char* top, xl_node_t* element, int indent) {
 	if(end[0] != 0) print(out, end, 0, indent);
 }
 
-void default_body(FILE* out, const char* top, xl_node_t* element, int spec, int pre, int indent) {
+void default_body(FILE* out, const char* top, xl_node_t* element, const char* input, int spec, int pre, int indent) {
 	xl_node_t* child;
 	char	   tag[2048]; /* enough for most cases... :) */
 	char	   end[128];
@@ -240,7 +240,7 @@ void default_body(FILE* out, const char* top, xl_node_t* element, int spec, int 
 	child = element->first_child;
 	while(child != NULL) {
 		if(child->type == XL_NODE_NODE && child->name != NULL) {
-			default_body(out, top, child, spec, pre, indent + 1 + add);
+			default_body(out, top, child, input, spec, pre, indent + 1 + add);
 		} else if(child->type == XL_NODE_TEXT && (pre ? (child->text_raw != NULL) : (child->text != NULL))) {
 			print(out, pre ? child->text_raw : child->text, pre, pre ? 0 : (indent + 1 + add));
 		}
@@ -312,25 +312,27 @@ static char** scan_xml(const char* path, const char* path2, xl_node_t** excludes
 					char* p3 = u_strvacat(path2, d->d_name, NULL);
 					int   i;
 
-					for(i = 0; excludes[i] != NULL; i++) {
-						if(excludes[i]->text == NULL) continue;
+					if(excludes != NULL) {
+						for(i = 0; excludes[i] != NULL; i++) {
+							if(excludes[i]->text == NULL) continue;
 
-						if(strcmp(excludes[i]->text, p3) == 0) break;
-						if(strlen(excludes[i]->text) > 0 && excludes[i]->text[strlen(excludes[i]->text) - 1] == '/' && strstr(p3, excludes[i]->text) == p3) break;
-						if(strlen(excludes[i]->text) > 0) {
-							char* p4 = u_strvacat(excludes[i]->text, "/", NULL);
+							if(strcmp(excludes[i]->text, p3) == 0) break;
+							if(strlen(excludes[i]->text) > 0 && excludes[i]->text[strlen(excludes[i]->text) - 1] == '/' && strstr(p3, excludes[i]->text) == p3) break;
+							if(strlen(excludes[i]->text) > 0) {
+								char* p4 = u_strvacat(excludes[i]->text, "/", NULL);
 
-							if(strstr(p3, p4) == p3) {
+								if(strstr(p3, p4) == p3) {
+									free(p4);
+									break;
+								}
 								free(p4);
-								break;
 							}
-							free(p4);
 						}
 					}
 
 					free(p3);
 
-					if(excludes[i] == NULL) arrput(arr, p);
+					if(excludes == NULL || excludes[i] == NULL) arrput(arr, p);
 				} else {
 					free(p);
 				}
@@ -347,12 +349,44 @@ static char** scan_xml(const char* path, const char* path2, xl_node_t** excludes
 	return arr;
 }
 
-void default_nav(FILE* out, const char* top, xl_node_t* element, int indent) {
+void default_nav(FILE* out, const char* top, xl_node_t* element, const char* input, int indent) {
 	int i;
 
 	if(element->name == NULL) return;
 
-	if(strcmp(element->name, "link") == 0) {
+	if(strcmp(element->name, "if") == 0) {
+		int		cond = 0;
+		xl_attribute_t* attr = element->first_attribute;
+
+		while(attr != NULL) {
+			if(strcmp(attr->key, "under") == 0 && attr->value != NULL) {
+				char* p	 = u_path_combine("site/content", attr->value);
+				char* p2 = u_strvacat(p, "/", NULL);
+
+				if(strstr(input, p2) == input) {
+					free(p2);
+					free(p);
+
+					cond = 1;
+					break;
+				}
+
+				free(p2);
+				free(p);
+			}
+
+			attr = attr->next;
+		}
+
+		if(cond) {
+			xl_node_t* child = element->first_child;
+			while(child != NULL) {
+				default_nav(out, top, child, input, indent);
+
+				child = child->next;
+			}
+		}
+	} else if(strcmp(element->name, "link") == 0) {
 		char* link;
 		char* name;
 
@@ -381,7 +415,7 @@ void default_nav(FILE* out, const char* top, xl_node_t* element, int indent) {
 
 		child = element->first_child;
 		while(child != NULL) {
-			default_nav(out, top, child, indent + 1);
+			default_nav(out, top, child, input, indent + 1);
 
 			child = child->next;
 		}
@@ -394,12 +428,24 @@ void default_nav(FILE* out, const char* top, xl_node_t* element, int indent) {
 		char*	    layer;
 		xl_node_t*  child;
 		xl_node_t** excludes;
+		char*	    p;
+		char*	    p2;
 
 		if((layer = xl_get_attribute(element, "layer")) == NULL) layer = "*";
 
 		excludes = xl_get_path(element, "exclude");
 
-		xml = scan_xml("site/content/", "", excludes, strcmp(layer, "*") == 0 ? 0xffff : (atoi(layer) - 1));
+		if((p = xl_get_attribute(element, "path")) == NULL) {
+			p = u_path_combine("site/content", "");
+		} else {
+			p = u_path_combine("site/content", p);
+		}
+
+		p2 = u_strvacat(p, "/", NULL);
+		free(p);
+
+		xml = scan_xml(p2, "", excludes, strcmp(layer, "*") == 0 ? 0xffff : (atoi(layer) - 1));
+		free(p2);
 
 		if(excludes != NULL) free(excludes);
 

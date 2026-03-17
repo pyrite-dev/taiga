@@ -70,7 +70,7 @@ static int parse_file(const char* top, const char* full) {
 				free(nodes);
 			}
 
-			site_head(f, top, header);
+			site_head(f, top, header, full);
 
 			fprintf(f, "		<link rel=\"stylesheet\" href=\"%sstyle.css\">\n", top);
 			if(!has_own_icon && (nodes = xl_get_path(skinconf->root, "favicon")) != NULL) {
@@ -85,7 +85,7 @@ static int parse_file(const char* top, const char* full) {
 
 			fprintf(f, "	</head>\n");
 			fprintf(f, "	<body>\n");
-			site_body(f, top, title, body);
+			site_body(f, top, title, body, full);
 			fprintf(f, "		<!--[if lte IE 6]>\n");
 			fprintf(f, "		<script language=\"javascript\" type=\"text/javascript\">\n");
 			fprintf(f, "			for(var i = 0; i < document.images.length; i++){\n");
@@ -121,6 +121,9 @@ static int parse_file(const char* top, const char* full) {
 			fprintf(f, "		<style>\n");
 			fprintf(f, "pre {\n");
 			fprintf(f, "	width: 50px;\n");
+			fprintf(f, "	overflow-wrap: break-word;\n");
+			fprintf(f, "	word-wrap: break-word;\n");
+			fprintf(f, "	white-space: pre-wrap;\n");
 			fprintf(f, "}\n");
 			fprintf(f, "		</style>\n");
 			fprintf(f, "		<![endif]-->\n");

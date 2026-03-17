@@ -124,12 +124,6 @@ void classic_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "	border-left: 1px solid #cccccc;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
-	fprintf(out, "pre {\n");
-	fprintf(out, "	overflow-wrap: break-word;\n");
-	fprintf(out, "	word-wrap: break-word;\n");
-	fprintf(out, "	white-space: pre-wrap;\n");
-	fprintf(out, "}\n");
-	fprintf(out, "\n");
 	fprintf(out, ".message-icon {\n");
 	fprintf(out, "	padding-right: 5px;\n");
 	fprintf(out, "}\n");
@@ -145,20 +139,18 @@ void classic_stylesheet(FILE* out, const char* top) {
 	}
 }
 
-void classic_head(FILE* out, const char* top, xl_node_t* header) {
+void classic_head(FILE* out, const char* top, xl_node_t* header, const char* input) {
 	xl_node_t* child;
-
-	fprintf(out, "		<link rel=\"stylesheet\" href=\"%sstyle.css\">\n", top);
 
 	child = header->first_child;
 	while(child != NULL) {
-		default_head(out, top, child, 2);
+		default_head(out, top, child, input, 2);
 
 		child = child->next;
 	}
 }
 
-void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body) {
+void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body, const char* input) {
 	char	    year[4 + 1 + 4 + 1]; /* no one would use our software in year 10000... right? :) */
 	char*	    holder     = "Unknown people";
 	char*	    sitesearch = NULL;
@@ -324,7 +316,7 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 
 		child = nodes[0]->first_child;
 		while(child != NULL) {
-			default_nav(out, top, child, 6);
+			default_nav(out, top, child, input, 6);
 
 			child = child->next;
 		}
@@ -340,7 +332,7 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 	if(body != NULL) {
 		child = body->first_child;
 		while(child != NULL) {
-			default_body(out, top, child, 0, 0, 6);
+			default_body(out, top, child, input, 0, 0, 6);
 
 			child = child->next;
 		}
@@ -352,7 +344,7 @@ void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body
 	if((nodes = xl_get_path(skinconf->root, "footer")) != NULL) {
 		child = nodes[0]->first_child;
 		while(child != NULL) {
-			default_body(out, top, child, 1, 0, 6);
+			default_body(out, top, child, input, 1, 0, 6);
 
 			child = child->next;
 		}

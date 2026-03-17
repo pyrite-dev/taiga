@@ -306,7 +306,7 @@ open(OUT, ">", $ARGV[2]);
 print(OUT "<?xml version=\"1.0\"?>\n");
 print(OUT "<document>\n");
 print(OUT "	<header>\n");
-print(OUT "		<title>Documentation of $input</title>\n");
+print(OUT "		<title>$input</title>\n");
 print(OUT "	</header>\n");
 print(OUT "	<body>\n");
 

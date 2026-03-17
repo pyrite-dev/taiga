@@ -34,7 +34,7 @@ char* u_path(const char* top, const char* path) {
 	if(strlen(path) > 2 && memcmp(path, "./", 2) == 0) return u_strdup(path);  /* current directory - probably intended */
 	if(strlen(path) > 3 && memcmp(path, "../", 2) == 0) return u_strdup(path); /* parent directory - also probably intended */
 
-	return u_strvacat(top, path, NULL); /* otherwise, concat */
+	return u_strvacat(top, (top[strlen(top) - 1] == '/' && path[0] == '/') ? (path + 1) : path, NULL); /* otherwise, concat */
 }
 
 char* u_http_path(const char* top, const char* path) {

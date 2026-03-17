@@ -2,8 +2,8 @@
 
 xemil_t* skinconf;
 void (*site_stylesheet)(FILE* out, const char* top); /* also create files here if you need one */
-void (*site_head)(FILE* out, const char* top, xl_node_t* header);
-void (*site_body)(FILE* out, const char* top, const char* title, xl_node_t* body);
+void (*site_head)(FILE* out, const char* top, xl_node_t* header, const char* input);
+void (*site_body)(FILE* out, const char* top, const char* title, xl_node_t* body, const char* input);
 
 static int scan(const char* top, int mode, const char* path) {
 	char*	in  = u_strvacat("site/content/", path, NULL);
