@@ -115,11 +115,8 @@ static int enter_block(MD_BLOCKTYPE type, void* detail, void* user) {
 			in_message = 1;
 		} else {
 			print_indent();
-			fprintf(out, "<pre>\n");
-			indent++;
-			print_indent();
-			fprintf(out, "<code>\n");
-			indent++;
+			fprintf(out, "<pre>");
+			fprintf(out, "<code>");
 		}
 	} else if(type == MD_BLOCK_TABLE) {
 		print_indent();
@@ -216,12 +213,7 @@ static int leave_block(MD_BLOCKTYPE type, void* detail, void* user) {
 
 			in_message = 0;
 		} else {
-			indent--;
-			print_indent();
-			fprintf(out, "</code>\n");
-			indent--;
-			print_indent();
-			fprintf(out, "</pre>\n");
+			fprintf(out, "</code></pre>\n");
 		}
 	} else if(type == MD_BLOCK_TABLE) {
 		indent--;
