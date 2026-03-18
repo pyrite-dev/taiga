@@ -7,6 +7,7 @@ static char*  title	 = NULL;
 static int    in_title	 = 0;
 static int    in_section = 0;
 static int    in_message = 0;
+static int in_pre = 0;
 static char** mapping;
 static int    mapping_len;
 static char*  argin    = NULL;
@@ -117,6 +118,8 @@ static int enter_block(MD_BLOCKTYPE type, void* detail, void* user) {
 			print_indent();
 			fprintf(out, "<pre>");
 			fprintf(out, "<code>");
+
+			in_pre = 1;
 		}
 	} else if(type == MD_BLOCK_TABLE) {
 		print_indent();
@@ -213,6 +216,8 @@ static int leave_block(MD_BLOCKTYPE type, void* detail, void* user) {
 
 			in_message = 0;
 		} else {
+			in_pre = 0;
+
 			fprintf(out, "</code></pre>\n");
 		}
 	} else if(type == MD_BLOCK_TABLE) {
@@ -411,13 +416,13 @@ static int text(MD_TEXTTYPE type, const MD_CHAR* text, MD_SIZE size, void* user)
 		} else {
 			char* buf;
 
-			print_indent();
+			if(!in_pre) print_indent();
 
 			buf = encode(text, size);
 			fwrite(buf, 1, strlen(buf), out);
 			free(buf);
 
-			fprintf(out, "\n");
+			if(!in_pre) fprintf(out, "\n");
 		}
 	}
 
@@ -496,6 +501,7 @@ int action_markdown(int argc, char** argv) {
 	in_title   = 0;
 	in_section = 0;
 	in_message = 0;
+	in_pre = 0;
 	mode	   = 0;
 	if(md_parse(buffer, size, &parser, NULL)) {
 		free(buffer);
@@ -517,6 +523,7 @@ int action_markdown(int argc, char** argv) {
 	in_title   = 0;
 	in_section = 0;
 	in_message = 0;
+	in_pre = 0;
 	mode	   = 1;
 	if(md_parse(buffer, size, &parser, NULL)) {
 		free(buffer);
