@@ -93,7 +93,7 @@ static int enter_block(MD_BLOCKTYPE type, void* detail, void* user) {
 		indent++;
 	} else if(type == MD_BLOCK_HR) {
 		print_indent();
-		fprintf(out, "<hr>\n");
+		fprintf(out, "<hr />\n");
 		indent++;
 	} else if(type == MD_BLOCK_CODE) {
 		MD_BLOCK_CODE_DETAIL* det = detail;
