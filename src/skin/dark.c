@@ -18,6 +18,11 @@ void dark_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "	padding-top: 8px;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
+	fprintf(out, "hr {\n");
+	fprintf(out, "	border: none;\n");
+	fprintf(out, "	border-bottom: solid 1px #666666;\n");
+	fprintf(out, "}\n");
+	fprintf(out, "\n");
 	fprintf(out, ".sectionsep {\n");
 	fprintf(out, "	background: #666666;\n");
 	fprintf(out, "}\n");
@@ -110,7 +115,7 @@ void dark_body(FILE* out, const char* top, const char* title, xl_node_t* body, c
 	fprintf(out, "				<td valign=\"middle\" align=\"center\">\n");
 	fprintf(out, "					<table width=\"600\" height=\"400\" border=\"0\" cellspacing=\"10\" cellpadding=\"0\">\n");
 	fprintf(out, "						<tr>\n");
-	fprintf(out, "							<td>\n");
+	fprintf(out, "							<td rowspan=\"2\">\n");
 	fprintf(out, "								<table width=\"1\" border=\"0\" cellspacing=\"0\" cellpadding=\"4\">\n");
 	fprintf(out, "									<tr>\n");
 	fprintf(out, "										<td align=\"center\" valign=\"middle\">\n");
@@ -149,15 +154,29 @@ void dark_body(FILE* out, const char* top, const char* title, xl_node_t* body, c
 	fprintf(out, "									</tr>\n");
 	fprintf(out, "								</table>\n");
 	fprintf(out, "							</td>\n");
-	fprintf(out, "							<td width=\"1\" bgcolor=\"#666666\"></td>\n");
+	fprintf(out, "							<td width=\"1\" bgcolor=\"#666666\" rowspan=\"2\"></td>\n");
 	fprintf(out, "							<td width=\"450\" valign=\"top\" id=\"content\">\n");
 	if(body != NULL) {
 		child = body->first_child;
 		while(child != NULL) {
-			default_body(out, top, child, input, 0, 0, 5);
+			default_body(out, top, child, input, 0, 0, 8);
 
 			child = child->next;
 		}
+	}
+	fprintf(out, "							</td>\n");
+	fprintf(out, "						</tr>\n");
+	fprintf(out, "						<tr>\n");
+	fprintf(out, "							<td id=\"footer\">\n");
+	if((nodes = xl_get_path(skinconf->root, "footer")) != NULL) {
+		child = nodes[0]->first_child;
+		while(child != NULL) {
+			default_body(out, top, child, input, 1, 0, 8);
+
+			child = child->next;
+		}
+
+		free(nodes);
 	}
 	fprintf(out, "							</td>\n");
 	fprintf(out, "						</tr>\n");
