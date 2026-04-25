@@ -48,8 +48,12 @@ static int parse_file(const char* top, const char* full) {
 
 			if(title == NULL) title = u_strdup("Untitled");
 
-			fprintf(f, "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n");
-			fprintf(f, "<html>\n");
+			if(site_htmlattr != dark_htmlattr) {
+				fprintf(f, "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n");
+			}
+			fprintf(f, "<html");
+			site_htmlattr(f, top);
+			fprintf(f, ">\n");
 			fprintf(f, "	<head>\n");
 			fprintf(f, "		<meta http-equiv=\"Content-Type\" content=\"text/html;charset=UTF-8\">\n");
 			fprintf(f, "		<meta name=\"generator\" content=\"Taiga\">\n");
@@ -84,7 +88,9 @@ static int parse_file(const char* top, const char* full) {
 			}
 
 			fprintf(f, "	</head>\n");
-			fprintf(f, "	<body>\n");
+			fprintf(f, "	<body");
+			site_bodyattr(f, top);
+			fprintf(f, ">\n");
 			site_body(f, top, title, body, full);
 			fprintf(f, "		<!--[if lte IE 6]>\n");
 			fprintf(f, "		<script language=\"javascript\" type=\"text/javascript\">\n");
@@ -116,7 +122,6 @@ static int parse_file(const char* top, const char* full) {
 			fprintf(f, "			fixTags(\"div\");\n");
 			fprintf(f, "			fixTags(\"p\");\n");
 			fprintf(f, "			document.documentElement.style.width = document.documentElement.clientWidth + \"px\";\n");
-			fprintf(f, "		</script>\n");
 			fprintf(f, "		</script>\n");
 			fprintf(f, "		<style>\n");
 			fprintf(f, "pre {\n");

@@ -139,6 +139,9 @@ void classic_stylesheet(FILE* out, const char* top) {
 	}
 }
 
+void classic_htmlattr(FILE* out, const char* top) {
+}
+
 void classic_head(FILE* out, const char* top, xl_node_t* header, const char* input) {
 	xl_node_t* child;
 
@@ -148,6 +151,9 @@ void classic_head(FILE* out, const char* top, xl_node_t* header, const char* inp
 
 		child = child->next;
 	}
+}
+
+void classic_bodyattr(FILE* out, const char* top) {
 }
 
 void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body, const char* input) {

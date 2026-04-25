@@ -2,7 +2,9 @@
 
 xemil_t* skinconf;
 void (*site_stylesheet)(FILE* out, const char* top); /* also create files here if you need one */
+void (*site_htmlattr)(FILE* out, const char* top);
 void (*site_head)(FILE* out, const char* top, xl_node_t* header, const char* input);
+void (*site_bodyattr)(FILE* out, const char* top);
 void (*site_body)(FILE* out, const char* top, const char* title, xl_node_t* body, const char* input);
 
 static int scan(const char* top, int mode, const char* path) {
@@ -80,7 +82,9 @@ static int scan(const char* top, int mode, const char* path) {
 
 #define USE_THEME(x) \
 	site_stylesheet = x##_stylesheet; \
+	site_htmlattr	= x##_htmlattr; \
 	site_head	= x##_head; \
+	site_bodyattr	= x##_bodyattr; \
 	site_body	= x##_body;
 
 int action_site(int argc, char** argv) {
@@ -103,6 +107,8 @@ int action_site(int argc, char** argv) {
 				USE_THEME(classic);
 			} else if(strcmp(nodes[0]->text, "simple") == 0) {
 				USE_THEME(simple);
+			} else if(strcmp(nodes[0]->text, "dark") == 0) {
+				USE_THEME(dark);
 			} else {
 				fprintf(stderr, "Unknown skin: %s\n", nodes[0]->text);
 				st = 1;

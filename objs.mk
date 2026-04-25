@@ -80,6 +80,9 @@ src/src_process.o: src/process.c
 OBJS += src/src_skin_classic.o
 src/src_skin_classic.o: src/skin/classic.c
 	$(CC) $(CFLAGS) -c -o $@ src/skin/classic.c
+OBJS += src/src_skin_dark.o
+src/src_skin_dark.o: src/skin/dark.c
+	$(CC) $(CFLAGS) -c -o $@ src/skin/dark.c
 OBJS += src/src_skin_simple.o
 src/src_skin_simple.o: src/skin/simple.c
 	$(CC) $(CFLAGS) -c -o $@ src/skin/simple.c

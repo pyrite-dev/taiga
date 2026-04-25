@@ -192,6 +192,9 @@ void simple_stylesheet(FILE* out, const char* top) {
 	}
 }
 
+void simple_htmlattr(FILE* out, const char* top) {
+}
+
 void simple_head(FILE* out, const char* top, xl_node_t* header, const char* input) {
 	xl_node_t* child;
 
@@ -203,6 +206,9 @@ void simple_head(FILE* out, const char* top, xl_node_t* header, const char* inpu
 	}
 }
 
+void simple_bodyattr(FILE* out, const char* top) {
+}
+
 void simple_body(FILE* out, const char* top, const char* title, xl_node_t* body, const char* input) {
 	char	    year[4 + 1 + 4 + 1]; /* no one would use our software in year 10000... right? :) */
 	char*	    holder	 = "Unknown people";
@@ -210,7 +216,7 @@ void simple_body(FILE* out, const char* top, const char* title, xl_node_t* body,
 	char*	    project_desc = "Unknown project description";
 	xl_node_t** nodes;
 	xl_node_t*  child;
-	char*	    text;
+	char*	    image;
 	char*	    link;
 	char	    size[256];
 
@@ -271,25 +277,29 @@ void simple_body(FILE* out, const char* top, const char* title, xl_node_t* body,
 	link = NULL;
 	if((nodes = xl_get_path(skinconf->root, "project.link")) != NULL) {
 		link = xl_get_attribute(nodes[0], "href");
+
+		free(nodes);
 	}
 	if(link == NULL) link = "https://invalid.link";
 	link = u_path(top, link);
 
-	text = NULL;
+	image = NULL;
 	if((nodes = xl_get_path(skinconf->root, "project.image")) != NULL) {
-		text = xl_get_attribute(nodes[0], "src");
-		if(text != NULL) text = u_path(top, text);
+		image = xl_get_attribute(nodes[0], "src");
+		if(image != NULL) image = u_path(top, image);
+
+		free(nodes);
 	}
 
-	if(text != NULL) {
+	if(image != NULL) {
 		int ws, hs;
 
-		if(u_image_size(top, text, u_http_path, &ws, &hs)) {
+		if(u_image_size(top, image, u_http_path, &ws, &hs)) {
 			sprintf(size, " width=\"%d\" height=\"%d\"", ws, hs);
 		}
 
-		fprintf(out, "								<a href=\"%s\"><img src=\"%s\" alt=\"Project logo\" border=\"0\"%s></a>\n", link, text, size);
-		free(text);
+		fprintf(out, "								<a href=\"%s\"><img src=\"%s\" alt=\"Project logo\" border=\"0\"%s></a>\n", link, image, size);
+		free(nodes);
 	}
 
 	free(link);

@@ -102,7 +102,11 @@ void default_body(FILE* out, const char* top, xl_node_t* element, const char* in
 		char* title = xl_get_attribute(element, "title");
 		char* id    = u_section_id(element);
 
-		if(id != NULL) sprintf(tag, "<div class=\"section\" id=\"%s\">%s</div>", id, title);
+		if(id != NULL) {
+			sprintf(tag, "<div class=\"section\" id=\"%s\">%s</div>", id, title);
+
+			sprintf(tag + strlen(tag), "<table border=\"0\" width=\"100%%\" cellspacing=\"0\" cellpadding=\"0\"><tr><td class=\"sectionsep\"></td></tr></table>");
+		}
 	} else if(strcmp(element->name, "fixme") == 0 ||   /**/
 		  strcmp(element->name, "warning") == 0 || /**/
 		  strcmp(element->name, "note") == 0) {

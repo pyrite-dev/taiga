@@ -52,7 +52,9 @@ void		  io_closedir(IO_DIR* dir);
 /* action/site.c */
 extern xemil_t* skinconf;
 extern void (*site_stylesheet)(FILE* out, const char* top); /* also create files here if you need one */
+extern void (*site_htmlattr)(FILE* out, const char* top);
 extern void (*site_head)(FILE* out, const char* top, xl_node_t* header, const char* input);
+extern void (*site_bodyattr)(FILE* out, const char* top);
 extern void (*site_body)(FILE* out, const char* top, const char* title, xl_node_t* body, const char* input);
 
 int action_site(int argc, char** argv);
@@ -98,12 +100,23 @@ void default_nav(FILE* out, const char* top, xl_node_t* element, const char* inp
 
 /* skin/classic.c */
 void classic_stylesheet(FILE* out, const char* top);
+void classic_htmlattr(FILE* out, const char* top);
 void classic_head(FILE* out, const char* top, xl_node_t* header, const char* input);
+void classic_bodyattr(FILE* out, const char* top);
 void classic_body(FILE* out, const char* top, const char* title, xl_node_t* body, const char* input);
 
 /* skin/simple.c */
 void simple_stylesheet(FILE* out, const char* top);
+void simple_htmlattr(FILE* out, const char* top);
 void simple_head(FILE* out, const char* top, xl_node_t* header, const char* input);
+void simple_bodyattr(FILE* out, const char* top);
 void simple_body(FILE* out, const char* top, const char* title, xl_node_t* body, const char* input);
+
+/* skin/dark.c */
+void dark_stylesheet(FILE* out, const char* top);
+void dark_htmlattr(FILE* out, const char* top);
+void dark_head(FILE* out, const char* top, xl_node_t* header, const char* input);
+void dark_bodyattr(FILE* out, const char* top);
+void dark_body(FILE* out, const char* top, const char* title, xl_node_t* body, const char* input);
 
 #endif

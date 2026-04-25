@@ -7,7 +7,7 @@ static char*  title	 = NULL;
 static int    in_title	 = 0;
 static int    in_section = 0;
 static int    in_message = 0;
-static int in_pre = 0;
+static int    in_pre	 = 0;
 static char** mapping;
 static int    mapping_len;
 static char*  argin    = NULL;
@@ -501,7 +501,7 @@ int action_markdown(int argc, char** argv) {
 	in_title   = 0;
 	in_section = 0;
 	in_message = 0;
-	in_pre = 0;
+	in_pre	   = 0;
 	mode	   = 0;
 	if(md_parse(buffer, size, &parser, NULL)) {
 		free(buffer);
@@ -523,7 +523,7 @@ int action_markdown(int argc, char** argv) {
 	in_title   = 0;
 	in_section = 0;
 	in_message = 0;
-	in_pre = 0;
+	in_pre	   = 0;
 	mode	   = 1;
 	if(md_parse(buffer, size, &parser, NULL)) {
 		free(buffer);
