@@ -105,7 +105,7 @@ void default_body(FILE* out, const char* top, xl_node_t* element, const char* in
 		if(id != NULL) {
 			sprintf(tag, "<div class=\"section\" id=\"%s\">%s</div>", id, title);
 
-			sprintf(tag + strlen(tag), "<table border=\"0\" width=\"100%%\" cellspacing=\"0\" cellpadding=\"0\"><tr><td class=\"sectionsep\"></td></tr></table>");
+			sprintf(tag + strlen(tag), "<table border=\"0\" width=\"100%%\" height=\"1\" cellspacing=\"0\" cellpadding=\"0\"><tr><td class=\"sectionsep\"></td></tr></table>");
 		}
 	} else if(strcmp(element->name, "fixme") == 0 ||   /**/
 		  strcmp(element->name, "warning") == 0 || /**/

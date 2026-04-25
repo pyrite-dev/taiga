@@ -7,7 +7,7 @@ void dark_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "	font-size: 9pt;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
-	fprintf(out, ".smalltext {\n");
+	fprintf(out, ".smalltext, .linkgroup, .linkgrouptitle {\n");
 	fprintf(out, "	font-size: 8pt;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
@@ -20,6 +20,14 @@ void dark_stylesheet(FILE* out, const char* top) {
 	fprintf(out, "\n");
 	fprintf(out, ".sectionsep {\n");
 	fprintf(out, "	background: #666666;\n");
+	fprintf(out, "}\n");
+	fprintf(out, "\n");
+	fprintf(out, ".linkgroup {\n");
+	fprintf(out, "	padding-left: 12px;\n");
+	fprintf(out, "}\n");
+	fprintf(out, "\n");
+	fprintf(out, ".linkgrouptitle {\n");
+	fprintf(out, "	font-weight: bold;\n");
 	fprintf(out, "}\n");
 	fprintf(out, "\n");
 	fprintf(out, "a {\n");
@@ -116,6 +124,27 @@ void dark_body(FILE* out, const char* top, const char* title, xl_node_t* body, c
 	fprintf(out, "											%s<br>\n", project_desc);
 	fprintf(out, "											<br>\n");
 	fprintf(out, "											<div class=\"smalltext\">&copy; %s</div>\n", holder);
+	fprintf(out, "										</td>\n");
+	fprintf(out, "									</tr>\n");
+	fprintf(out, "									<tr>\n");
+	fprintf(out, "										<td>\n");
+	fprintf(out, "											<table border=\"0\" width=\"100%%\" height=\"1\" cellspacing=\"0\" cellpadding=\"0\"><tr><td class=\"sectionsep\"></td></tr></table>");
+	fprintf(out, "										</td>\n");
+	fprintf(out, "									</tr>\n");
+	fprintf(out, "									<tr>\n");
+	fprintf(out, "										<td align=\"left\">\n");
+	if((nodes = xl_get_path(skinconf->root, "nav")) != NULL) {
+		int i;
+
+		child = nodes[0]->first_child;
+		while(child != NULL) {
+			default_nav(out, top, child, input, 8);
+
+			child = child->next;
+		}
+
+		free(nodes);
+	}
 	fprintf(out, "										</td>\n");
 	fprintf(out, "									</tr>\n");
 	fprintf(out, "								</table>\n");
