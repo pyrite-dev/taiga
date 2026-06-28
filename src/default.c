@@ -183,7 +183,7 @@ void default_body(FILE* out, const char* top, xl_node_t* element, const char* in
 
 		sprintf(end, "</%s>", element->name);
 	} else if(strcmp(element->name, "a") == 0) {
-		accept_attr(top, text, 0, element, "id", "class", "href", "title", "rel", NULL);
+		accept_attr(top, text, spec, element, "id", "class", "href", "title", "rel", NULL);
 
 		sprintf(tag, "<%s%s>", element->name, text);
 
@@ -201,7 +201,7 @@ void default_body(FILE* out, const char* top, xl_node_t* element, const char* in
 		char* h;
 		int   ws, hs;
 
-		accept_attr(top, text, 0, element, "src", "alt", "title", "height", "width", "id", "class", NULL);
+		accept_attr(top, text, spec, element, "src", "alt", "title", "height", "width", "id", "class", NULL);
 
 		w = xl_get_attribute(element, "width");
 		h = xl_get_attribute(element, "height");
@@ -219,7 +219,7 @@ void default_body(FILE* out, const char* top, xl_node_t* element, const char* in
 
 		sprintf(tag, "<%s%s border=\"0\">", element->name, text);
 	} else if(strcmp(element->name, "script") == 0) {
-		accept_attr(top, text, 0, element, "src", "type", NULL);
+		accept_attr(top, text, spec, element, "src", "type", NULL);
 
 		sprintf(tag, "<%s%s>", element->name, text);
 
