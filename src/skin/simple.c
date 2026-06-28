@@ -299,7 +299,6 @@ void simple_body(FILE* out, const char* top, const char* title, xl_node_t* body,
 		}
 
 		fprintf(out, "								<a href=\"%s\"><img src=\"%s\" alt=\"Project logo\" border=\"0\"%s></a>\n", link, image, size);
-		free(nodes);
 	}
 
 	free(link);
