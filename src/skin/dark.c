@@ -167,7 +167,7 @@ void dark_body(FILE* out, const char* top, const char* title, xl_node_t* body, c
 	fprintf(out, "							</td>\n");
 	fprintf(out, "						</tr>\n");
 	fprintf(out, "						<tr>\n");
-	fprintf(out, "							<td id=\"footer\">\n");
+	fprintf(out, "							<td id=\"footer\" valign=\"bottom\">\n");
 	if((nodes = xl_get_path(skinconf->root, "footer")) != NULL) {
 		child = nodes[0]->first_child;
 		while(child != NULL) {
