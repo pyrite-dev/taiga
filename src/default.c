@@ -224,6 +224,12 @@ void default_body(FILE* out, const char* top, xl_node_t* element, const char* in
 		sprintf(tag, "<%s%s>", element->name, text);
 
 		sprintf(end, "</%s>", element->name);
+	} else if(strcmp(element->name, "marquee") == 0) {
+		accept_attr(top, text, spec, element, NULL);
+
+		sprintf(tag, "<%s%s>", element->name, text);
+
+		sprintf(end, "</%s>", element->name);
 	} else if(strcmp(element->name, "table") == 0) {
 		char* t = xl_get_attribute(element, "class");
 
